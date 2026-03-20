@@ -5,23 +5,23 @@ import { useSession } from "next-auth/react";
 import { BAREME, type ItemBareme } from "@/lib/scoring/bareme";
 
 const ETAPES = [
-  { dim: "DIM1", comp: "A", label: "Genre — Gouvernance & Politique", couleur: "#1A237E", bg: "#E8EAF6" },
-  { dim: "DIM1", comp: "B", label: "Genre — Données & Parité", couleur: "#1A237E", bg: "#E8EAF6" },
-  { dim: "DIM1", comp: "C", label: "Genre — Recrutement & Carrière", couleur: "#1A237E", bg: "#E8EAF6" },
-  { dim: "DIM1", comp: "D", label: "Genre — Parentalité", couleur: "#1A237E", bg: "#E8EAF6" },
-  { dim: "DIM1", comp: "E", label: "Genre — VSBG", couleur: "#1A237E", bg: "#E8EAF6" },
-  { dim: "DIM1", comp: "F", label: "Genre — VIH/Sida (Art. 4 CT CI)", couleur: "#1A237E", bg: "#E8EAF6" },
-  { dim: "DIM1", comp: "G", label: "Genre — Accompagnement carrière femmes", couleur: "#1A237E", bg: "#E8EAF6" },
-  { dim: "DIM2", comp: "A", label: "Handicap — Gouvernance & Politique", couleur: "#00695C", bg: "#E0F2F1" },
-  { dim: "DIM2", comp: "B", label: "Handicap — Recrutement inclusif PSH", couleur: "#00695C", bg: "#E0F2F1" },
-  { dim: "DIM2", comp: "C", label: "Handicap — Sensibilisation", couleur: "#00695C", bg: "#E0F2F1" },
-  { dim: "DIM2", comp: "D", label: "Handicap — Données PSH", couleur: "#00695C", bg: "#E0F2F1" },
-  { dim: "DIM3", comp: "A", label: "Multiculturalité — Anti-tribalisme", couleur: "#E65100", bg: "#FFF3E0" },
-  { dim: "DIM3", comp: "B", label: "Multiculturalité — Recrutement sans biais", couleur: "#E65100", bg: "#FFF3E0" },
-  { dim: "DIM3", comp: "C", label: "Multiculturalité — Fait religieux CI", couleur: "#E65100", bg: "#FFF3E0" },
-  { dim: "DIM4", comp: "A", label: "Intergénérationnel — Gouvernance", couleur: "#2E7D32", bg: "#E8F5E9" },
-  { dim: "DIM4", comp: "B", label: "Intergénérationnel — AGEFOP", couleur: "#2E7D32", bg: "#E8F5E9" },
-  { dim: "DIM4", comp: "C", label: "Intergénérationnel — QVT & Sécurité", couleur: "#2E7D32", bg: "#E8F5E9" },
+  { dim: "DIM1", comp: "A", label: "Genre — Gouvernance & Politique", couleur: "#1A237E" },
+  { dim: "DIM1", comp: "B", label: "Genre — Données & Parité", couleur: "#1A237E" },
+  { dim: "DIM1", comp: "C", label: "Genre — Recrutement & Carrière", couleur: "#1A237E" },
+  { dim: "DIM1", comp: "D", label: "Genre — Parentalité", couleur: "#1A237E" },
+  { dim: "DIM1", comp: "E", label: "Genre — VSBG", couleur: "#1A237E" },
+  { dim: "DIM1", comp: "F", label: "Genre — VIH/Sida (Art. 4 CT CI)", couleur: "#1A237E" },
+  { dim: "DIM1", comp: "G", label: "Genre — Accompagnement carrière femmes", couleur: "#1A237E" },
+  { dim: "DIM2", comp: "A", label: "Handicap — Gouvernance & Politique", couleur: "#00695C" },
+  { dim: "DIM2", comp: "B", label: "Handicap — Recrutement inclusif PSH", couleur: "#00695C" },
+  { dim: "DIM2", comp: "C", label: "Handicap — Sensibilisation", couleur: "#00695C" },
+  { dim: "DIM2", comp: "D", label: "Handicap — Données PSH", couleur: "#00695C" },
+  { dim: "DIM3", comp: "A", label: "Multiculturalité — Anti-tribalisme", couleur: "#E65100" },
+  { dim: "DIM3", comp: "B", label: "Multiculturalité — Recrutement sans biais", couleur: "#E65100" },
+  { dim: "DIM3", comp: "C", label: "Multiculturalité — Fait religieux CI", couleur: "#E65100" },
+  { dim: "DIM4", comp: "A", label: "Intergénérationnel — Gouvernance", couleur: "#2E7D32" },
+  { dim: "DIM4", comp: "B", label: "Intergénérationnel — AGEFOP", couleur: "#2E7D32" },
+  { dim: "DIM4", comp: "C", label: "Intergénérationnel — QVT & Sécurité", couleur: "#2E7D32" },
 ];
 
 function getItems(dim: string, comp: string): ItemBareme[] {
@@ -32,31 +32,25 @@ function QuestionItem({ item, valeur, nbActions, onChange, onActionsChange }: {
   item: ItemBareme; valeur: string; nbActions: number;
   onChange: (v: string) => void; onActionsChange: (n: number) => void;
 }) {
-  const ic = item.importance === "critique" ? "#B71C1C" : item.importance === "important" ? "#E65100" : "#757575";
-  const il = item.importance === "critique" ? "★★★ Critique" : item.importance === "important" ? "★★ Important" : "★ Standard";
   return (
     <div style={{ border: "1px solid #E0E0E0", borderRadius: 10, padding: "18px 20px", marginBottom: 14, background: "#fff" }}>
-      <div style={{ marginBottom: 8 }}>
-        <span style={{ fontSize: 11, fontWeight: 600, color: "#fff", background: ic, padding: "2px 8px", borderRadius: 99, marginRight: 8 }}>{il}</span>
-        <span style={{ fontSize: 11, color: "#9E9E9E" }}>{item.code} · {item.scoreMax} pts</span>
+      <div style={{ fontSize: 14, color: "#212121", marginBottom: 14, lineHeight: 1.5, fontWeight: 500 }}>
+        {item.libelle}
       </div>
-      <div style={{ fontSize: 14, color: "#212121", marginBottom: 14, lineHeight: 1.5 }}>{item.libelle}</div>
       {item.type === "binaire" && item.bareme && (
         <div style={{ display: "flex", flexDirection: "column", gap: 8 }}>
-          {Object.entries(item.bareme).map(([key, pts]) => (
+          {Object.entries(item.bareme).map(([key]) => (
             <label key={key} style={{ display: "flex", alignItems: "center", gap: 10, padding: "10px 14px", border: `1.5px solid ${valeur === key ? "#1A237E" : "#E0E0E0"}`, borderRadius: 8, cursor: "pointer", background: valeur === key ? "#E8EAF6" : "#FAFAFA" }}>
               <input type="radio" name={item.code} value={key} checked={valeur === key} onChange={() => onChange(key)} style={{ accentColor: "#1A237E" }} />
-              <span style={{ fontSize: 13, flex: 1 }}>{key.replace(/_/g, " ")}</span>
-              <span style={{ fontSize: 12, fontWeight: 600, color: pts > 0 ? "#2E7D32" : "#9E9E9E", minWidth: 40, textAlign: "right" }}>{pts} pt{pts > 1 ? "s" : ""}</span>
+              <span style={{ fontSize: 13 }}>{key.replace(/_/g, " ")}</span>
             </label>
           ))}
         </div>
       )}
       {item.type === "actions_multiples" && (
         <div>
-          <div style={{ fontSize: 13, color: "#616161", marginBottom: 10 }}>{item.ptsByAction} pt par action · max {item.maxActions} actions</div>
+          <div style={{ fontSize: 13, color: "#616161", marginBottom: 10 }}>Nombre d'actions mises en place :</div>
           <div style={{ display: "flex", alignItems: "center", gap: 8, flexWrap: "wrap" }}>
-            <span style={{ fontSize: 13 }}>Nombre d'actions :</span>
             {Array.from({ length: (item.maxActions ?? 0) + 1 }, (_, i) => (
               <label key={i} style={{ display: "flex", alignItems: "center", gap: 4, padding: "6px 12px", border: `1.5px solid ${nbActions === i ? "#1A237E" : "#E0E0E0"}`, borderRadius: 8, cursor: "pointer", background: nbActions === i ? "#E8EAF6" : "#FAFAFA" }}>
                 <input type="radio" name={`${item.code}_n`} checked={nbActions === i} onChange={() => onActionsChange(i)} style={{ accentColor: "#1A237E" }} />
@@ -69,19 +63,10 @@ function QuestionItem({ item, valeur, nbActions, onChange, onActionsChange }: {
       {(item.type === "indicateur_seuil" || item.type === "indicateur_seuil_inverse") && (
         <div>
           <div style={{ fontSize: 13, color: "#616161", marginBottom: 8 }}>
-            {item.type === "indicateur_seuil_inverse" ? "⬇ Plus la valeur est basse, mieux c'est" : "Renseignez votre valeur en %"}
+            {item.type === "indicateur_seuil_inverse" ? "Renseignez votre valeur (plus elle est basse, mieux c'est)" : "Renseignez votre valeur en %"}
           </div>
           <input type="number" value={valeur} onChange={e => onChange(e.target.value)} placeholder="Ex : 35" min={0} max={100}
             style={{ padding: "10px 14px", border: "1.5px solid #E0E0E0", borderRadius: 8, fontSize: 14, width: 160 }} />
-          {item.seuils && (
-            <div style={{ marginTop: 10, display: "flex", gap: 8, flexWrap: "wrap" }}>
-              {item.seuils.filter(([s]) => s !== Infinity).map(([seuil, pts]) => (
-                <span key={seuil} style={{ fontSize: 11, padding: "3px 8px", background: "#F5F5F5", borderRadius: 99, color: "#616161" }}>
-                  {item.type === "indicateur_seuil" ? `≥${seuil}% → ${pts}pts` : `≤${seuil}% → ${pts}pts`}
-                </span>
-              ))}
-            </div>
-          )}
         </div>
       )}
     </div>
@@ -113,13 +98,10 @@ export default function QuestionnairePage() {
           rm[r.itemCode] = r.valeurBrute;
           if (r.valeurBrute.includes(",")) am[r.itemCode] = r.valeurBrute.split(",").filter(Boolean).length;
         });
-        setReponses(rm);
-        setNbActions(am);
-        setProgression(data.progression ?? 0);
+        setReponses(rm); setNbActions(am); setProgression(data.progression ?? 0);
         const repSet = new Set(Object.keys(rm));
         for (let i = 0; i < ETAPES.length; i++) {
-          const its = getItems(ETAPES[i].dim, ETAPES[i].comp);
-          if (!its.every(it => repSet.has(it.code))) { setEtapeIndex(i); break; }
+          if (!getItems(ETAPES[i].dim, ETAPES[i].comp).every(it => repSet.has(it.code))) { setEtapeIndex(i); break; }
         }
       }
       setLoading(false);
@@ -153,9 +135,7 @@ export default function QuestionnairePage() {
   }
 
   async function precedent() {
-    await sauvegarder();
-    setEtapeIndex(i => i - 1);
-    window.scrollTo(0, 0);
+    await sauvegarder(); setEtapeIndex(i => i - 1); window.scrollTo(0, 0);
   }
 
   if (status === "unauthenticated") { router.push("/connexion"); return null; }
@@ -213,14 +193,14 @@ export default function QuestionnairePage() {
             style={{ padding: "11px 22px", background: etapeIndex === 0 ? "#F5F5F5" : "#fff", color: etapeIndex === 0 ? "#BDBDBD" : "#424242", border: "1.5px solid #E0E0E0", borderRadius: 8, fontSize: 14, cursor: etapeIndex === 0 ? "default" : "pointer", fontWeight: 500 }}>
             ← Précédent
           </button>
-          <div style={{ fontSize: 12, color: "#9E9E9E" }}>{saving ? "Sauvegarde..." : `${items.filter(i => reponses[i.code] || nbActions[i.code]).length} / ${items.length} réponses`}</div>
+          <div style={{ fontSize: 12, color: "#9E9E9E" }}>{saving ? "Sauvegarde en cours..." : `${items.filter(i => reponses[i.code] || nbActions[i.code]).length} / ${items.length} répondues`}</div>
           <button onClick={suivant} disabled={saving}
             style={{ padding: "11px 22px", background: saving ? "#9FA8DA" : etape.couleur, color: "#fff", border: "none", borderRadius: 8, fontSize: 14, cursor: saving ? "default" : "pointer", fontWeight: 500 }}>
             {saving ? "Sauvegarde..." : isLast ? "Terminer & calculer le score →" : "Suivant →"}
           </button>
         </div>
         <div style={{ marginTop: 20, padding: "12px 16px", background: "#E8EAF6", borderRadius: 8, fontSize: 11, color: "#3949AB", lineHeight: 1.6 }}>
-          <strong>Référence légale CI :</strong> Les items ★★★ Critique correspondent à des obligations légales directes du Code du Travail CI 2025. Vos réponses sont sauvegardées automatiquement.
+          Répondez en vous basant sur la situation réelle de votre organisation. Vos réponses sont sauvegardées automatiquement à chaque étape.
         </div>
       </div>
     </div>
