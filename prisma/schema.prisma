@@ -1,0 +1,277 @@
+// prisma/schema.prisma
+// Haki — Schéma de données v1.0
+// Stack : PostgreSQL 15 (Supabase)
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+// ─── ORGANISATION ─────────────────────────────────────────────
+model Organisation {
+  id            String   @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  nom           String   @db.VarChar(255)
+  secteur       String   @db.VarChar(100)
+  taille        String   @db.VarChar(50)  // <20 / 20-50 / 50-200 / 200-500 / 500+
+  ville         String   @default("Abidjan") @db.VarChar(100)
+  pays          String   @default("Côte d'Ivoire") @db.VarChar(50)
+  statutArtci   String   @default("en_cours") @db.VarChar(50) // déclaré / autorisé / en_cours
+  createdAt     DateTime @default(now()) @db.Timestamptz
+  updatedAt     DateTime @updatedAt @db.Timestamptz
+
+  utilisateurs  Utilisateur[]
+  sessions      SessionDiagnostic[]
+
+  @@map("organisation")
+}
+
+// ─── UTILISATEUR ──────────────────────────────────────────────
+model Utilisateur {
+  id                 String       @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  organisationId     String       @db.Uuid
+  email              String       @unique @db.VarChar(255)
+  passwordHash       String?      @db.VarChar(255)
+  role               RoleUtilisateur
+  prenom             String?      @db.VarChar(100)
+  nom                String?      @db.VarChar(100)
+  actif              Boolean      @default(true)
+  derniereConnexion  DateTime?    @db.Timestamptz
+  createdAt          DateTime     @default(now()) @db.Timestamptz
+
+  organisation       Organisation @relation(fields: [organisationId], references: [id], onDelete: Cascade)
+  sessions           SessionDiagnostic[]
+  liensManager       LienManager[]
+
+  @@map("utilisateur")
+}
+
+enum RoleUtilisateur {
+  admin_haki
+  drh
+  dg
+  lecteur
+}
+
+// ─── SESSION DIAGNOSTIC ───────────────────────────────────────
+model SessionDiagnostic {
+  id                String    @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  organisationId    String    @db.Uuid
+  creeePar          String?   @db.Uuid
+  type              TypeSession
+  statut            StatutSession @default(en_cours)
+  anneeReference    String    @default(dbgenerated("EXTRACT(YEAR FROM NOW())::text")) @db.VarChar(4)
+  startedAt         DateTime  @default(now()) @db.Timestamptz
+  completedAt       DateTime? @db.Timestamptz
+
+  organisation      Organisation      @relation(fields: [organisationId], references: [id], onDelete: Cascade)
+  createur          Utilisateur?      @relation(fields: [creeePar], references: [id])
+  socleDiagnostic   SocleDiagnostic?
+  reponsesOrg       ReponseOrganisation[]
+  scoreMmiCi        ScoreMmiCi?
+  liensCollaborateur LienCollaborateur[]
+  reponsesCollab    ReponseCollaborateur[]
+  scoreCollaborateur ScoreCollaborateur?
+  liensManager      LienManager[]
+  rapports          Rapport[]
+
+  @@map("session_diagnostic")
+}
+
+enum TypeSession {
+  organisation
+  collaborateurs
+  managers
+  complet
+}
+
+enum StatutSession {
+  en_cours
+  complete
+  expire
+  archive
+}
+
+// ─── SOCLE DIAGNOSTIC ─────────────────────────────────────────
+model SocleDiagnostic {
+  id                    String    @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  sessionId             String    @unique @db.Uuid
+  cnpsStatut            String    @default("non_evalue") @db.VarChar(20)
+  cmuStatut             String    @default("non_evalue") @db.VarChar(20)
+  medecinTravailStatut  String    @default("non_evalue") @db.VarChar(20)
+  prevoyanceStatut      String    @default("non_evalue") @db.VarChar(20)
+  badgeGlobal           String    @default("non_evalue") @db.VarChar(20)
+  // conforme / en_cours / non_conforme
+  alertes               Json      @default("[]")
+  // [{composante, niveau, message, remediation, articleLegal}]
+  planRemediation       Json      @default("[]")
+  evaluatedAt           DateTime  @default(now()) @db.Timestamptz
+
+  session               SessionDiagnostic @relation(fields: [sessionId], references: [id], onDelete: Cascade)
+
+  @@map("socle_diagnostic")
+}
+
+// ─── RÉPONSE ORGANISATION ─────────────────────────────────────
+model ReponseOrganisation {
+  id           String   @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  sessionId    String   @db.Uuid
+  itemCode     String   @db.VarChar(20)   // G-23, H-02, M-06...
+  dimension    String   @db.VarChar(10)   // DIM1, DIM2, DIM3, DIM4, SOCLE
+  composante   String   @db.VarChar(5)    // A, B, C...
+  valeurBrute  String                     // texte de la réponse cochée
+  scoreObtenu  Float    @default(0)
+  scoreMax     Float
+  answeredAt   DateTime @default(now()) @db.Timestamptz
+
+  session      SessionDiagnostic @relation(fields: [sessionId], references: [id], onDelete: Cascade)
+
+  @@unique([sessionId, itemCode])
+  @@map("reponse_organisation")
+}
+
+// ─── SCORE MMI-CI ─────────────────────────────────────────────
+model ScoreMmiCi {
+  id                   String   @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  sessionId            String   @unique @db.Uuid
+  scoreGlobal          Float
+  niveauMmi            Int      // 1 à 5
+  scoreDim1Genre       Float    @default(0)
+  scoreDim2Handicap    Float    @default(0)
+  scoreDim3Multicult   Float    @default(0)
+  scoreDim4Intergen    Float    @default(0)
+  scoresComposantes    Json     @default("{}")
+  // {G-A: 7.2, G-B: 5.0, H-A: 3.1, ...}
+  calculatedAt         DateTime @default(now()) @db.Timestamptz
+
+  session              SessionDiagnostic @relation(fields: [sessionId], references: [id], onDelete: Cascade)
+
+  @@map("score_mmi_ci")
+}
+
+// ─── LIEN COLLABORATEUR ───────────────────────────────────────
+model LienCollaborateur {
+  id            String    @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  sessionId     String    @db.Uuid
+  tokenAnonyme  String    @unique @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  utilise       Boolean   @default(false)
+  expireAt      DateTime  @db.Timestamptz
+
+  session       SessionDiagnostic    @relation(fields: [sessionId], references: [id], onDelete: Cascade)
+  reponse       ReponseCollaborateur?
+
+  @@map("lien_collaborateur")
+}
+
+// ─── RÉPONSE COLLABORATEUR (AGRÉGÉE) ──────────────────────────
+// RÈGLE CRITIQUE : Aucune donnée individuelle stockée
+// L'agrégation est faite côté serveur AVANT l'INSERT
+model ReponseCollaborateur {
+  id            String    @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  sessionId     String    @db.Uuid
+  lienId        String    @unique @db.Uuid
+  // Profil en tranches uniquement — jamais de valeur exacte
+  // Format : "F|26-35|cadre|3-7ans"
+  profilAgrege  String    @db.VarChar(100)
+  reponsesJson  Json
+  // {GH-01: "3", GH-02: "2", HH-01: "4", ...}
+  submittedAt   DateTime  @default(now()) @db.Timestamptz
+
+  session       SessionDiagnostic @relation(fields: [sessionId], references: [id], onDelete: Cascade)
+  lien          LienCollaborateur @relation(fields: [lienId], references: [id], onDelete: Cascade)
+
+  @@map("reponse_collaborateur")
+}
+
+// ─── SCORE COLLABORATEUR (AGRÉGÉ) ─────────────────────────────
+model ScoreCollaborateur {
+  id                  String   @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  sessionId           String   @unique @db.Uuid
+  nbRepondants        Int
+  // Affiché à l'organisation UNIQUEMENT si nbRepondants >= 5
+  scoresDimAgreg      Json     @default("{}")
+  // {DIM1: 3.2, DIM2: 2.8, DIM3: 3.5, DIM4: 3.1}
+  scoreInclusionGlobal Float?
+  calculatedAt        DateTime @default(now()) @db.Timestamptz
+
+  session             SessionDiagnostic @relation(fields: [sessionId], references: [id], onDelete: Cascade)
+
+  @@map("score_collaborateur")
+}
+
+// ─── LIEN MANAGER ─────────────────────────────────────────────
+model LienManager {
+  id             String    @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  sessionId      String    @db.Uuid
+  managerUserId  String    @db.Uuid
+  // tokenPrive est hashé SHA-256 en base — jamais stocké en clair
+  tokenPriveHash String    @unique @db.VarChar(64)
+  complete       Boolean   @default(false)
+  expireAt       DateTime  @db.Timestamptz
+
+  session        SessionDiagnostic @relation(fields: [sessionId], references: [id], onDelete: Cascade)
+  manager        Utilisateur       @relation(fields: [managerUserId], references: [id], onDelete: Cascade)
+  scoreManager   ScoreManager?
+
+  @@map("lien_manager")
+}
+
+// ─── SCORE MANAGER (STRICTEMENT CONFIDENTIEL) ─────────────────
+// RÈGLE CRITIQUE : Jamais accessible à l'organisation ni à Haki
+// Accessible uniquement via le tokenPrive du manager lui-même
+model ScoreManager {
+  id             String    @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  lienManagerId  String    @unique @db.Uuid
+  scoreModule1   Float     // Biais inconscients CI /36
+  scoreModule2   Float     // Recrutement inclusif /36
+  scoreModule3   Float     // Management inclusif /40
+  scoreTotal     Float     // /112
+  planAction     Json      @default("[]")
+  // [{action, delai, indicateur}]
+  calculatedAt   DateTime  @default(now()) @db.Timestamptz
+
+  lienManager    LienManager @relation(fields: [lienManagerId], references: [id], onDelete: Cascade)
+
+  @@map("score_manager")
+}
+
+// ─── RAPPORT ──────────────────────────────────────────────────
+model Rapport {
+  id            String    @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  sessionId     String    @db.Uuid
+  type          TypeRapport
+  urlPdf        String?   // URL S3/Supabase signée
+  version       String    @default("1.0") @db.VarChar(10)
+  generatedAt   DateTime  @default(now()) @db.Timestamptz
+
+  session       SessionDiagnostic @relation(fields: [sessionId], references: [id], onDelete: Cascade)
+
+  @@map("rapport")
+}
+
+enum TypeRapport {
+  executif
+  analytique
+}
+
+// ─── BENCHMARK SECTORIEL CI ───────────────────────────────────
+// Jamais calculé à la volée — job nocturne uniquement
+// Publié uniquement si nbEntreprises >= 10
+model BenchmarkSectoriel {
+  id              String    @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  secteur         String    @db.VarChar(100)
+  dimension       String    @db.VarChar(10)  // DIM1/DIM2/DIM3/DIM4/GLOBAL
+  composante      String?   @db.VarChar(5)
+  annee           String    @db.VarChar(4)
+  scoreMoyen      Float
+  scoreP25        Float?
+  scoreP75        Float?
+  nbEntreprises   Int       // minimum 10 pour publication
+  updatedAt       DateTime  @default(now()) @db.Timestamptz
+
+  @@unique([secteur, dimension, composante, annee])
+  @@map("benchmark_sectoriel")
+}
