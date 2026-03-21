@@ -339,6 +339,10 @@ export default function DashboardPage() {
                   style={{ padding:"9px 18px", background:"#1A237E", color:"#fff", border:"none", borderRadius:8, fontSize:13, fontWeight:500, cursor:"pointer" }}>
                   {score ? "Modifier le questionnaire" : "Questionnaire ORGANISATION"}
                 </button>
+<button onClick={() => router.push("/benchmarks")}
+  style={{ padding:"9px 18px", background:"#E8EAF6", color:"#1A237E", border:"none", borderRadius:8, fontSize:13, fontWeight:500, cursor:"pointer" }}>
+  📊 Benchmarks CI
+</button>
                 {score && (
                   <>
                     <button onClick={() => genererRapport("executif")} disabled={!!rapportLoading}

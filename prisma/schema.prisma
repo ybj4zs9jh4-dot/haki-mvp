@@ -287,3 +287,20 @@ model ParametreSession {
 
   @@map("parametre_session")
 }
+
+model VeilleWebCI {
+  id              String    @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  secteur         String    @db.VarChar(100)
+  entreprise      String    @db.VarChar(255)
+  sourceUrl       String    @db.VarChar(500)
+  sourceTitre     String    @db.VarChar(500)
+  signalDei       String    // description du signal DEI détecté
+  dimension       String?   @db.VarChar(10)  // DIM1/DIM2/DIM3/DIM4
+  scoreConfiance  Int       @default(50)     // 0-100
+  statut          String    @default("non_verifie") @db.VarChar(20)
+  // non_verifie / verifie / rejete
+  dateVeille      DateTime  @default(now()) @db.Timestamptz
+  createdAt       DateTime  @default(now()) @db.Timestamptz
+
+  @@map("veille_web_ci")
+}
