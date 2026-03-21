@@ -110,6 +110,12 @@ export default function DashboardPage() {
     setTimeout(() => setCopie(""), 2000);
   }
 
+  function retour() {
+    setModeInvitation("none");
+    setEnvoyResult(null);
+    setLiensGeneres([]);
+  }
+
   if (status === "loading" || loading) return (
     <div style={{ display:"flex",alignItems:"center",justifyContent:"center",height:"100vh",fontFamily:"system-ui" }}>
       <div style={{ color:"#1A237E" }}>Chargement...</div>
@@ -235,7 +241,6 @@ export default function DashboardPage() {
                 )}
               </div>
 
-              {/* Choix du mode */}
               {modeInvitation === "none" && (
                 <div style={{ display:"flex", gap:10 }}>
                   <button onClick={() => setModeInvitation("email")}
@@ -253,84 +258,85 @@ export default function DashboardPage() {
                 </div>
               )}
 
-              {/* Mode email */}
-              {modeInvitation === "email" && (
-                <div>
-                  <div style={{ display:"flex", justifyContent:"space-between", alignItems:"center", marginBottom:10 }}>
-                    <div style={{ fontSize:13, fontWeight:500, color:"#1A237E" }}>📧 Envoi par email</div>
-                    <button onClick={() => { setModeInvitation("none"); setEnvoyResult(null); }} style={{ background:"none", border:"none", color:"#9E9E9E", fontSize:12, cursor:"pointer" }}>← Retour</button>
-                  </div>
-                  <div style={{ fontSize:13, color:"#424242", marginBottom:8 }}>
-                    Saisissez les adresses email — une par ligne ou séparées par des virgules :
-                  </div>
-                  <textarea value={emailsText} onChange={e => setEmailsText(e.target.value)}
-                    placeholder={"collaborateur1@entreprise.ci\ncollaborateur2@entreprise.ci\ncollaborateur3@entreprise.ci"}
-                    rows={5} style={{ width:"100%", padding:"12px 14px", border:"1.5px solid #E0E0E0", borderRadius:8, fontSize:13, fontFamily:"monospace", resize:"vertical", marginBottom:10, boxSizing:"border-box" }} />
-                  <div style={{ display:"flex", alignItems:"center", gap:12, marginBottom:12 }}>
-                    <div style={{ fontSize:12, color:"#9E9E9E" }}>
-                      {emailsText.split(/[\n,;]+/).filter(e => e.trim().includes("@")).length} adresse(s) détectée(s)
-                    </div>
-                    <button onClick={envoyerEmails} disabled={envoyLoading}
-                      style={{ padding:"10px 20px", background:envoyLoading?"#9FA8DA":"#1A237E", color:"#fff", border:"none", borderRadius:8, fontSize:13, fontWeight:500, cursor:envoyLoading?"default":"pointer" }}>
-                      {envoyLoading ? "Envoi en cours..." : "Envoyer les liens →"}
-                    </button>
-                  </div>
-                  {envoyResult && (
-                    <div style={{ padding:"12px 16px", borderRadius:8, background:envoyResult.erreurs>0?"#FFF3E0":"#E8F5E9", fontSize:13, color:envoyResult.erreurs>0?"#E65100":"#2E7D32" }}>
-                      {envoyResult.envoyes > 0 && <div>✓ {envoyResult.envoyes} email(s) envoyé(s) avec succès</div>}
-                      {envoyResult.erreurs > 0 && <div>⚠ {envoyResult.erreurs} email(s) non envoyé(s) — vérifiez les adresses</div>}
-                    </div>
-                  )}
-                  <div style={{ marginTop:10, fontSize:11, color:"#9E9E9E", lineHeight:1.6 }}>
-                    ⚠ En mode test, l'envoi n'est possible que vers l'email de votre compte Resend. Un domaine vérifié sera nécessaire pour envoyer à tous vos collaborateurs.
-                  </div>
-                </div>
-              )}
+              {modeInvitation !== "none" && (
+                <>
+                  {/* Bouton retour visible */}
+                  <button onClick={retour}
+                    style={{ display:"flex", alignItems:"center", gap:6, padding:"8px 16px", background:"#F5F5F5", color:"#424242", border:"1.5px solid #E0E0E0", borderRadius:8, fontSize:13, fontWeight:500, cursor:"pointer", marginBottom:16 }}>
+                    ← Changer de méthode d'invitation
+                  </button>
 
-              {/* Mode lien */}
-              {modeInvitation === "lien" && (
-                <div>
-                  <div style={{ display:"flex", justifyContent:"space-between", alignItems:"center", marginBottom:12 }}>
-                    <div style={{ fontSize:13, fontWeight:500, color:"#00695C" }}>🔗 Génération de liens</div>
-                    <button onClick={() => { setModeInvitation("none"); setLiensGeneres([]); }} style={{ background:"none", border:"none", color:"#9E9E9E", fontSize:12, cursor:"pointer" }}>← Retour</button>
-                  </div>
-                  <div style={{ display:"flex", alignItems:"center", gap:12, marginBottom:14 }}>
-                    <span style={{ fontSize:13, color:"#424242" }}>Nombre de liens à générer :</span>
-                    <input type="number" value={nbLiens} onChange={e => setNbLiens(Number(e.target.value))} min={1} max={5000}
-                      style={{ padding:"8px 12px", border:"1.5px solid #E0E0E0", borderRadius:8, fontSize:14, width:90 }} />
-                    <button onClick={genererLiens} disabled={envoyLoading}
-                      style={{ padding:"9px 18px", background:envoyLoading?"#9FA8DA":"#00695C", color:"#fff", border:"none", borderRadius:8, fontSize:13, fontWeight:500, cursor:envoyLoading?"default":"pointer" }}>
-                      {envoyLoading ? "Génération..." : "Générer →"}
-                    </button>
-                  </div>
-
-                  {liensGeneres.length > 0 && (
+                  {modeInvitation === "email" && (
                     <div>
-                      <div style={{ display:"flex", justifyContent:"space-between", alignItems:"center", marginBottom:8 }}>
-                        <div style={{ fontSize:12, color:"#2E7D32" }}>✓ {liensGeneres.length} liens générés</div>
-                        <button onClick={copierTousLiens}
-                          style={{ padding:"6px 14px", background:copie==="tous"?"#2E7D32":"#E0F2F1", color:copie==="tous"?"#fff":"#00695C", border:"none", borderRadius:6, fontSize:12, fontWeight:500, cursor:"pointer" }}>
-                          {copie === "tous" ? "✓ Copié !" : "Copier tous les liens"}
+                      <div style={{ fontSize:13, fontWeight:500, color:"#1A237E", marginBottom:10 }}>📧 Envoi par email</div>
+                      <div style={{ fontSize:13, color:"#424242", marginBottom:8 }}>
+                        Saisissez les adresses email — une par ligne ou séparées par des virgules :
+                      </div>
+                      <textarea value={emailsText} onChange={e => setEmailsText(e.target.value)}
+                        placeholder={"collaborateur1@entreprise.ci\ncollaborateur2@entreprise.ci\ncollaborateur3@entreprise.ci"}
+                        rows={5} style={{ width:"100%", padding:"12px 14px", border:"1.5px solid #E0E0E0", borderRadius:8, fontSize:13, fontFamily:"monospace", resize:"vertical", marginBottom:10, boxSizing:"border-box" }} />
+                      <div style={{ display:"flex", alignItems:"center", gap:12, marginBottom:12 }}>
+                        <div style={{ fontSize:12, color:"#9E9E9E" }}>
+                          {emailsText.split(/[\n,;]+/).filter(e => e.trim().includes("@")).length} adresse(s) détectée(s)
+                        </div>
+                        <button onClick={envoyerEmails} disabled={envoyLoading}
+                          style={{ padding:"10px 20px", background:envoyLoading?"#9FA8DA":"#1A237E", color:"#fff", border:"none", borderRadius:8, fontSize:13, fontWeight:500, cursor:envoyLoading?"default":"pointer" }}>
+                          {envoyLoading ? "Envoi en cours..." : "Envoyer les liens →"}
                         </button>
                       </div>
-                      <div style={{ background:"#F5F5F5", borderRadius:8, padding:14, maxHeight:220, overflowY:"auto" }}>
-                        {liensGeneres.map((l, i) => (
-                          <div key={i} style={{ display:"flex", alignItems:"center", gap:8, marginBottom:6 }}>
-                            <span style={{ fontSize:11, color:"#757575", minWidth:22 }}>{i+1}.</span>
-                            <span style={{ fontSize:11, color:"#1A237E", fontFamily:"monospace", flex:1, wordBreak:"break-all" }}>{l.url}</span>
-                            <button onClick={() => copierLien(l.url, l.id)}
-                              style={{ padding:"3px 10px", background:copie===l.id?"#2E7D32":"#E0F2F1", color:copie===l.id?"#fff":"#00695C", border:"none", borderRadius:4, fontSize:11, cursor:"pointer", flexShrink:0 }}>
-                              {copie === l.id ? "✓" : "Copier"}
-                            </button>
-                          </div>
-                        ))}
-                      </div>
+                      {envoyResult && (
+                        <div style={{ padding:"12px 16px", borderRadius:8, background:envoyResult.erreurs>0?"#FFF3E0":"#E8F5E9", fontSize:13, color:envoyResult.erreurs>0?"#E65100":"#2E7D32" }}>
+                          {envoyResult.envoyes > 0 && <div>✓ {envoyResult.envoyes} email(s) envoyé(s) avec succès</div>}
+                          {envoyResult.erreurs > 0 && <div>⚠ {envoyResult.erreurs} email(s) non envoyé(s)</div>}
+                        </div>
+                      )}
                       <div style={{ marginTop:10, fontSize:11, color:"#9E9E9E", lineHeight:1.6 }}>
-                        Partagez ces liens par email, WhatsApp ou intranet · Chaque lien est à usage unique · Expiration 30 jours
+                        ⚠ En mode test, l'envoi n'est possible que vers l'email de votre compte Resend. Un domaine vérifié sera nécessaire pour envoyer à tous vos collaborateurs.
                       </div>
                     </div>
                   )}
-                </div>
+
+                  {modeInvitation === "lien" && (
+                    <div>
+                      <div style={{ fontSize:13, fontWeight:500, color:"#00695C", marginBottom:12 }}>🔗 Génération de liens</div>
+                      <div style={{ display:"flex", alignItems:"center", gap:12, marginBottom:14 }}>
+                        <span style={{ fontSize:13, color:"#424242" }}>Nombre de liens à générer :</span>
+                        <input type="number" value={nbLiens} onChange={e => setNbLiens(Number(e.target.value))} min={1} max={5000}
+                          style={{ padding:"8px 12px", border:"1.5px solid #E0E0E0", borderRadius:8, fontSize:14, width:90 }} />
+                        <button onClick={genererLiens} disabled={envoyLoading}
+                          style={{ padding:"9px 18px", background:envoyLoading?"#9FA8DA":"#00695C", color:"#fff", border:"none", borderRadius:8, fontSize:13, fontWeight:500, cursor:envoyLoading?"default":"pointer" }}>
+                          {envoyLoading ? "Génération..." : "Générer →"}
+                        </button>
+                      </div>
+                      {liensGeneres.length > 0 && (
+                        <div>
+                          <div style={{ display:"flex", justifyContent:"space-between", alignItems:"center", marginBottom:8 }}>
+                            <div style={{ fontSize:12, color:"#2E7D32" }}>✓ {liensGeneres.length} liens générés</div>
+                            <button onClick={copierTousLiens}
+                              style={{ padding:"6px 14px", background:copie==="tous"?"#2E7D32":"#E0F2F1", color:copie==="tous"?"#fff":"#00695C", border:"none", borderRadius:6, fontSize:12, fontWeight:500, cursor:"pointer" }}>
+                              {copie === "tous" ? "✓ Copié !" : "Copier tous les liens"}
+                            </button>
+                          </div>
+                          <div style={{ background:"#F5F5F5", borderRadius:8, padding:14, maxHeight:220, overflowY:"auto" }}>
+                            {liensGeneres.map((l, i) => (
+                              <div key={i} style={{ display:"flex", alignItems:"center", gap:8, marginBottom:6 }}>
+                                <span style={{ fontSize:11, color:"#757575", minWidth:22 }}>{i+1}.</span>
+                                <span style={{ fontSize:11, color:"#1A237E", fontFamily:"monospace", flex:1, wordBreak:"break-all" }}>{l.url}</span>
+                                <button onClick={() => copierLien(l.url, l.id)}
+                                  style={{ padding:"3px 10px", background:copie===l.id?"#2E7D32":"#E0F2F1", color:copie===l.id?"#fff":"#00695C", border:"none", borderRadius:4, fontSize:11, cursor:"pointer", flexShrink:0 }}>
+                                  {copie === l.id ? "✓" : "Copier"}
+                                </button>
+                              </div>
+                            ))}
+                          </div>
+                          <div style={{ marginTop:10, fontSize:11, color:"#9E9E9E", lineHeight:1.6 }}>
+                            Partagez ces liens par email, WhatsApp ou intranet · Chaque lien est à usage unique · Expiration 30 jours
+                          </div>
+                        </div>
+                      )}
+                    </div>
+                  )}
+                </>
               )}
             </div>
 
