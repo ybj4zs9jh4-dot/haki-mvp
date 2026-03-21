@@ -265,7 +265,7 @@ export default function ManagerPage() {
           <div style={{ fontSize:13, color:"#616161", lineHeight:1.7 }}>
             Pour chaque affirmation, indiquez votre niveau d'accord sur une échelle de 1 à 4.<br/>
             <strong>Répondez honnêtement</strong> — il n'y a pas de bonne ou mauvaise réponse.<br/>
-            Les questions sont adaptées au contexte managérial ivoirien (tribalisme, fait religieux CI, VIH/Sida Art. 4 CT CI...).
+            
           </div>
         </div>
         <button onClick={() => setEtape("module1")}
