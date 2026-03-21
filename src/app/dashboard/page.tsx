@@ -4,10 +4,10 @@ import { useSession, signOut } from "next-auth/react";
 import { useRouter } from "next/navigation";
 
 const DIM_CONFIG = [
-  { key:"scoreDim1Genre",    label:"Genre & Égalité + VIH/Sida",          max:38, color:"#1A237E" },
-  { key:"scoreDim2Handicap", label:"Handicap + Médecine du travail",       max:26, color:"#00695C" },
-  { key:"scoreDim3Multicult",label:"Multiculturalité & Anti-tribalisme",   max:25, color:"#E65100" },
-  { key:"scoreDim4Intergen", label:"Intergénérationnel + QVT",             max:11, color:"#2E7D32" },
+  { key:"scoreDim1Genre",    label:"Genre & Égalité + VIH/Sida",        max:38, color:"#1A237E" },
+  { key:"scoreDim2Handicap", label:"Handicap + Médecine du travail",     max:26, color:"#00695C" },
+  { key:"scoreDim3Multicult",label:"Multiculturalité & Anti-tribalisme", max:25, color:"#E65100" },
+  { key:"scoreDim4Intergen", label:"Intergénérationnel + QVT",           max:11, color:"#2E7D32" },
 ];
 
 const NIVEAUX: Record<number,{label:string;color:string;bg:string}> = {
@@ -24,9 +24,9 @@ export default function DashboardPage() {
   const [sessions, setSessions] = useState<any[]>([]);
   const [loading, setLoading] = useState(true);
   const [showLiens, setShowLiens] = useState(false);
-  const [nbLiens, setNbLiens] = useState(10);
-  const [liens, setLiens] = useState<any[]>([]);
-  const [genLoading, setGenLoading] = useState(false);
+  const [emailsText, setEmailsText] = useState("");
+  const [envoyLoading, setEnvoyLoading] = useState(false);
+  const [envoyResult, setEnvoyResult] = useState<any>(null);
   const [statsLiens, setStatsLiens] = useState<any>(null);
 
   useEffect(() => {
@@ -59,21 +59,30 @@ export default function DashboardPage() {
     setSessions(d.sessions ?? []);
   }
 
-  async function genererLiens() {
+  async function envoyerEmails() {
     if (!sessions[0]?.id) return;
-    setGenLoading(true);
-    const res = await fetch(`/api/sessions/${sessions[0].id}/liens-collaborateur`, {
+    const emails = emailsText
+      .split(/[\n,;]+/)
+      .map(e => e.trim())
+      .filter(e => e.includes("@"));
+    if (emails.length === 0) {
+      alert("Veuillez saisir au moins une adresse email valide.");
+      return;
+    }
+    setEnvoyLoading(true);
+    setEnvoyResult(null);
+    const res = await fetch(`/api/sessions/${sessions[0].id}/envoyer-liens`, {
       method: "POST",
       headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ nombre: nbLiens }),
+      body: JSON.stringify({ emails }),
     });
     const data = await res.json();
-    if (data.tokens) {
-      setLiens(data.tokens);
+    setEnvoyResult(data);
+    setEnvoyLoading(false);
+    if (data.envoyes > 0) {
       const d = await fetch(`/api/sessions/${sessions[0].id}/liens-collaborateur`).then(r => r.json());
       if (d.stats) setStatsLiens(d.stats);
     }
-    setGenLoading(false);
   }
 
   if (status === "loading" || loading) return (
@@ -87,7 +96,6 @@ export default function DashboardPage() {
   const socle = latest?.socleDiagnostic;
   const niveau = score ? NIVEAUX[score.niveauMmi] : null;
   const user = session?.user as any;
-  const appUrl = process.env.NEXT_PUBLIC_APP_URL || "https://haki-mvp.vercel.app";
 
   return (
     <div style={{ fontFamily:"system-ui,sans-serif", background:"#F5F5F5", minHeight:"100vh" }}>
@@ -109,12 +117,11 @@ export default function DashboardPage() {
 
       <div style={{ maxWidth:1100, margin:"0 auto", padding:"24px 20px" }}>
 
-        {/* Pas de session */}
         {!latest && (
           <div style={{ background:"#fff", borderRadius:12, padding:36, textAlign:"center", border:"2px dashed #E0E0E0" }}>
             <div style={{ fontSize:32, marginBottom:12 }}>🚀</div>
             <div style={{ fontSize:18, fontWeight:500, marginBottom:8, color:"#1A237E" }}>Lancer votre premier diagnostic Haki</div>
-            <div style={{ fontSize:14, color:"#757575", marginBottom:24 }}>Commencez par le SOCLE (conformité légale CI), puis les 4 dimensions DEI.</div>
+            <div style={{ fontSize:14, color:"#757575", marginBottom:24 }}>Commencez par le SOCLE puis les 4 dimensions DEI.</div>
             <button onClick={creerSession} style={{ background:"#1A237E", color:"#fff", border:"none", borderRadius:8, padding:"12px 28px", fontSize:14, fontWeight:500, cursor:"pointer" }}>
               Créer un diagnostic
             </button>
@@ -145,9 +152,9 @@ export default function DashboardPage() {
                 {socle ? (
                   <>
                     <div style={{ display:"flex", alignItems:"center", gap:10, marginBottom:12 }}>
-                      <span style={{ fontSize:22 }}>{socle.badgeGlobal === "conforme" ? "✅" : socle.badgeGlobal === "en_cours" ? "⏳" : "⚠️"}</span>
-                      <span style={{ fontSize:14, fontWeight:500, color: socle.badgeGlobal === "conforme" ? "#2E7D32" : socle.badgeGlobal === "en_cours" ? "#E65100" : "#B71C1C" }}>
-                        {socle.badgeGlobal === "conforme" ? "Conforme" : socle.badgeGlobal === "en_cours" ? "En cours de conformité" : "Non conforme"}
+                      <span style={{ fontSize:22 }}>{socle.badgeGlobal==="conforme"?"✅":socle.badgeGlobal==="en_cours"?"⏳":"⚠️"}</span>
+                      <span style={{ fontSize:14, fontWeight:500, color:socle.badgeGlobal==="conforme"?"#2E7D32":socle.badgeGlobal==="en_cours"?"#E65100":"#B71C1C" }}>
+                        {socle.badgeGlobal==="conforme"?"Conforme":socle.badgeGlobal==="en_cours"?"En cours de conformité":"Non conforme"}
                       </span>
                     </div>
                     {Array.isArray(socle.alertes) && (socle.alertes as any[]).slice(0,2).map((a:any,i:number) => (
@@ -170,7 +177,7 @@ export default function DashboardPage() {
                 <div style={{ display:"grid", gridTemplateColumns:"1fr 1fr", gap:14 }}>
                   {DIM_CONFIG.map(dim => {
                     const s = score[dim.key] ?? 0;
-                    const pct = Math.round((s / dim.max) * 100);
+                    const pct = Math.round((s/dim.max)*100);
                     return (
                       <div key={dim.key}>
                         <div style={{ display:"flex", justifyContent:"space-between", marginBottom:4 }}>
@@ -195,60 +202,60 @@ export default function DashboardPage() {
               <div style={{ display:"flex", justifyContent:"space-between", alignItems:"center", marginBottom:14 }}>
                 <div>
                   <div style={{ fontSize:13, fontWeight:500, color:"#424242" }}>Baromètre COLLABORATEURS</div>
-                  <div style={{ fontSize:12, color:"#9E9E9E", marginTop:2 }}>Liens anonymes · Résultats agrégés · Seuil n≥5</div>
+                  <div style={{ fontSize:12, color:"#9E9E9E", marginTop:2 }}>Liens anonymes envoyés par email · Résultats agrégés · Seuil n≥5</div>
                 </div>
                 {statsLiens && (
-                  <div style={{ display:"flex", gap:12, fontSize:12 }}>
-                    <span style={{ color:"#1A237E" }}><strong>{statsLiens.total}</strong> liens générés</span>
-                    <span style={{ color:"#2E7D32" }}><strong>{statsLiens.utilises}</strong> réponses</span>
-                    <span style={{ color:"#E65100" }}><strong>{statsLiens.enAttente}</strong> en attente</span>
+                  <div style={{ display:"flex", gap:16, fontSize:12 }}>
+                    <span><strong style={{ color:"#1A237E" }}>{statsLiens.total}</strong> <span style={{ color:"#9E9E9E" }}>envoyés</span></span>
+                    <span><strong style={{ color:"#2E7D32" }}>{statsLiens.utilises}</strong> <span style={{ color:"#9E9E9E" }}>réponses</span></span>
+                    <span><strong style={{ color:"#E65100" }}>{statsLiens.enAttente}</strong> <span style={{ color:"#9E9E9E" }}>en attente</span></span>
                   </div>
                 )}
               </div>
 
               {!showLiens ? (
                 <button onClick={() => setShowLiens(true)} style={{ padding:"10px 20px", background:"#E8EAF6", color:"#1A237E", border:"none", borderRadius:8, fontSize:13, fontWeight:500, cursor:"pointer" }}>
-                  Générer des liens collaborateurs →
+                  Inviter des collaborateurs par email →
                 </button>
               ) : (
                 <div>
+                  <div style={{ fontSize:13, color:"#424242", marginBottom:8 }}>
+                    Saisissez les adresses email de vos collaborateurs — une par ligne, ou séparées par des virgules :
+                  </div>
+                  <textarea
+                    value={emailsText}
+                    onChange={e => setEmailsText(e.target.value)}
+                    placeholder={"collaborateur1@entreprise.ci\ncollaborateur2@entreprise.ci\ncollaborateur3@entreprise.ci"}
+                    rows={6}
+                    style={{ width:"100%", padding:"12px 14px", border:"1.5px solid #E0E0E0", borderRadius:8, fontSize:13, fontFamily:"monospace", resize:"vertical", marginBottom:12, boxSizing:"border-box" }}
+                  />
                   <div style={{ display:"flex", alignItems:"center", gap:12, marginBottom:14 }}>
-                    <span style={{ fontSize:13, color:"#424242" }}>Nombre de collaborateurs à inviter :</span>
-                    <input type="number" value={nbLiens} onChange={e => setNbLiens(Number(e.target.value))} min={1} max={5000}
-                      style={{ padding:"8px 12px", border:"1.5px solid #E0E0E0", borderRadius:8, fontSize:14, width:100 }} />
-                    <button onClick={genererLiens} disabled={genLoading}
-                      style={{ padding:"9px 18px", background:genLoading?"#9FA8DA":"#1A237E", color:"#fff", border:"none", borderRadius:8, fontSize:13, fontWeight:500, cursor:genLoading?"default":"pointer" }}>
-                      {genLoading ? "Génération..." : "Générer les liens"}
+                    <div style={{ fontSize:12, color:"#9E9E9E" }}>
+                      {emailsText.split(/[\n,;]+/).filter(e => e.trim().includes("@")).length} adresse(s) détectée(s)
+                    </div>
+                    <button onClick={envoyerEmails} disabled={envoyLoading}
+                      style={{ padding:"10px 22px", background:envoyLoading?"#9FA8DA":"#1A237E", color:"#fff", border:"none", borderRadius:8, fontSize:13, fontWeight:500, cursor:envoyLoading?"default":"pointer" }}>
+                      {envoyLoading ? "Envoi en cours..." : "Envoyer les liens →"}
                     </button>
                   </div>
 
-                  {liens.length > 0 && (
-                    <div>
-                      <div style={{ fontSize:12, color:"#2E7D32", marginBottom:10 }}>✓ {liens.length} liens générés — copiez et envoyez-les à vos collaborateurs</div>
-                      <div style={{ background:"#F5F5F5", borderRadius:8, padding:14, maxHeight:200, overflowY:"auto" }}>
-                        {liens.map((l, i) => (
-                          <div key={i} style={{ display:"flex", alignItems:"center", gap:8, marginBottom:6 }}>
-                            <span style={{ fontSize:11, color:"#757575", minWidth:20 }}>{i+1}.</span>
-                            <span style={{ fontSize:12, color:"#1A237E", fontFamily:"monospace", flex:1, wordBreak:"break-all" }}>{l.url}</span>
-                            <button onClick={() => navigator.clipboard.writeText(l.url)}
-                              style={{ padding:"3px 8px", background:"#E8EAF6", color:"#1A237E", border:"none", borderRadius:4, fontSize:11, cursor:"pointer", flexShrink:0 }}>
-                              Copier
-                            </button>
-                          </div>
-                        ))}
-                      </div>
-                      <div style={{ marginTop:10, fontSize:11, color:"#9E9E9E" }}>
-                        Chaque lien est à usage unique · Expiration dans 30 jours · Résultats visibles si n≥5 répondants
-                      </div>
+                  {envoyResult && (
+                    <div style={{ padding:"12px 16px", borderRadius:8, background:envoyResult.erreurs>0?"#FFF3E0":"#E8F5E9", fontSize:13, color:envoyResult.erreurs>0?"#E65100":"#2E7D32" }}>
+                      {envoyResult.envoyes > 0 && <div>✓ {envoyResult.envoyes} email(s) envoyé(s) avec succès</div>}
+                      {envoyResult.erreurs > 0 && <div>⚠ {envoyResult.erreurs} email(s) n'ont pas pu être envoyés</div>}
                     </div>
                   )}
+
+                  <div style={{ marginTop:12, padding:"10px 14px", background:"#E8EAF6", borderRadius:8, fontSize:11, color:"#3949AB", lineHeight:1.6 }}>
+                    Chaque collaborateur reçoit un lien unique et anonyme · Expiration 30 jours · Résultats visibles si n≥5 répondants
+                  </div>
                 </div>
               )}
             </div>
 
             {/* Actions */}
             <div style={{ background:"#fff", borderRadius:12, padding:22 }}>
-              <div style={{ fontSize:13, fontWeight:500, color:"#424242", marginBottom:14 }}>Actions</div>
+              <div style={{ fontSize:13, fontWeight:500, color:"#424242", marginBottom:14 }}>Actions diagnostic</div>
               <div style={{ display:"flex", gap:10, flexWrap:"wrap" }}>
                 <button onClick={() => router.push(`/diagnostic/${latest.id}/socle`)}
                   style={{ padding:"9px 18px", background:"#FFEBEE", color:"#B71C1C", border:"none", borderRadius:8, fontSize:13, fontWeight:500, cursor:"pointer" }}>
