@@ -32,6 +32,7 @@ export default function DashboardPage() {
   const [liensGeneres, setLiensGeneres] = useState<any[]>([]);
   const [statsCollab, setStatsCollab] = useState<any>(null);
   const [copie, setCopie] = useState<string>("");
+  const [rapportLoading, setRapportLoading] = useState<string>("");
 
   useEffect(() => {
     if (status === "unauthenticated") router.push("/connexion");
@@ -81,6 +82,33 @@ export default function DashboardPage() {
       if (d.stats) setStatsCollab(d.stats);
     }
     setCollabLoading(false);
+  }
+
+  async function genererRapport(format: string) {
+    if (!sessions[0]?.id) return;
+    setRapportLoading(format);
+    try {
+      const res = await fetch(`/api/sessions/${sessions[0].id}/rapports`, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ format }),
+      });
+      if (res.ok) {
+        const blob = await res.blob();
+        const url = URL.createObjectURL(blob);
+        const a = document.createElement("a");
+        a.href = url;
+        a.download = `Haki_Rapport_DEI_${format}_${new Date().getFullYear()}.pdf`;
+        a.click();
+        URL.revokeObjectURL(url);
+      } else {
+        const err = await res.json();
+        alert(err.error ?? "Erreur lors de la génération du rapport.");
+      }
+    } catch {
+      alert("Erreur réseau.");
+    }
+    setRapportLoading("");
   }
 
   function copierTexte(texte: string, id: string) {
@@ -299,9 +327,9 @@ export default function DashboardPage() {
             {/* Auto-diagnostic Managers */}
             <ManagerSection sessionId={latest.id} copie={copie} setCopie={setCopie} />
 
-            {/* Actions */}
+            {/* Actions diagnostic & Rapports PDF */}
             <div style={{ background:"#fff", borderRadius:12, padding:22 }}>
-              <div style={{ fontSize:13, fontWeight:500, color:"#424242", marginBottom:14 }}>Actions diagnostic</div>
+              <div style={{ fontSize:13, fontWeight:500, color:"#424242", marginBottom:14 }}>Actions diagnostic & Rapports PDF</div>
               <div style={{ display:"flex", gap:10, flexWrap:"wrap" }}>
                 <button onClick={() => router.push(`/diagnostic/${latest.id}/socle`)}
                   style={{ padding:"9px 18px", background:"#FFEBEE", color:"#B71C1C", border:"none", borderRadius:8, fontSize:13, fontWeight:500, cursor:"pointer" }}>
@@ -311,7 +339,24 @@ export default function DashboardPage() {
                   style={{ padding:"9px 18px", background:"#1A237E", color:"#fff", border:"none", borderRadius:8, fontSize:13, fontWeight:500, cursor:"pointer" }}>
                   {score ? "Modifier le questionnaire" : "Questionnaire ORGANISATION"}
                 </button>
+                {score && (
+                  <>
+                    <button onClick={() => genererRapport("executif")} disabled={!!rapportLoading}
+                      style={{ padding:"9px 18px", background:rapportLoading==="executif"?"#9FA8DA":"#00695C", color:"#fff", border:"none", borderRadius:8, fontSize:13, fontWeight:500, cursor:rapportLoading?"default":"pointer" }}>
+                      {rapportLoading === "executif" ? "Génération..." : "📄 Rapport Exécutif PDF"}
+                    </button>
+                    <button onClick={() => genererRapport("analytique")} disabled={!!rapportLoading}
+                      style={{ padding:"9px 18px", background:rapportLoading==="analytique"?"#9FA8DA":"#1A237E", color:"#fff", border:"none", borderRadius:8, fontSize:13, fontWeight:500, cursor:rapportLoading?"default":"pointer" }}>
+                      {rapportLoading === "analytique" ? "Génération..." : "📊 Rapport Analytique PDF"}
+                    </button>
+                  </>
+                )}
               </div>
+              {rapportLoading && (
+                <div style={{ marginTop:10, fontSize:12, color:"#00695C" }}>
+                  ⏳ Génération du rapport en cours — cela peut prendre 20 à 30 secondes...
+                </div>
+              )}
             </div>
           </>
         )}
