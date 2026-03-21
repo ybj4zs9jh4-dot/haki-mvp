@@ -23,11 +23,14 @@ export default function DashboardPage() {
   const router = useRouter();
   const [sessions, setSessions] = useState<any[]>([]);
   const [loading, setLoading] = useState(true);
-  const [showLiens, setShowLiens] = useState(false);
+  const [modeInvitation, setModeInvitation] = useState<"none"|"email"|"lien">("none");
   const [emailsText, setEmailsText] = useState("");
+  const [nbLiens, setNbLiens] = useState(10);
   const [envoyLoading, setEnvoyLoading] = useState(false);
   const [envoyResult, setEnvoyResult] = useState<any>(null);
+  const [liensGeneres, setLiensGeneres] = useState<any[]>([]);
   const [statsLiens, setStatsLiens] = useState<any>(null);
+  const [copie, setCopie] = useState<string>("");
 
   useEffect(() => {
     if (status === "unauthenticated") router.push("/connexion");
@@ -61,14 +64,8 @@ export default function DashboardPage() {
 
   async function envoyerEmails() {
     if (!sessions[0]?.id) return;
-    const emails = emailsText
-      .split(/[\n,;]+/)
-      .map(e => e.trim())
-      .filter(e => e.includes("@"));
-    if (emails.length === 0) {
-      alert("Veuillez saisir au moins une adresse email valide.");
-      return;
-    }
+    const emails = emailsText.split(/[\n,;]+/).map(e => e.trim()).filter(e => e.includes("@"));
+    if (emails.length === 0) { alert("Aucune adresse email valide détectée."); return; }
     setEnvoyLoading(true);
     setEnvoyResult(null);
     const res = await fetch(`/api/sessions/${sessions[0].id}/envoyer-liens`, {
@@ -79,10 +76,38 @@ export default function DashboardPage() {
     const data = await res.json();
     setEnvoyResult(data);
     setEnvoyLoading(false);
-    if (data.envoyes > 0) {
+    const d = await fetch(`/api/sessions/${sessions[0].id}/liens-collaborateur`).then(r => r.json());
+    if (d.stats) setStatsLiens(d.stats);
+  }
+
+  async function genererLiens() {
+    if (!sessions[0]?.id) return;
+    setEnvoyLoading(true);
+    const res = await fetch(`/api/sessions/${sessions[0].id}/liens-collaborateur`, {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ nombre: nbLiens }),
+    });
+    const data = await res.json();
+    if (data.tokens) {
+      setLiensGeneres(data.tokens);
       const d = await fetch(`/api/sessions/${sessions[0].id}/liens-collaborateur`).then(r => r.json());
       if (d.stats) setStatsLiens(d.stats);
     }
+    setEnvoyLoading(false);
+  }
+
+  function copierLien(url: string, id: string) {
+    navigator.clipboard.writeText(url);
+    setCopie(id);
+    setTimeout(() => setCopie(""), 2000);
+  }
+
+  function copierTousLiens() {
+    const texte = liensGeneres.map(l => l.url).join("\n");
+    navigator.clipboard.writeText(texte);
+    setCopie("tous");
+    setTimeout(() => setCopie(""), 2000);
   }
 
   if (status === "loading" || loading) return (
@@ -100,7 +125,6 @@ export default function DashboardPage() {
   return (
     <div style={{ fontFamily:"system-ui,sans-serif", background:"#F5F5F5", minHeight:"100vh" }}>
 
-      {/* Header */}
       <div style={{ background:"#1A237E", padding:"14px 28px", display:"flex", alignItems:"center", justifyContent:"space-between" }}>
         <div style={{ display:"flex", alignItems:"center", gap:12 }}>
           <span style={{ fontSize:20, fontWeight:600, color:"#FFC107", letterSpacing:2 }}>HAKI</span>
@@ -109,7 +133,7 @@ export default function DashboardPage() {
         <div style={{ display:"flex", alignItems:"center", gap:12 }}>
           <span style={{ fontSize:12, color:"#C5CAE9" }}>{user?.organisationNom}</span>
           <span style={{ background:"#283593", padding:"3px 10px", borderRadius:99, fontSize:11, color:"#90CAF9" }}>{user?.role?.toUpperCase()}</span>
-          <button onClick={() => signOut({ callbackUrl: "/connexion" })} style={{ background:"transparent", border:"1px solid #3949AB", color:"#90CAF9", borderRadius:6, padding:"4px 10px", fontSize:11, cursor:"pointer" }}>
+          <button onClick={() => signOut({ callbackUrl:"/connexion" })} style={{ background:"transparent", border:"1px solid #3949AB", color:"#90CAF9", borderRadius:6, padding:"4px 10px", fontSize:11, cursor:"pointer" }}>
             Déconnexion
           </button>
         </div>
@@ -130,7 +154,6 @@ export default function DashboardPage() {
 
         {latest && (
           <>
-            {/* Score + SOCLE */}
             <div style={{ display:"grid", gridTemplateColumns:"1fr 1fr", gap:16, marginBottom:16 }}>
               <div style={{ background:"#fff", borderRadius:12, padding:24 }}>
                 <div style={{ fontSize:11, color:"#9E9E9E", letterSpacing:".05em", marginBottom:12 }}>SCORE MMI-CI GLOBAL</div>
@@ -170,7 +193,6 @@ export default function DashboardPage() {
               </div>
             </div>
 
-            {/* Dimensions */}
             {score && (
               <div style={{ background:"#fff", borderRadius:12, padding:22, marginBottom:16 }}>
                 <div style={{ fontSize:13, fontWeight:500, color:"#424242", marginBottom:16 }}>Scores par dimension MMI-CI</div>
@@ -197,58 +219,117 @@ export default function DashboardPage() {
               </div>
             )}
 
-            {/* Baromètre Collaborateurs */}
+            {/* Baromètre */}
             <div style={{ background:"#fff", borderRadius:12, padding:22, marginBottom:16 }}>
-              <div style={{ display:"flex", justifyContent:"space-between", alignItems:"center", marginBottom:14 }}>
+              <div style={{ display:"flex", justifyContent:"space-between", alignItems:"center", marginBottom:16 }}>
                 <div>
                   <div style={{ fontSize:13, fontWeight:500, color:"#424242" }}>Baromètre COLLABORATEURS</div>
-                  <div style={{ fontSize:12, color:"#9E9E9E", marginTop:2 }}>Liens anonymes envoyés par email · Résultats agrégés · Seuil n≥5</div>
+                  <div style={{ fontSize:12, color:"#9E9E9E", marginTop:2 }}>Liens anonymes · Résultats agrégés · Seuil n≥5</div>
                 </div>
                 {statsLiens && (
                   <div style={{ display:"flex", gap:16, fontSize:12 }}>
-                    <span><strong style={{ color:"#1A237E" }}>{statsLiens.total}</strong> <span style={{ color:"#9E9E9E" }}>envoyés</span></span>
+                    <span><strong style={{ color:"#1A237E" }}>{statsLiens.total}</strong> <span style={{ color:"#9E9E9E" }}>liens</span></span>
                     <span><strong style={{ color:"#2E7D32" }}>{statsLiens.utilises}</strong> <span style={{ color:"#9E9E9E" }}>réponses</span></span>
                     <span><strong style={{ color:"#E65100" }}>{statsLiens.enAttente}</strong> <span style={{ color:"#9E9E9E" }}>en attente</span></span>
                   </div>
                 )}
               </div>
 
-              {!showLiens ? (
-                <button onClick={() => setShowLiens(true)} style={{ padding:"10px 20px", background:"#E8EAF6", color:"#1A237E", border:"none", borderRadius:8, fontSize:13, fontWeight:500, cursor:"pointer" }}>
-                  Inviter des collaborateurs par email →
-                </button>
-              ) : (
+              {/* Choix du mode */}
+              {modeInvitation === "none" && (
+                <div style={{ display:"flex", gap:10 }}>
+                  <button onClick={() => setModeInvitation("email")}
+                    style={{ flex:1, padding:"14px 16px", background:"#E8EAF6", color:"#1A237E", border:"1.5px solid #C5CAE9", borderRadius:10, fontSize:13, fontWeight:500, cursor:"pointer", textAlign:"left" }}>
+                    <div style={{ fontSize:18, marginBottom:4 }}>📧</div>
+                    <div>Envoyer par email</div>
+                    <div style={{ fontSize:11, color:"#7986CB", marginTop:2 }}>Saisir les adresses — envoi automatique</div>
+                  </button>
+                  <button onClick={() => setModeInvitation("lien")}
+                    style={{ flex:1, padding:"14px 16px", background:"#E0F2F1", color:"#00695C", border:"1.5px solid #A5D6A7", borderRadius:10, fontSize:13, fontWeight:500, cursor:"pointer", textAlign:"left" }}>
+                    <div style={{ fontSize:18, marginBottom:4 }}>🔗</div>
+                    <div>Générer des liens</div>
+                    <div style={{ fontSize:11, color:"#4DB6AC", marginTop:2 }}>Copier et partager manuellement</div>
+                  </button>
+                </div>
+              )}
+
+              {/* Mode email */}
+              {modeInvitation === "email" && (
                 <div>
-                  <div style={{ fontSize:13, color:"#424242", marginBottom:8 }}>
-                    Saisissez les adresses email de vos collaborateurs — une par ligne, ou séparées par des virgules :
+                  <div style={{ display:"flex", justifyContent:"space-between", alignItems:"center", marginBottom:10 }}>
+                    <div style={{ fontSize:13, fontWeight:500, color:"#1A237E" }}>📧 Envoi par email</div>
+                    <button onClick={() => { setModeInvitation("none"); setEnvoyResult(null); }} style={{ background:"none", border:"none", color:"#9E9E9E", fontSize:12, cursor:"pointer" }}>← Retour</button>
                   </div>
-                  <textarea
-                    value={emailsText}
-                    onChange={e => setEmailsText(e.target.value)}
+                  <div style={{ fontSize:13, color:"#424242", marginBottom:8 }}>
+                    Saisissez les adresses email — une par ligne ou séparées par des virgules :
+                  </div>
+                  <textarea value={emailsText} onChange={e => setEmailsText(e.target.value)}
                     placeholder={"collaborateur1@entreprise.ci\ncollaborateur2@entreprise.ci\ncollaborateur3@entreprise.ci"}
-                    rows={6}
-                    style={{ width:"100%", padding:"12px 14px", border:"1.5px solid #E0E0E0", borderRadius:8, fontSize:13, fontFamily:"monospace", resize:"vertical", marginBottom:12, boxSizing:"border-box" }}
-                  />
-                  <div style={{ display:"flex", alignItems:"center", gap:12, marginBottom:14 }}>
+                    rows={5} style={{ width:"100%", padding:"12px 14px", border:"1.5px solid #E0E0E0", borderRadius:8, fontSize:13, fontFamily:"monospace", resize:"vertical", marginBottom:10, boxSizing:"border-box" }} />
+                  <div style={{ display:"flex", alignItems:"center", gap:12, marginBottom:12 }}>
                     <div style={{ fontSize:12, color:"#9E9E9E" }}>
                       {emailsText.split(/[\n,;]+/).filter(e => e.trim().includes("@")).length} adresse(s) détectée(s)
                     </div>
                     <button onClick={envoyerEmails} disabled={envoyLoading}
-                      style={{ padding:"10px 22px", background:envoyLoading?"#9FA8DA":"#1A237E", color:"#fff", border:"none", borderRadius:8, fontSize:13, fontWeight:500, cursor:envoyLoading?"default":"pointer" }}>
+                      style={{ padding:"10px 20px", background:envoyLoading?"#9FA8DA":"#1A237E", color:"#fff", border:"none", borderRadius:8, fontSize:13, fontWeight:500, cursor:envoyLoading?"default":"pointer" }}>
                       {envoyLoading ? "Envoi en cours..." : "Envoyer les liens →"}
                     </button>
                   </div>
-
                   {envoyResult && (
                     <div style={{ padding:"12px 16px", borderRadius:8, background:envoyResult.erreurs>0?"#FFF3E0":"#E8F5E9", fontSize:13, color:envoyResult.erreurs>0?"#E65100":"#2E7D32" }}>
                       {envoyResult.envoyes > 0 && <div>✓ {envoyResult.envoyes} email(s) envoyé(s) avec succès</div>}
-                      {envoyResult.erreurs > 0 && <div>⚠ {envoyResult.erreurs} email(s) n'ont pas pu être envoyés</div>}
+                      {envoyResult.erreurs > 0 && <div>⚠ {envoyResult.erreurs} email(s) non envoyé(s) — vérifiez les adresses</div>}
                     </div>
                   )}
-
-                  <div style={{ marginTop:12, padding:"10px 14px", background:"#E8EAF6", borderRadius:8, fontSize:11, color:"#3949AB", lineHeight:1.6 }}>
-                    Chaque collaborateur reçoit un lien unique et anonyme · Expiration 30 jours · Résultats visibles si n≥5 répondants
+                  <div style={{ marginTop:10, fontSize:11, color:"#9E9E9E", lineHeight:1.6 }}>
+                    ⚠ En mode test, l'envoi n'est possible que vers l'email de votre compte Resend. Un domaine vérifié sera nécessaire pour envoyer à tous vos collaborateurs.
                   </div>
+                </div>
+              )}
+
+              {/* Mode lien */}
+              {modeInvitation === "lien" && (
+                <div>
+                  <div style={{ display:"flex", justifyContent:"space-between", alignItems:"center", marginBottom:12 }}>
+                    <div style={{ fontSize:13, fontWeight:500, color:"#00695C" }}>🔗 Génération de liens</div>
+                    <button onClick={() => { setModeInvitation("none"); setLiensGeneres([]); }} style={{ background:"none", border:"none", color:"#9E9E9E", fontSize:12, cursor:"pointer" }}>← Retour</button>
+                  </div>
+                  <div style={{ display:"flex", alignItems:"center", gap:12, marginBottom:14 }}>
+                    <span style={{ fontSize:13, color:"#424242" }}>Nombre de liens à générer :</span>
+                    <input type="number" value={nbLiens} onChange={e => setNbLiens(Number(e.target.value))} min={1} max={5000}
+                      style={{ padding:"8px 12px", border:"1.5px solid #E0E0E0", borderRadius:8, fontSize:14, width:90 }} />
+                    <button onClick={genererLiens} disabled={envoyLoading}
+                      style={{ padding:"9px 18px", background:envoyLoading?"#9FA8DA":"#00695C", color:"#fff", border:"none", borderRadius:8, fontSize:13, fontWeight:500, cursor:envoyLoading?"default":"pointer" }}>
+                      {envoyLoading ? "Génération..." : "Générer →"}
+                    </button>
+                  </div>
+
+                  {liensGeneres.length > 0 && (
+                    <div>
+                      <div style={{ display:"flex", justifyContent:"space-between", alignItems:"center", marginBottom:8 }}>
+                        <div style={{ fontSize:12, color:"#2E7D32" }}>✓ {liensGeneres.length} liens générés</div>
+                        <button onClick={copierTousLiens}
+                          style={{ padding:"6px 14px", background:copie==="tous"?"#2E7D32":"#E0F2F1", color:copie==="tous"?"#fff":"#00695C", border:"none", borderRadius:6, fontSize:12, fontWeight:500, cursor:"pointer" }}>
+                          {copie === "tous" ? "✓ Copié !" : "Copier tous les liens"}
+                        </button>
+                      </div>
+                      <div style={{ background:"#F5F5F5", borderRadius:8, padding:14, maxHeight:220, overflowY:"auto" }}>
+                        {liensGeneres.map((l, i) => (
+                          <div key={i} style={{ display:"flex", alignItems:"center", gap:8, marginBottom:6 }}>
+                            <span style={{ fontSize:11, color:"#757575", minWidth:22 }}>{i+1}.</span>
+                            <span style={{ fontSize:11, color:"#1A237E", fontFamily:"monospace", flex:1, wordBreak:"break-all" }}>{l.url}</span>
+                            <button onClick={() => copierLien(l.url, l.id)}
+                              style={{ padding:"3px 10px", background:copie===l.id?"#2E7D32":"#E0F2F1", color:copie===l.id?"#fff":"#00695C", border:"none", borderRadius:4, fontSize:11, cursor:"pointer", flexShrink:0 }}>
+                              {copie === l.id ? "✓" : "Copier"}
+                            </button>
+                          </div>
+                        ))}
+                      </div>
+                      <div style={{ marginTop:10, fontSize:11, color:"#9E9E9E", lineHeight:1.6 }}>
+                        Partagez ces liens par email, WhatsApp ou intranet · Chaque lien est à usage unique · Expiration 30 jours
+                      </div>
+                    </div>
+                  )}
                 </div>
               )}
             </div>
