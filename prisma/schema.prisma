@@ -77,6 +77,7 @@ model SessionDiagnostic {
   scoreCollaborateur ScoreCollaborateur?
   liensManager      LienManager[]
   rapports          Rapport[]
+  parametres        ParametreSession?
 
   @@map("session_diagnostic")
 }
@@ -274,4 +275,15 @@ model BenchmarkSectoriel {
 
   @@unique([secteur, dimension, composante, annee])
   @@map("benchmark_sectoriel")
+}
+
+model ParametreSession {
+  id              String    @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  sessionId       String    @unique @db.Uuid
+  dateClotureMgr  DateTime? @db.Timestamptz
+  createdAt       DateTime  @default(now()) @db.Timestamptz
+
+  session         SessionDiagnostic @relation(fields: [sessionId], references: [id], onDelete: Cascade)
+
+  @@map("parametre_session")
 }
