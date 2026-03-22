@@ -5,10 +5,10 @@ import { useRouter } from "next/navigation";
 import ManagerSection from "./ManagerSection";
 
 const DIM_CONFIG = [
-  { key:"scoreDim1Genre",    label:"Genre & Égalité + VIH/Sida",        max:38, color:"#1A237E" },
-  { key:"scoreDim2Handicap", label:"Handicap + Médecine du travail",     max:26, color:"#00695C" },
-  { key:"scoreDim3Multicult",label:"Multiculturalité & Anti-tribalisme", max:25, color:"#E65100" },
-  { key:"scoreDim4Intergen", label:"Intergénérationnel + QVT",           max:11, color:"#2E7D32" },
+  { key:"scoreDim1Genre",    label:"Genre & Égalité + VIH/Sida",        max:38, color:"#1A237E", bg:"#E8EAF6" },
+  { key:"scoreDim2Handicap", label:"Handicap + Médecine du travail",     max:26, color:"#00695C", bg:"#E0F2F1" },
+  { key:"scoreDim3Multicult",label:"Multiculturalité & Anti-tribalisme", max:25, color:"#E65100", bg:"#FFF3E0" },
+  { key:"scoreDim4Intergen", label:"Intergénérationnel + QVT",           max:11, color:"#2E7D32", bg:"#E8F5E9" },
 ];
 
 const NIVEAUX: Record<number,{label:string;color:string;bg:string}> = {
@@ -18,6 +18,27 @@ const NIVEAUX: Record<number,{label:string;color:string;bg:string}> = {
   4:{label:"Engagée",        color:"#00695C",bg:"#E0F2F1"},
   5:{label:"Transformatrice",color:"#1A237E",bg:"#E8EAF6"},
 };
+
+const css = `
+  * { box-sizing: border-box; }
+  .haki-grid-2 { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; }
+  .haki-grid-4 { display: grid; grid-template-columns: 1fr 1fr 1fr 1fr; gap: 12px; }
+  .haki-card { background: #fff; border-radius: 14px; padding: 24px; box-shadow: 0 1px 4px rgba(0,0,0,0.07); }
+  .haki-btn { border: none; border-radius: 8px; font-family: system-ui; cursor: pointer; font-weight: 500; transition: opacity .15s; }
+  .haki-btn:hover { opacity: .88; }
+  .haki-btn:disabled { opacity: .5; cursor: default; }
+  .haki-section-title { font-size: 11px; font-weight: 700; color: #9E9E9E; letter-spacing: .1em; text-transform: uppercase; margin-bottom: 16px; }
+  .haki-progress { height: 8px; background: #F0F0F0; border-radius: 4px; overflow: hidden; }
+  .haki-progress-bar { height: 100%; border-radius: 4px; transition: width .6s ease; }
+  @media (max-width: 900px) {
+    .haki-grid-2 { grid-template-columns: 1fr; }
+    .haki-grid-4 { grid-template-columns: 1fr 1fr; }
+    .haki-card { padding: 18px; }
+  }
+  @media (max-width: 600px) {
+    .haki-grid-4 { grid-template-columns: 1fr; }
+  }
+`;
 
 export default function DashboardPage() {
   const { data: session, status } = useSession();
@@ -62,11 +83,13 @@ export default function DashboardPage() {
   async function envoyerEmailsCollab() {
     if (!sessions[0]?.id) return;
     const emails = emailsCollabText.split(/[\n,;]+/).map(e => e.trim()).filter(e => e.includes("@"));
-    if (emails.length === 0) { alert("Aucune adresse email valide."); return; }
+    if (!emails.length) { alert("Aucune adresse valide."); return; }
     setCollabLoading(true); setCollabResult(null);
-    const res = await fetch(`/api/sessions/${sessions[0].id}/envoyer-liens`, { method:"POST", headers:{"Content-Type":"application/json"}, body:JSON.stringify({ emails }) });
-    const data = await res.json();
-    setCollabResult(data); setCollabLoading(false);
+    const res = await fetch(`/api/sessions/${sessions[0].id}/envoyer-liens`, {
+      method:"POST", headers:{"Content-Type":"application/json"}, body:JSON.stringify({ emails })
+    });
+    setCollabResult(await res.json());
+    setCollabLoading(false);
     const d = await fetch(`/api/sessions/${sessions[0].id}/liens-collaborateur`).then(r => r.json());
     if (d.stats) setStatsCollab(d.stats);
   }
@@ -74,7 +97,9 @@ export default function DashboardPage() {
   async function genererLiensCollab() {
     if (!sessions[0]?.id) return;
     setCollabLoading(true);
-    const res = await fetch(`/api/sessions/${sessions[0].id}/liens-collaborateur`, { method:"POST", headers:{"Content-Type":"application/json"}, body:JSON.stringify({ nombre: nbLiens }) });
+    const res = await fetch(`/api/sessions/${sessions[0].id}/liens-collaborateur`, {
+      method:"POST", headers:{"Content-Type":"application/json"}, body:JSON.stringify({ nombre: nbLiens })
+    });
     const data = await res.json();
     if (data.tokens) {
       setLiensGeneres(data.tokens);
@@ -89,9 +114,7 @@ export default function DashboardPage() {
     setRapportLoading(format);
     try {
       const res = await fetch(`/api/sessions/${sessions[0].id}/rapports`, {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ format }),
+        method:"POST", headers:{"Content-Type":"application/json"}, body:JSON.stringify({ format })
       });
       if (res.ok) {
         const blob = await res.blob();
@@ -103,11 +126,9 @@ export default function DashboardPage() {
         URL.revokeObjectURL(url);
       } else {
         const err = await res.json();
-        alert(err.error ?? "Erreur lors de la génération du rapport.");
+        alert(err.error ?? "Erreur génération rapport.");
       }
-    } catch {
-      alert("Erreur réseau.");
-    }
+    } catch { alert("Erreur réseau."); }
     setRapportLoading("");
   }
 
@@ -118,8 +139,9 @@ export default function DashboardPage() {
   }
 
   if (status === "loading" || loading) return (
-    <div style={{ display:"flex",alignItems:"center",justifyContent:"center",height:"100vh",fontFamily:"system-ui" }}>
-      <div style={{ color:"#1A237E" }}>Chargement...</div>
+    <div style={{ display:"flex", alignItems:"center", justifyContent:"center", height:"100vh", fontFamily:"system-ui" }}>
+      <style>{css}</style>
+      <div style={{ color:"#1A237E", fontSize:15 }}>Chargement...</div>
     </div>
   );
 
@@ -130,88 +152,172 @@ export default function DashboardPage() {
   const user = session?.user as any;
 
   return (
-    <div style={{ fontFamily:"system-ui,sans-serif", background:"#F5F5F5", minHeight:"100vh" }}>
-      <div style={{ background:"#1A237E", padding:"14px 28px", display:"flex", alignItems:"center", justifyContent:"space-between" }}>
-        <div style={{ display:"flex", alignItems:"center", gap:12 }}>
-          <span style={{ fontSize:20, fontWeight:600, color:"#FFC107", letterSpacing:2 }}>HAKI</span>
+    <div style={{ fontFamily:"system-ui,-apple-system,sans-serif", background:"#F0F2F5", minHeight:"100vh" }}>
+      <style>{css}</style>
+
+      {/* ── HEADER ── */}
+      <div style={{ background:"#1A237E", padding:"0 28px", height:56, display:"flex", alignItems:"center", justifyContent:"space-between", position:"sticky", top:0, zIndex:100, boxShadow:"0 2px 8px rgba(0,0,0,0.2)" }}>
+        <div style={{ display:"flex", alignItems:"center", gap:14 }}>
+          <span style={{ fontSize:20, fontWeight:700, color:"#FFC107", letterSpacing:3 }}>HAKI</span>
+          <div style={{ width:1, height:18, background:"#3949AB" }}/>
           <span style={{ fontSize:12, color:"#9FA8DA" }}>Plateforme DEI · Côte d'Ivoire</span>
         </div>
         <div style={{ display:"flex", alignItems:"center", gap:12 }}>
-          <span style={{ fontSize:12, color:"#C5CAE9" }}>{user?.organisationNom}</span>
-          <span style={{ background:"#283593", padding:"3px 10px", borderRadius:99, fontSize:11, color:"#90CAF9" }}>{user?.role?.toUpperCase()}</span>
-          <button onClick={() => signOut({ callbackUrl:"/connexion" })} style={{ background:"transparent", border:"1px solid #3949AB", color:"#90CAF9", borderRadius:6, padding:"4px 10px", fontSize:11, cursor:"pointer" }}>
+          <div style={{ textAlign:"right" }}>
+            <div style={{ fontSize:12, color:"#fff", fontWeight:500 }}>{user?.organisationNom}</div>
+            <div style={{ fontSize:10, color:"#7986CB" }}>{user?.role?.toUpperCase()}</div>
+          </div>
+          <button className="haki-btn"
+            onClick={() => signOut({ callbackUrl:"/connexion" })}
+            style={{ background:"#283593", color:"#90CAF9", padding:"6px 14px", fontSize:11 }}>
             Déconnexion
           </button>
         </div>
       </div>
 
-      <div style={{ maxWidth:1100, margin:"0 auto", padding:"24px 20px" }}>
+      <div style={{ maxWidth:1200, margin:"0 auto", padding:"24px 20px" }}>
+
+        {/* ── PAS DE SESSION ── */}
         {!latest && (
-          <div style={{ background:"#fff", borderRadius:12, padding:36, textAlign:"center", border:"2px dashed #E0E0E0" }}>
-            <div style={{ fontSize:32, marginBottom:12 }}>🚀</div>
-            <div style={{ fontSize:18, fontWeight:500, marginBottom:8, color:"#1A237E" }}>Lancer votre premier diagnostic Haki</div>
-            <div style={{ fontSize:14, color:"#757575", marginBottom:24 }}>Commencez par le SOCLE puis les 4 dimensions DEI.</div>
-            <button onClick={creerSession} style={{ background:"#1A237E", color:"#fff", border:"none", borderRadius:8, padding:"12px 28px", fontSize:14, fontWeight:500, cursor:"pointer" }}>
-              Créer un diagnostic
+          <div className="haki-card" style={{ textAlign:"center", padding:48 }}>
+            <div style={{ fontSize:44, marginBottom:16 }}>🚀</div>
+            <div style={{ fontSize:20, fontWeight:600, color:"#1A237E", marginBottom:8 }}>Lancer votre premier diagnostic Haki</div>
+            <div style={{ fontSize:14, color:"#757575", marginBottom:28, maxWidth:420, margin:"0 auto 28px" }}>
+              Commencez par le SOCLE (conformité légale CI), puis les 4 dimensions DEI.
+            </div>
+            <button className="haki-btn" onClick={creerSession}
+              style={{ background:"#1A237E", color:"#fff", padding:"13px 32px", fontSize:14 }}>
+              Créer un diagnostic →
             </button>
           </div>
         )}
 
         {latest && (
           <>
-            <div style={{ display:"grid", gridTemplateColumns:"1fr 1fr", gap:16, marginBottom:16 }}>
-              <div style={{ background:"#fff", borderRadius:12, padding:24 }}>
-                <div style={{ fontSize:11, color:"#9E9E9E", letterSpacing:".05em", marginBottom:12 }}>SCORE MMI-CI GLOBAL</div>
+            {/* ══ 1. SCORE + SOCLE ══ */}
+            <div className="haki-grid-2" style={{ marginBottom:16 }}>
+
+              {/* Score MMI-CI */}
+              <div className="haki-card">
+                <div className="haki-section-title">Score MMI-CI Global</div>
                 {score ? (
                   <>
-                    <div style={{ display:"flex", alignItems:"baseline", gap:4, marginBottom:10 }}>
-                      <span style={{ fontSize:52, fontWeight:500, color:"#1A237E", lineHeight:1 }}>{score.scoreGlobal}</span>
-                      <span style={{ fontSize:18, color:"#9E9E9E" }}>/100</span>
+                    <div style={{ display:"flex", alignItems:"baseline", gap:8, marginBottom:14 }}>
+                      <span style={{ fontSize:64, fontWeight:700, color:"#1A237E", lineHeight:1 }}>{score.scoreGlobal}</span>
+                      <span style={{ fontSize:22, color:"#BDBDBD", fontWeight:300 }}>/100</span>
                     </div>
-                    {niveau && <span style={{ display:"inline-block", padding:"5px 14px", borderRadius:99, background:niveau.bg, color:niveau.color, fontSize:12, fontWeight:500 }}>Niveau {score.niveauMmi} — {niveau.label}</span>}
+                    {niveau && (
+                      <span style={{ display:"inline-block", padding:"6px 18px", borderRadius:99, background:niveau.bg, color:niveau.color, fontSize:12, fontWeight:700, marginBottom:16 }}>
+                        Niveau {score.niveauMmi} — {niveau.label}
+                      </span>
+                    )}
+                    <div className="haki-progress">
+                      <div className="haki-progress-bar" style={{
+                        width:`${score.scoreGlobal}%`,
+                        background: score.scoreGlobal>=75?"#2E7D32":score.scoreGlobal>=50?"#FFC107":"#E65100"
+                      }}/>
+                    </div>
+                    <div style={{ display:"flex", justifyContent:"space-between", fontSize:10, color:"#BDBDBD", marginTop:4 }}>
+                      <span>0 — Non-conforme</span>
+                      <span>75 — Label Haki</span>
+                      <span>100</span>
+                    </div>
                   </>
-                ) : <div style={{ fontSize:14, color:"#9E9E9E" }}>Score calculé après complétion du questionnaire</div>}
+                ) : (
+                  <div>
+                    <div style={{ fontSize:14, color:"#9E9E9E", marginBottom:16 }}>Complétez le questionnaire pour obtenir votre score</div>
+                    <button className="haki-btn" onClick={() => router.push(`/diagnostic/${latest.id}/organisation`)}
+                      style={{ background:"#1A237E", color:"#fff", padding:"10px 20px", fontSize:13 }}>
+                      Questionnaire ORGANISATION →
+                    </button>
+                  </div>
+                )}
               </div>
 
-              <div style={{ background:"#fff", borderRadius:12, padding:24 }}>
-                <div style={{ fontSize:11, color:"#9E9E9E", letterSpacing:".05em", marginBottom:12 }}>BADGE SOCLE — CONFORMITÉ LÉGALE CI</div>
+              {/* Badge SOCLE */}
+              <div className="haki-card">
+                <div className="haki-section-title">Badge SOCLE — Conformité Légale CI</div>
                 {socle ? (
                   <>
-                    <div style={{ display:"flex", alignItems:"center", gap:10, marginBottom:12 }}>
-                      <span style={{ fontSize:22 }}>{socle.badgeGlobal==="conforme"?"✅":socle.badgeGlobal==="en_cours"?"⏳":"⚠️"}</span>
-                      <span style={{ fontSize:14, fontWeight:500, color:socle.badgeGlobal==="conforme"?"#2E7D32":socle.badgeGlobal==="en_cours"?"#E65100":"#B71C1C" }}>
-                        {socle.badgeGlobal==="conforme"?"Conforme":socle.badgeGlobal==="en_cours"?"En cours":"Non conforme"}
-                      </span>
+                    <div style={{ display:"flex", alignItems:"center", gap:14, marginBottom:16 }}>
+                      <span style={{ fontSize:32 }}>{socle.badgeGlobal==="conforme"?"✅":socle.badgeGlobal==="en_cours"?"⏳":"⚠️"}</span>
+                      <div>
+                        <div style={{ fontSize:17, fontWeight:700, color:socle.badgeGlobal==="conforme"?"#2E7D32":socle.badgeGlobal==="en_cours"?"#E65100":"#B71C1C" }}>
+                          {socle.badgeGlobal==="conforme"?"Conforme":socle.badgeGlobal==="en_cours"?"En cours de conformité":"Non conforme"}
+                        </div>
+                        <div style={{ fontSize:11, color:"#9E9E9E", marginTop:2 }}>
+                          CNPS · CMU · Médecine travail · Prévoyance
+                        </div>
+                      </div>
                     </div>
-                    {Array.isArray(socle.alertes) && (socle.alertes as any[]).slice(0,2).map((a:any,i:number) => (
-                      <div key={i} style={{ display:"flex", gap:8, padding:"7px 10px", borderRadius:6, background:a.niveau==="rouge"?"#FFEBEE":"#FFF3E0", marginBottom:5, fontSize:12, color:a.niveau==="rouge"?"#B71C1C":"#E65100" }}>
-                        <div style={{ width:7, height:7, borderRadius:"50%", background:a.niveau==="rouge"?"#B71C1C":"#E65100", flexShrink:0, marginTop:3 }}/>
-                        <div><strong>{a.composante}</strong> — {a.message}</div>
+                    {Array.isArray(socle.alertes) && (socle.alertes as any[]).slice(0,3).map((a:any,i:number) => (
+                      <div key={i} style={{ display:"flex", gap:8, padding:"8px 12px", borderRadius:8, background:a.niveau==="rouge"?"#FFEBEE":"#FFF3E0", marginBottom:6 }}>
+                        <div style={{ width:7, height:7, borderRadius:"50%", background:a.niveau==="rouge"?"#B71C1C":"#E65100", flexShrink:0, marginTop:4 }}/>
+                        <div style={{ fontSize:12, color:a.niveau==="rouge"?"#B71C1C":"#E65100", lineHeight:1.5 }}>
+                          <strong>{a.composante}</strong> — {a.message}
+                        </div>
                       </div>
                     ))}
                   </>
-                ) : <div style={{ fontSize:14, color:"#9E9E9E" }}>SOCLE non encore évalué</div>}
+                ) : (
+                  <div>
+                    <div style={{ fontSize:14, color:"#9E9E9E", marginBottom:16 }}>SOCLE non encore évalué</div>
+                    <button className="haki-btn" onClick={() => router.push(`/diagnostic/${latest.id}/socle`)}
+                      style={{ background:"#B71C1C", color:"#fff", padding:"10px 20px", fontSize:13 }}>
+                      Évaluer le SOCLE →
+                    </button>
+                  </div>
+                )}
               </div>
             </div>
 
+            {/* ══ 2. RAPPORTS PDF ══ */}
             {score && (
-              <div style={{ background:"#fff", borderRadius:12, padding:22, marginBottom:16 }}>
-                <div style={{ fontSize:13, fontWeight:500, color:"#424242", marginBottom:16 }}>Scores par dimension MMI-CI</div>
-                <div style={{ display:"grid", gridTemplateColumns:"1fr 1fr", gap:14 }}>
+              <div className="haki-card" style={{ marginBottom:16 }}>
+                <div className="haki-section-title">Rapports PDF</div>
+                <div className="haki-grid-2" style={{ gap:12 }}>
+                  <button className="haki-btn" onClick={() => genererRapport("executif")} disabled={!!rapportLoading}
+                    style={{ padding:"14px 20px", background:rapportLoading==="executif"?"#9FA8DA":"#00695C", color:"#fff", fontSize:13, textAlign:"left" }}>
+                    <div style={{ fontSize:20, marginBottom:4 }}>📄</div>
+                    <div style={{ fontWeight:600 }}>{rapportLoading==="executif"?"⏳ Génération...":"Rapport Exécutif"}</div>
+                    <div style={{ fontSize:11, opacity:.8, marginTop:2 }}>6 pages · Pour le DG, bailleurs, partenaires</div>
+                  </button>
+                  <button className="haki-btn" onClick={() => genererRapport("analytique")} disabled={!!rapportLoading}
+                    style={{ padding:"14px 20px", background:rapportLoading==="analytique"?"#9FA8DA":"#1A237E", color:"#fff", fontSize:13, textAlign:"left" }}>
+                    <div style={{ fontSize:20, marginBottom:4 }}>📊</div>
+                    <div style={{ fontWeight:600 }}>{rapportLoading==="analytique"?"⏳ Génération...":"Rapport Analytique"}</div>
+                    <div style={{ fontSize:11, opacity:.8, marginTop:2 }}>14 pages · Pour le DRH, détail par composante</div>
+                  </button>
+                </div>
+                {rapportLoading && (
+                  <div style={{ marginTop:10, fontSize:12, color:"#00695C" }}>⏳ Génération en cours — 20 à 30 secondes...</div>
+                )}
+              </div>
+            )}
+
+            {/* ══ 3. SCORES PAR DIMENSION ══ */}
+            {score && (
+              <div className="haki-card" style={{ marginBottom:16 }}>
+                <div className="haki-section-title">Scores par dimension MMI-CI</div>
+                <div className="haki-grid-4">
                   {DIM_CONFIG.map(dim => {
                     const s = score[dim.key] ?? 0;
                     const pct = Math.round((s/dim.max)*100);
+                    const statut = pct>=65?"Fort":pct>=40?"Moyen":"Faible";
+                    const sc = pct>=65?"#2E7D32":pct>=40?"#E65100":"#B71C1C";
                     return (
-                      <div key={dim.key}>
-                        <div style={{ display:"flex", justifyContent:"space-between", marginBottom:4 }}>
-                          <div style={{ fontSize:12, fontWeight:500, color:dim.color }}>{dim.label}</div>
-                          <div style={{ fontSize:12, fontWeight:500, color:dim.color }}>{s}/{dim.max}</div>
+                      <div key={dim.key} style={{ padding:"16px", background:dim.bg, borderRadius:10, border:`1px solid ${dim.color}20` }}>
+                        <div style={{ fontSize:11, fontWeight:700, color:dim.color, marginBottom:10, lineHeight:1.4 }}>{dim.label}</div>
+                        <div style={{ display:"flex", alignItems:"baseline", gap:4, marginBottom:8 }}>
+                          <span style={{ fontSize:28, fontWeight:700, color:dim.color }}>{s}</span>
+                          <span style={{ fontSize:13, color:"#BDBDBD" }}>/{dim.max}</span>
                         </div>
-                        <div style={{ display:"flex", alignItems:"center", gap:8 }}>
-                          <div style={{ flex:1, height:8, background:"#F5F5F5", borderRadius:4, overflow:"hidden" }}>
-                            <div style={{ width:`${pct}%`, height:"100%", background:dim.color, borderRadius:4 }}/>
-                          </div>
-                          <div style={{ fontSize:12, fontWeight:500, color:dim.color, minWidth:32 }}>{pct}%</div>
+                        <div className="haki-progress" style={{ marginBottom:6 }}>
+                          <div className="haki-progress-bar" style={{ width:`${pct}%`, background:dim.color }}/>
+                        </div>
+                        <div style={{ display:"flex", justifyContent:"space-between", alignItems:"center" }}>
+                          <span style={{ fontSize:10, color:dim.color, fontWeight:600 }}>{pct}%</span>
+                          <span style={{ fontSize:10, padding:"2px 7px", borderRadius:99, background:`${sc}15`, color:sc, fontWeight:600 }}>{statut}</span>
                         </div>
                       </div>
                     );
@@ -220,14 +326,29 @@ export default function DashboardPage() {
               </div>
             )}
 
-            {/* Baromètre Collaborateurs */}
-            <div style={{ background:"#fff", borderRadius:12, padding:22, marginBottom:16 }}>
-              <div style={{ display:"flex", justifyContent:"space-between", alignItems:"center", marginBottom:16 }}>
+            {/* ══ 4. ACTIONS & DIAGNOSTICS ══ */}
+            <div className="haki-card" style={{ marginBottom:16 }}>
+              <div className="haki-section-title">Actions & Diagnostics</div>
+              <div style={{ display:"flex", gap:10, flexWrap:"wrap" }}>
+                <button className="haki-btn" onClick={() => router.push(`/diagnostic/${latest.id}/socle`)}
+                  style={{ padding:"10px 20px", background:socle?"#FFEBEE":"#B71C1C", color:socle?"#B71C1C":"#fff", border:`1.5px solid #EF9A9A`, fontSize:13 }}>
+                  ⚖️ {socle?"Mettre à jour le SOCLE":"Compléter le SOCLE"}
+                </button>
+                <button className="haki-btn" onClick={() => router.push(`/diagnostic/${latest.id}/organisation`)}
+                  style={{ padding:"10px 20px", background:score?"#E8EAF6":"#1A237E", color:score?"#1A237E":"#fff", border:`1.5px solid #C5CAE9`, fontSize:13 }}>
+                  📋 {score?"Modifier le questionnaire":"Questionnaire ORGANISATION"}
+                </button>
+              </div>
+            </div>
+
+            {/* ══ 5. BAROMÈTRE COLLABORATEURS ══ */}
+            <div className="haki-card" style={{ marginBottom:16 }}>
+              <div style={{ display:"flex", justifyContent:"space-between", alignItems:"flex-start", marginBottom:14, flexWrap:"wrap", gap:8 }}>
                 <div>
-                  <div style={{ fontSize:13, fontWeight:500, color:"#424242" }}>Baromètre COLLABORATEURS</div>
-                  <div style={{ fontSize:12, color:"#9E9E9E", marginTop:2 }}>Liens anonymes · Résultats agrégés · Seuil n≥5</div>
+                  <div className="haki-section-title" style={{ marginBottom:2 }}>Baromètre COLLABORATEURS</div>
+                  <div style={{ fontSize:12, color:"#9E9E9E" }}>Liens anonymes · Résultats agrégés · Seuil n≥5 (ARTCI)</div>
                 </div>
-                {statsCollab && (
+                {statsCollab && statsCollab.total > 0 && (
                   <div style={{ display:"flex", gap:16, fontSize:12 }}>
                     <span><strong style={{ color:"#1A237E" }}>{statsCollab.total}</strong> <span style={{ color:"#9E9E9E" }}>liens</span></span>
                     <span><strong style={{ color:"#2E7D32" }}>{statsCollab.utilises}</strong> <span style={{ color:"#9E9E9E" }}>réponses</span></span>
@@ -237,17 +358,17 @@ export default function DashboardPage() {
               </div>
 
               {modeCollab === "none" && (
-                <div style={{ display:"flex", gap:10 }}>
-                  <button onClick={() => setModeCollab("email")}
-                    style={{ flex:1, padding:"14px 16px", background:"#E8EAF6", color:"#1A237E", border:"1.5px solid #C5CAE940", borderRadius:10, fontSize:13, fontWeight:500, cursor:"pointer", textAlign:"left" }}>
-                    <div style={{ fontSize:18, marginBottom:4 }}>📧</div>
-                    <div>Inviter par email</div>
+                <div className="haki-grid-2" style={{ gap:10 }}>
+                  <button className="haki-btn" onClick={() => setModeCollab("email")}
+                    style={{ padding:"14px 16px", background:"#E8EAF6", color:"#1A237E", border:"1px solid #C5CAE9", fontSize:13, textAlign:"left" }}>
+                    <div style={{ fontSize:20, marginBottom:4 }}>📧</div>
+                    <div style={{ fontWeight:600 }}>Inviter par email</div>
                     <div style={{ fontSize:11, color:"#7986CB", marginTop:2 }}>Envoi automatique du lien anonyme</div>
                   </button>
-                  <button onClick={() => setModeCollab("lien")}
-                    style={{ flex:1, padding:"14px 16px", background:"#E0F2F1", color:"#00695C", border:"1.5px solid #A5D6A7", borderRadius:10, fontSize:13, fontWeight:500, cursor:"pointer", textAlign:"left" }}>
-                    <div style={{ fontSize:18, marginBottom:4 }}>🔗</div>
-                    <div>Générer des liens</div>
+                  <button className="haki-btn" onClick={() => setModeCollab("lien")}
+                    style={{ padding:"14px 16px", background:"#E0F2F1", color:"#00695C", border:"1px solid #A5D6A7", fontSize:13, textAlign:"left" }}>
+                    <div style={{ fontSize:20, marginBottom:4 }}>🔗</div>
+                    <div style={{ fontWeight:600 }}>Générer des liens</div>
                     <div style={{ fontSize:11, color:"#4DB6AC", marginTop:2 }}>Copier et partager manuellement</div>
                   </button>
                 </div>
@@ -255,67 +376,66 @@ export default function DashboardPage() {
 
               {modeCollab !== "none" && (
                 <>
-                  <button onClick={() => setModeCollab("none")}
-                    style={{ display:"flex", alignItems:"center", gap:6, padding:"8px 16px", background:"#F5F5F5", color:"#424242", border:"1.5px solid #E0E0E0", borderRadius:8, fontSize:13, fontWeight:500, cursor:"pointer", marginBottom:16 }}>
+                  <button className="haki-btn" onClick={() => setModeCollab("none")}
+                    style={{ display:"flex", alignItems:"center", gap:6, padding:"7px 14px", background:"#F5F5F5", color:"#424242", border:"1px solid #E0E0E0", fontSize:12, marginBottom:14 }}>
                     ← Changer de méthode
                   </button>
 
                   {modeCollab === "email" && (
                     <div>
-                      <div style={{ fontSize:13, color:"#424242", marginBottom:8 }}>Saisissez les adresses email — une par ligne :</div>
                       <textarea value={emailsCollabText} onChange={e => setEmailsCollabText(e.target.value)}
                         placeholder={"collab1@entreprise.ci\ncollab2@entreprise.ci"}
-                        rows={5} style={{ width:"100%", padding:"12px 14px", border:"1.5px solid #E0E0E0", borderRadius:8, fontSize:13, fontFamily:"monospace", resize:"vertical", marginBottom:10, boxSizing:"border-box" }} />
-                      <div style={{ display:"flex", alignItems:"center", gap:12, marginBottom:12 }}>
-                        <span style={{ fontSize:12, color:"#9E9E9E" }}>{emailsCollabText.split(/[\n,;]+/).filter(e => e.trim().includes("@")).length} adresse(s)</span>
-                        <button onClick={envoyerEmailsCollab} disabled={collabLoading}
-                          style={{ padding:"10px 20px", background:collabLoading?"#9FA8DA":"#1A237E", color:"#fff", border:"none", borderRadius:8, fontSize:13, fontWeight:500, cursor:collabLoading?"default":"pointer" }}>
-                          {collabLoading ? "Envoi..." : "Envoyer →"}
+                        rows={4} style={{ width:"100%", padding:"10px 12px", border:"1px solid #E0E0E0", borderRadius:8, fontSize:13, fontFamily:"monospace", resize:"vertical", marginBottom:10, boxSizing:"border-box" }} />
+                      <div style={{ display:"flex", alignItems:"center", gap:12 }}>
+                        <span style={{ fontSize:12, color:"#9E9E9E" }}>
+                          {emailsCollabText.split(/[\n,;]+/).filter(e=>e.trim().includes("@")).length} adresse(s)
+                        </span>
+                        <button className="haki-btn" onClick={envoyerEmailsCollab} disabled={collabLoading}
+                          style={{ padding:"9px 18px", background:collabLoading?"#9FA8DA":"#1A237E", color:"#fff", fontSize:13 }}>
+                          {collabLoading?"Envoi...":"Envoyer →"}
                         </button>
                       </div>
                       {collabResult && (
-                        <div style={{ padding:"10px 14px", borderRadius:8, background:collabResult.erreurs>0?"#FFF3E0":"#E8F5E9", fontSize:13, color:collabResult.erreurs>0?"#E65100":"#2E7D32" }}>
-                          {collabResult.envoyes > 0 && <div>✓ {collabResult.envoyes} email(s) envoyé(s)</div>}
-                          {collabResult.erreurs > 0 && <div>⚠ {collabResult.erreurs} non envoyé(s)</div>}
+                        <div style={{ marginTop:10, padding:"8px 12px", borderRadius:7, background:collabResult.erreurs>0?"#FFF3E0":"#E8F5E9", fontSize:12, color:collabResult.erreurs>0?"#E65100":"#2E7D32" }}>
+                          {collabResult.envoyes>0&&<div>✓ {collabResult.envoyes} email(s) envoyé(s)</div>}
+                          {collabResult.erreurs>0&&<div>⚠ {collabResult.erreurs} non envoyé(s)</div>}
                         </div>
                       )}
-                      <div style={{ marginTop:10, fontSize:11, color:"#9E9E9E" }}>⚠ En mode test, envoi possible uniquement vers votre email Resend.</div>
                     </div>
                   )}
 
                   {modeCollab === "lien" && (
                     <div>
-                      <div style={{ display:"flex", alignItems:"center", gap:12, marginBottom:14 }}>
-                        <span style={{ fontSize:13, color:"#424242" }}>Nombre de liens :</span>
+                      <div style={{ display:"flex", alignItems:"center", gap:10, marginBottom:12 }}>
+                        <span style={{ fontSize:13 }}>Nombre :</span>
                         <input type="number" value={nbLiens} onChange={e => setNbLiens(Number(e.target.value))} min={1} max={5000}
-                          style={{ padding:"8px 12px", border:"1.5px solid #E0E0E0", borderRadius:8, fontSize:14, width:90 }} />
-                        <button onClick={genererLiensCollab} disabled={collabLoading}
-                          style={{ padding:"9px 18px", background:collabLoading?"#9FA8DA":"#00695C", color:"#fff", border:"none", borderRadius:8, fontSize:13, fontWeight:500, cursor:collabLoading?"default":"pointer" }}>
-                          {collabLoading ? "Génération..." : "Générer →"}
+                          style={{ padding:"7px 10px", border:"1px solid #E0E0E0", borderRadius:7, fontSize:13, width:80 }}/>
+                        <button className="haki-btn" onClick={genererLiensCollab} disabled={collabLoading}
+                          style={{ padding:"8px 16px", background:collabLoading?"#9FA8DA":"#00695C", color:"#fff", fontSize:13 }}>
+                          {collabLoading?"Génération...":"Générer →"}
                         </button>
                       </div>
                       {liensGeneres.length > 0 && (
                         <div>
-                          <div style={{ display:"flex", justifyContent:"space-between", alignItems:"center", marginBottom:8 }}>
+                          <div style={{ display:"flex", justifyContent:"space-between", marginBottom:6 }}>
                             <span style={{ fontSize:12, color:"#2E7D32" }}>✓ {liensGeneres.length} liens générés</span>
-                            <button onClick={() => copierTexte(liensGeneres.map(l=>l.url).join("\n"), "col-tous")}
-                              style={{ padding:"5px 12px", background:copie==="col-tous"?"#2E7D32":"#E0F2F1", color:copie==="col-tous"?"#fff":"#00695C", border:"none", borderRadius:6, fontSize:12, fontWeight:500, cursor:"pointer" }}>
-                              {copie==="col-tous"?"✓ Copié !":"Copier tous"}
+                            <button className="haki-btn" onClick={() => copierTexte(liensGeneres.map(l=>l.url).join("\n"), "col-tous")}
+                              style={{ padding:"4px 10px", background:copie==="col-tous"?"#2E7D32":"#E0F2F1", color:copie==="col-tous"?"#fff":"#00695C", fontSize:11 }}>
+                              {copie==="col-tous"?"✓ Copié":"Copier tous"}
                             </button>
                           </div>
-                          <div style={{ background:"#F5F5F5", borderRadius:8, padding:14, maxHeight:200, overflowY:"auto" }}>
-                            {liensGeneres.map((l, i) => (
-                              <div key={i} style={{ display:"flex", alignItems:"center", gap:8, marginBottom:6 }}>
-                                <span style={{ fontSize:11, color:"#757575", minWidth:22 }}>{i+1}.</span>
+                          <div style={{ background:"#F5F5F5", borderRadius:8, padding:12, maxHeight:180, overflowY:"auto" }}>
+                            {liensGeneres.map((l,i) => (
+                              <div key={i} style={{ display:"flex", alignItems:"center", gap:6, marginBottom:5 }}>
+                                <span style={{ fontSize:10, color:"#BDBDBD", minWidth:18 }}>{i+1}.</span>
                                 <span style={{ fontSize:11, color:"#1A237E", fontFamily:"monospace", flex:1, wordBreak:"break-all" }}>{l.url}</span>
-                                <button onClick={() => copierTexte(l.url, l.id)}
-                                  style={{ padding:"3px 10px", background:copie===l.id?"#2E7D32":"#E0F2F1", color:copie===l.id?"#fff":"#00695C", border:"none", borderRadius:4, fontSize:11, cursor:"pointer", flexShrink:0 }}>
+                                <button className="haki-btn" onClick={() => copierTexte(l.url, l.id)}
+                                  style={{ padding:"2px 8px", background:copie===l.id?"#2E7D32":"#E0F2F1", color:copie===l.id?"#fff":"#00695C", fontSize:10 }}>
                                   {copie===l.id?"✓":"Copier"}
                                 </button>
                               </div>
                             ))}
                           </div>
-                          <div style={{ marginTop:10, fontSize:11, color:"#9E9E9E" }}>Lien à usage unique · Expiration 30 jours</div>
                         </div>
                       )}
                     </div>
@@ -324,50 +444,56 @@ export default function DashboardPage() {
               )}
             </div>
 
-            {/* Auto-diagnostic Managers */}
+            {/* ══ 6. AUTO-DIAGNOSTIC MANAGERS ══ */}
             <ManagerSection sessionId={latest.id} copie={copie} setCopie={setCopie} />
 
-            {/* Actions diagnostic & Rapports PDF */}
-            <div style={{ background:"#fff", borderRadius:12, padding:22 }}>
-              <div style={{ fontSize:13, fontWeight:500, color:"#424242", marginBottom:14 }}>Actions diagnostic & Rapports PDF</div>
-              <div style={{ display:"flex", gap:10, flexWrap:"wrap" }}>
-                <button onClick={() => router.push(`/diagnostic/${latest.id}/socle`)}
-                  style={{ padding:"9px 18px", background:"#FFEBEE", color:"#B71C1C", border:"none", borderRadius:8, fontSize:13, fontWeight:500, cursor:"pointer" }}>
-                  {socle ? "Mettre à jour le SOCLE" : "Compléter le SOCLE"}
-                </button>
-                <button onClick={() => router.push(`/diagnostic/${latest.id}/organisation`)}
-                  style={{ padding:"9px 18px", background:"#1A237E", color:"#fff", border:"none", borderRadius:8, fontSize:13, fontWeight:500, cursor:"pointer" }}>
-                  </button>
-                <button onClick={() => router.push("/documents")}
-                  style={{ padding:"9px 18px", background:"#FFF3E0", color:"#E65100", border:"none", borderRadius:8, fontSize:13, fontWeight:500, cursor:"pointer" }}>
-                  📄 Services documentaires
-                </button>
-<button onClick={() => router.push("/documents")}
-  style={{ padding:"9px 18px", background:"#FFF3E0", color:"#E65100", border:"none", borderRadius:8, fontSize:13, fontWeight:500, cursor:"pointer" }}>
-  📄 Services documentaires DEI
-</button>
-<button onClick={() => router.push("/benchmarks")}
-  style={{ padding:"9px 18px", background:"#E8EAF6", color:"#1A237E", border:"none", borderRadius:8, fontSize:13, fontWeight:500, cursor:"pointer" }}>
-  📊 Benchmarks CI
-</button>
-                {score && (
-                  <>
-                    <button onClick={() => genererRapport("executif")} disabled={!!rapportLoading}
-                      style={{ padding:"9px 18px", background:rapportLoading==="executif"?"#9FA8DA":"#00695C", color:"#fff", border:"none", borderRadius:8, fontSize:13, fontWeight:500, cursor:rapportLoading?"default":"pointer" }}>
-                      {rapportLoading === "executif" ? "Génération..." : "📄 Rapport Exécutif PDF"}
-                    </button>
-                    <button onClick={() => genererRapport("analytique")} disabled={!!rapportLoading}
-                      style={{ padding:"9px 18px", background:rapportLoading==="analytique"?"#9FA8DA":"#1A237E", color:"#fff", border:"none", borderRadius:8, fontSize:13, fontWeight:500, cursor:rapportLoading?"default":"pointer" }}>
-                      {rapportLoading === "analytique" ? "Génération..." : "📊 Rapport Analytique PDF"}
-                    </button>
-                  </>
-                )}
-              </div>
-              {rapportLoading && (
-                <div style={{ marginTop:10, fontSize:12, color:"#00695C" }}>
-                  ⏳ Génération du rapport en cours — cela peut prendre 20 à 30 secondes...
+            {/* ══ 7. PRODUCTION DOCUMENTAIRE ══ */}
+            <div style={{ background:"linear-gradient(135deg, #1A237E 0%, #0D47A1 100%)", borderRadius:14, padding:24, marginBottom:16, boxShadow:"0 4px 20px rgba(26,35,126,0.25)" }}>
+              <div style={{ display:"flex", justifyContent:"space-between", alignItems:"center", flexWrap:"wrap", gap:16 }}>
+                <div>
+                  <div style={{ fontSize:13, fontWeight:700, color:"#FFC107", marginBottom:6, letterSpacing:".05em" }}>
+                    PRODUCTION DOCUMENTAIRE DEI
+                  </div>
+                  <div style={{ fontSize:13, color:"#C5CAE9", marginBottom:12 }}>
+                    5 documents personnalisés · Stratégie Genre · Charte D&I · Politique Genre · PAG · Mécanisme S&E
+                  </div>
+                  <div style={{ display:"flex", gap:8, flexWrap:"wrap" }}>
+                    {[
+                      { label:"Pack Essentiel -20%", highlight:false },
+                      { label:"Pack Conformité -25%", highlight:false },
+                      { label:"Pack Transformation -30%", highlight:true },
+                    ].map(p => (
+                      <span key={p.label} style={{ fontSize:11, padding:"4px 12px", borderRadius:99,
+                        background: p.highlight ? "rgba(255,193,7,0.25)" : "rgba(255,255,255,0.1)",
+                        color: p.highlight ? "#FFC107" : "#C5CAE9",
+                        border: p.highlight ? "1px solid rgba(255,193,7,0.4)" : "1px solid rgba(255,255,255,0.1)",
+                        fontWeight: p.highlight ? 600 : 400 }}>
+                        {p.label}
+                      </span>
+                    ))}
+                  </div>
                 </div>
-              )}
+                <button className="haki-btn" onClick={() => router.push("/documents")}
+                  style={{ padding:"13px 28px", background:"#FFC107", color:"#1A237E", fontSize:14, fontWeight:700, flexShrink:0 }}>
+                  Voir le catalogue →
+                </button>
+              </div>
+            </div>
+
+            {/* ══ 8. BENCHMARKS CI ══ */}
+            <div className="haki-card">
+              <div style={{ display:"flex", justifyContent:"space-between", alignItems:"center", flexWrap:"wrap", gap:12 }}>
+                <div>
+                  <div className="haki-section-title" style={{ marginBottom:4 }}>Benchmarks sectoriels CI</div>
+                  <div style={{ fontSize:12, color:"#9E9E9E" }}>
+                    Positionnement vs entreprises CI · Veille web DEI mensuelle · 339 entreprises suivies
+                  </div>
+                </div>
+                <button className="haki-btn" onClick={() => router.push("/benchmarks")}
+                  style={{ padding:"10px 20px", background:"#E8EAF6", color:"#1A237E", border:"1px solid #C5CAE9", fontSize:13 }}>
+                  📊 Voir les benchmarks →
+                </button>
+              </div>
             </div>
           </>
         )}
