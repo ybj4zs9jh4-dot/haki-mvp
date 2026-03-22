@@ -19,6 +19,7 @@ model Organisation {
   taille        String   @db.VarChar(50)  // <20 / 20-50 / 50-200 / 200-500 / 500+
   ville         String   @default("Abidjan") @db.VarChar(100)
   pays          String   @default("Côte d'Ivoire") @db.VarChar(50)
+  commandes         CommandeDocument[]
   statutArtci   String   @default("en_cours") @db.VarChar(50) // déclaré / autorisé / en_cours
   createdAt     DateTime @default(now()) @db.Timestamptz
   updatedAt     DateTime @updatedAt @db.Timestamptz
@@ -77,6 +78,7 @@ model SessionDiagnostic {
   scoreCollaborateur ScoreCollaborateur?
   liensManager      LienManager[]
   rapports          Rapport[]
+  commandes         CommandeDocument[]
   parametres        ParametreSession?
 
   @@map("session_diagnostic")
@@ -303,4 +305,35 @@ model VeilleWebCI {
   createdAt       DateTime  @default(now()) @db.Timestamptz
 
   @@map("veille_web_ci")
+}
+
+model CommandeDocument {
+  id              String    @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  organisationId  String    @db.Uuid
+  sessionId       String    @db.Uuid
+  typeDocument    String    @db.VarChar(50)
+  // strategie_genre / charte_di / politique_genre / pag / mecanisme_se
+  niveau          String    @default("standard") @db.VarChar(20)
+  // standard / enrichi / premium
+  taille          String    @db.VarChar(20)
+  // pme / eti / grande
+  statut          String    @default("en_attente") @db.VarChar(20)
+  // en_attente / proforma_envoyee / validee / en_production / livre / annule
+  montantFcfa     Int
+  contexte        Json      @default("{}")
+  documentsUploads Json     @default("[]")
+  // URLs des docs uploadés pour revue documentaire
+  urlDocument     String?   @db.VarChar(500)
+  notesAdmin      String?
+  notesClient     String?
+  proformaRef     String?   @db.VarChar(50)
+  commandeeLe     DateTime  @default(now()) @db.Timestamptz
+  valideeeLe      DateTime? @db.Timestamptz
+  livraisonPrevue DateTime? @db.Timestamptz
+  livreeLe        DateTime? @db.Timestamptz
+
+  organisation    Organisation      @relation(fields: [organisationId], references: [id], onDelete: Cascade)
+  session         SessionDiagnostic @relation(fields: [sessionId], references: [id], onDelete: Cascade)
+
+  @@map("commande_document")
 }
