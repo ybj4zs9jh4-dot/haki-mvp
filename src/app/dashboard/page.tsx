@@ -3,6 +3,7 @@ import { useEffect, useState } from "react";
 import { useSession, signOut } from "next-auth/react";
 import { useRouter } from "next/navigation";
 import ManagerSection from "./ManagerSection";
+import CalendrierDEI from "./CalendrierDEI";
 
 const DIM_CONFIG = [
   { key:"scoreDim1Genre",    label:"Genre & Égalité + VIH/Sida",        max:38, color:"#1A237E", bg:"#E8EAF6" },
@@ -163,7 +164,7 @@ export default function DashboardPage() {
           <span style={{ fontSize:12, color:"#9FA8DA" }}>Plateforme DEI · Côte d'Ivoire</span>
         </div>
         <div style={{ display:"flex", alignItems:"center", gap:12 }}>
-          <div style={{ textAlign:"right" }}>
+          <div style={{ textAlign:"right" as const }}>
             <div style={{ fontSize:12, color:"#fff", fontWeight:500 }}>{user?.organisationNom}</div>
             <div style={{ fontSize:10, color:"#7986CB" }}>{user?.role?.toUpperCase()}</div>
           </div>
@@ -277,13 +278,13 @@ export default function DashboardPage() {
                 <div className="haki-section-title">Rapports PDF</div>
                 <div className="haki-grid-2" style={{ gap:12 }}>
                   <button className="haki-btn" onClick={() => genererRapport("executif")} disabled={!!rapportLoading}
-                    style={{ padding:"14px 20px", background:rapportLoading==="executif"?"#9FA8DA":"#00695C", color:"#fff", fontSize:13, textAlign:"left" }}>
+                    style={{ padding:"14px 20px", background:rapportLoading==="executif"?"#9FA8DA":"#00695C", color:"#fff", fontSize:13, textAlign:"left" as const }}>
                     <div style={{ fontSize:20, marginBottom:4 }}>📄</div>
                     <div style={{ fontWeight:600 }}>{rapportLoading==="executif"?"⏳ Génération...":"Rapport Exécutif"}</div>
                     <div style={{ fontSize:11, opacity:.8, marginTop:2 }}>6 pages · Pour le DG, bailleurs, partenaires</div>
                   </button>
                   <button className="haki-btn" onClick={() => genererRapport("analytique")} disabled={!!rapportLoading}
-                    style={{ padding:"14px 20px", background:rapportLoading==="analytique"?"#9FA8DA":"#1A237E", color:"#fff", fontSize:13, textAlign:"left" }}>
+                    style={{ padding:"14px 20px", background:rapportLoading==="analytique"?"#9FA8DA":"#1A237E", color:"#fff", fontSize:13, textAlign:"left" as const }}>
                     <div style={{ fontSize:20, marginBottom:4 }}>📊</div>
                     <div style={{ fontWeight:600 }}>{rapportLoading==="analytique"?"⏳ Génération...":"Rapport Analytique"}</div>
                     <div style={{ fontSize:11, opacity:.8, marginTop:2 }}>14 pages · Pour le DRH, détail par composante</div>
@@ -329,7 +330,7 @@ export default function DashboardPage() {
             {/* ══ 4. ACTIONS & DIAGNOSTICS ══ */}
             <div className="haki-card" style={{ marginBottom:16 }}>
               <div className="haki-section-title">Actions & Diagnostics</div>
-              <div style={{ display:"flex", gap:10, flexWrap:"wrap" }}>
+              <div style={{ display:"flex", gap:10, flexWrap:"wrap" as const }}>
                 <button className="haki-btn" onClick={() => router.push(`/diagnostic/${latest.id}/socle`)}
                   style={{ padding:"10px 20px", background:socle?"#FFEBEE":"#B71C1C", color:socle?"#B71C1C":"#fff", border:`1.5px solid #EF9A9A`, fontSize:13 }}>
                   ⚖️ {socle?"Mettre à jour le SOCLE":"Compléter le SOCLE"}
@@ -343,7 +344,7 @@ export default function DashboardPage() {
 
             {/* ══ 5. BAROMÈTRE COLLABORATEURS ══ */}
             <div className="haki-card" style={{ marginBottom:16 }}>
-              <div style={{ display:"flex", justifyContent:"space-between", alignItems:"flex-start", marginBottom:14, flexWrap:"wrap", gap:8 }}>
+              <div style={{ display:"flex", justifyContent:"space-between", alignItems:"flex-start", marginBottom:14, flexWrap:"wrap" as const, gap:8 }}>
                 <div>
                   <div className="haki-section-title" style={{ marginBottom:2 }}>Baromètre COLLABORATEURS</div>
                   <div style={{ fontSize:12, color:"#9E9E9E" }}>Liens anonymes · Résultats agrégés · Seuil n≥5 (ARTCI)</div>
@@ -360,13 +361,13 @@ export default function DashboardPage() {
               {modeCollab === "none" && (
                 <div className="haki-grid-2" style={{ gap:10 }}>
                   <button className="haki-btn" onClick={() => setModeCollab("email")}
-                    style={{ padding:"14px 16px", background:"#E8EAF6", color:"#1A237E", border:"1px solid #C5CAE9", fontSize:13, textAlign:"left" }}>
+                    style={{ padding:"14px 16px", background:"#E8EAF6", color:"#1A237E", border:"1px solid #C5CAE9", fontSize:13, textAlign:"left" as const }}>
                     <div style={{ fontSize:20, marginBottom:4 }}>📧</div>
                     <div style={{ fontWeight:600 }}>Inviter par email</div>
                     <div style={{ fontSize:11, color:"#7986CB", marginTop:2 }}>Envoi automatique du lien anonyme</div>
                   </button>
                   <button className="haki-btn" onClick={() => setModeCollab("lien")}
-                    style={{ padding:"14px 16px", background:"#E0F2F1", color:"#00695C", border:"1px solid #A5D6A7", fontSize:13, textAlign:"left" }}>
+                    style={{ padding:"14px 16px", background:"#E0F2F1", color:"#00695C", border:"1px solid #A5D6A7", fontSize:13, textAlign:"left" as const }}>
                     <div style={{ fontSize:20, marginBottom:4 }}>🔗</div>
                     <div style={{ fontWeight:600 }}>Générer des liens</div>
                     <div style={{ fontSize:11, color:"#4DB6AC", marginTop:2 }}>Copier et partager manuellement</div>
@@ -385,7 +386,7 @@ export default function DashboardPage() {
                     <div>
                       <textarea value={emailsCollabText} onChange={e => setEmailsCollabText(e.target.value)}
                         placeholder={"collab1@entreprise.ci\ncollab2@entreprise.ci"}
-                        rows={4} style={{ width:"100%", padding:"10px 12px", border:"1px solid #E0E0E0", borderRadius:8, fontSize:13, fontFamily:"monospace", resize:"vertical", marginBottom:10, boxSizing:"border-box" }} />
+                        rows={4} style={{ width:"100%", padding:"10px 12px", border:"1px solid #E0E0E0", borderRadius:8, fontSize:13, fontFamily:"monospace", resize:"vertical" as const, marginBottom:10, boxSizing:"border-box" as const }} />
                       <div style={{ display:"flex", alignItems:"center", gap:12 }}>
                         <span style={{ fontSize:12, color:"#9E9E9E" }}>
                           {emailsCollabText.split(/[\n,;]+/).filter(e=>e.trim().includes("@")).length} adresse(s)
@@ -424,11 +425,11 @@ export default function DashboardPage() {
                               {copie==="col-tous"?"✓ Copié":"Copier tous"}
                             </button>
                           </div>
-                          <div style={{ background:"#F5F5F5", borderRadius:8, padding:12, maxHeight:180, overflowY:"auto" }}>
+                          <div style={{ background:"#F5F5F5", borderRadius:8, padding:12, maxHeight:180, overflowY:"auto" as const }}>
                             {liensGeneres.map((l,i) => (
                               <div key={i} style={{ display:"flex", alignItems:"center", gap:6, marginBottom:5 }}>
                                 <span style={{ fontSize:10, color:"#BDBDBD", minWidth:18 }}>{i+1}.</span>
-                                <span style={{ fontSize:11, color:"#1A237E", fontFamily:"monospace", flex:1, wordBreak:"break-all" }}>{l.url}</span>
+                                <span style={{ fontSize:11, color:"#1A237E", fontFamily:"monospace", flex:1, wordBreak:"break-all" as const }}>{l.url}</span>
                                 <button className="haki-btn" onClick={() => copierTexte(l.url, l.id)}
                                   style={{ padding:"2px 8px", background:copie===l.id?"#2E7D32":"#E0F2F1", color:copie===l.id?"#fff":"#00695C", fontSize:10 }}>
                                   {copie===l.id?"✓":"Copier"}
@@ -449,7 +450,7 @@ export default function DashboardPage() {
 
             {/* ══ 7. PRODUCTION DOCUMENTAIRE ══ */}
             <div style={{ background:"linear-gradient(135deg, #1A237E 0%, #0D47A1 100%)", borderRadius:14, padding:24, marginBottom:16, boxShadow:"0 4px 20px rgba(26,35,126,0.25)" }}>
-              <div style={{ display:"flex", justifyContent:"space-between", alignItems:"center", flexWrap:"wrap", gap:16 }}>
+              <div style={{ display:"flex", justifyContent:"space-between", alignItems:"center", flexWrap:"wrap" as const, gap:16 }}>
                 <div>
                   <div style={{ fontSize:13, fontWeight:700, color:"#FFC107", marginBottom:6, letterSpacing:".05em" }}>
                     PRODUCTION DOCUMENTAIRE DEI
@@ -457,7 +458,7 @@ export default function DashboardPage() {
                   <div style={{ fontSize:13, color:"#C5CAE9", marginBottom:12 }}>
                     5 documents personnalisés · Stratégie Genre · Charte D&I · Politique Genre · PAG · Mécanisme S&E
                   </div>
-                  <div style={{ display:"flex", gap:8, flexWrap:"wrap" }}>
+                  <div style={{ display:"flex", gap:8, flexWrap:"wrap" as const }}>
                     {[
                       { label:"Pack Essentiel -20%", highlight:false },
                       { label:"Pack Conformité -25%", highlight:false },
@@ -481,8 +482,8 @@ export default function DashboardPage() {
             </div>
 
             {/* ══ 8. BENCHMARKS CI ══ */}
-            <div className="haki-card">
-              <div style={{ display:"flex", justifyContent:"space-between", alignItems:"center", flexWrap:"wrap", gap:12 }}>
+            <div className="haki-card" style={{ marginBottom:16 }}>
+              <div style={{ display:"flex", justifyContent:"space-between", alignItems:"center", flexWrap:"wrap" as const, gap:12 }}>
                 <div>
                   <div className="haki-section-title" style={{ marginBottom:4 }}>Benchmarks sectoriels CI</div>
                   <div style={{ fontSize:12, color:"#9E9E9E" }}>
@@ -495,6 +496,10 @@ export default function DashboardPage() {
                 </button>
               </div>
             </div>
+
+            {/* ══ 9. CALENDRIER DEI ══ */}
+            <CalendrierDEI />
+
           </>
         )}
       </div>
