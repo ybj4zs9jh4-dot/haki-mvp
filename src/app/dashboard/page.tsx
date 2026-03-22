@@ -162,6 +162,10 @@ export default function DashboardPage() {
           <span style={{ fontSize:20, fontWeight:700, color:"#FFC107", letterSpacing:3 }}>HAKI</span>
           <div style={{ width:1, height:18, background:"#3949AB" }}/>
           <span style={{ fontSize:12, color:"#9FA8DA" }}>Plateforme DEI · Côte d'Ivoire</span>
+          <button onClick={() => router.push("/services")}
+            style={{ background:"transparent", color:"#FFC107", border:"1px solid #FFC107", borderRadius:6, padding:"5px 12px", fontSize:11, fontWeight:600, cursor:"pointer", marginLeft:8 }}>
+            Nos services
+          </button>
         </div>
         <div style={{ display:"flex", alignItems:"center", gap:12 }}>
           <div style={{ textAlign:"right" as const }}>
