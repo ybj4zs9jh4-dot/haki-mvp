@@ -337,8 +337,15 @@ export default function DashboardPage() {
                 </button>
                 <button onClick={() => router.push(`/diagnostic/${latest.id}/organisation`)}
                   style={{ padding:"9px 18px", background:"#1A237E", color:"#fff", border:"none", borderRadius:8, fontSize:13, fontWeight:500, cursor:"pointer" }}>
-                  {score ? "Modifier le questionnaire" : "Questionnaire ORGANISATION"}
+                  </button>
+                <button onClick={() => router.push("/documents")}
+                  style={{ padding:"9px 18px", background:"#FFF3E0", color:"#E65100", border:"none", borderRadius:8, fontSize:13, fontWeight:500, cursor:"pointer" }}>
+                  📄 Services documentaires
                 </button>
+<button onClick={() => router.push("/documents")}
+  style={{ padding:"9px 18px", background:"#FFF3E0", color:"#E65100", border:"none", borderRadius:8, fontSize:13, fontWeight:500, cursor:"pointer" }}>
+  📄 Services documentaires DEI
+</button>
 <button onClick={() => router.push("/benchmarks")}
   style={{ padding:"9px 18px", background:"#E8EAF6", color:"#1A237E", border:"none", borderRadius:8, fontSize:13, fontWeight:500, cursor:"pointer" }}>
   📊 Benchmarks CI
