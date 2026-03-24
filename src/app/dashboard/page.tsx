@@ -166,6 +166,12 @@ export default function DashboardPage() {
             style={{ background:"transparent", color:"#FFC107", border:"1px solid #FFC107", borderRadius:6, padding:"5px 12px", fontSize:11, fontWeight:600, cursor:"pointer", marginLeft:8 }}>
             Nos services
           </button>
+{user?.role === "admin_haki" && (
+  <button onClick={() => router.push("/admin")}
+    style={{ background:"#B91C1C", color:"#fff", border:"none", borderRadius:6, padding:"5px 12px", fontSize:11, fontWeight:600, cursor:"pointer", marginLeft:4 }}>
+    ⚙️ Admin
+  </button>
+)}
         </div>
         <div style={{ display:"flex", alignItems:"center", gap:12 }}>
           <div style={{ textAlign:"right" as const }}>
