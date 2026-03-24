@@ -91,7 +91,7 @@ const SERVICES_COMPLEMENTAIRES = [
     sous: "Stratégie · Contenu · Visibilité DEI",
     desc: "Haki vous accompagne dans votre stratégie de communication DEI externe : rédaction de contenus, gestion des journées clés, communication LinkedIn employeur, rapports RSE et positionnement DEI auprès de vos parties prenantes.",
     statut: "bientot",
-    lien: null,
+    lien: "/communication",
     color: "#00838F",
     bg: "#E0F7FA",
   },

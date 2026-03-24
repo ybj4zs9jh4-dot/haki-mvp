@@ -485,6 +485,30 @@ export default function DashboardPage() {
               </div>
             </div>
 
+{/* ══ 8bis. COMMUNICATION DIGITALE ══ */}
+<div style={{ background:"linear-gradient(135deg, #00695C 0%, #00838F 100%)", borderRadius:14, padding:24, marginBottom:16, boxShadow:"0 4px 20px rgba(0,105,92,0.2)" }}>
+  <div style={{ display:"flex", justifyContent:"space-between", alignItems:"center", flexWrap:"wrap" as const, gap:16 }}>
+    <div>
+      <div style={{ fontSize:13, fontWeight:700, color:"#fff", marginBottom:6, letterSpacing:".05em" }}>
+        📣 COMMUNICATION DIGITALE DEI
+      </div>
+      <div style={{ fontSize:13, color:"rgba(255,255,255,0.8)", marginBottom:12 }}>
+        Posts LinkedIn · Facebook · Twitter/X · Emails · WhatsApp — personnalisés avec vos données DEI
+      </div>
+      <div style={{ display:"flex", gap:8, flexWrap:"wrap" as const }}>
+        {["Kit Journées DEI","Kit Plan d'Action DEI","Génération IA","Sur mesure Haki"].map(t => (
+          <span key={t} style={{ fontSize:11, padding:"3px 10px", borderRadius:99, background:"rgba(255,255,255,0.15)", color:"rgba(255,255,255,0.9)" }}>
+            {t}
+          </span>
+        ))}
+      </div>
+    </div>
+    <button className="haki-btn" onClick={() => router.push("/communication")}
+      style={{ padding:"13px 28px", background:"#fff", color:"#00695C", fontSize:14, fontWeight:700, flexShrink:0 }}>
+      Créer mes contenus →
+    </button>
+  </div>
+</div>
             {/* ══ 8. BENCHMARKS CI ══ */}
             <div className="haki-card" style={{ marginBottom:16 }}>
               <div style={{ display:"flex", justifyContent:"space-between", alignItems:"center", flexWrap:"wrap" as const, gap:12 }}>
