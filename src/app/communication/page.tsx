@@ -99,20 +99,18 @@ Génère exactement ce JSON (sans markdown, sans backticks) :
 }`;
 
     try {
-      const res = await fetch("https://api.anthropic.com/v1/messages", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({
-          model: "claude-sonnet-4-20250514",
-          max_tokens: 1000,
-          messages: [{ role:"user", content: prompt }],
-        }),
-      });
-      const data = await res.json();
-      const text = data.content?.[0]?.text ?? "";
-      const clean = text.replace(/```json|```/g, "").trim();
-      const parsed = JSON.parse(clean);
-      setContenu(parsed);
+      const res = await fetch("/api/communication", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({
+        kit,
+        journeeLabel: journee?.label ?? "",
+        orgNom: user?.organisationNom ?? "",
+      }),
+    });
+    const parsed = await res.json();
+    if (parsed.error) throw new Error(parsed.error);
+    setContenu(parsed);
     } catch {
       setErreur("Erreur lors de la génération. Réessaie dans quelques secondes.");
     }
