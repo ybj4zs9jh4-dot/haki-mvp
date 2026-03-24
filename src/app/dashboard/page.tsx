@@ -4,6 +4,7 @@ import { useSession, signOut } from "next-auth/react";
 import { useRouter } from "next/navigation";
 import ManagerSection from "./ManagerSection";
 import CalendrierGIS from "./CalendrierGIS";
+import OnboardingGuide from "./OnboardingGuide";
 
 const DIM_CONFIG = [
   { key:"scoreDim1Genre",    label:"Genre & Égalité + VIH/Sida",        max:38, color:"#1A237E", bg:"#E8EAF6" },
@@ -561,6 +562,14 @@ export default function DashboardPage() {
           </>
         )}
       </div>
+{/* ── ONBOARDING GUIDE ── */}
+<OnboardingGuide
+  score={score}
+  socle={socle}
+  statsCollab={statsCollab}
+  sessionId={latest?.id ?? null}
+  onNavigate={(path) => router.push(path)}
+/>
     </div>
   );
 }
