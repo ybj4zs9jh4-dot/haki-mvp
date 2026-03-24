@@ -3,7 +3,7 @@ import { useEffect, useState } from "react";
 import { useSession, signOut } from "next-auth/react";
 import { useRouter } from "next/navigation";
 import ManagerSection from "./ManagerSection";
-import CalendrierDEI from "./CalendrierDEI";
+import CalendrierGIS from "./CalendrierGIS";
 
 const DIM_CONFIG = [
   { key:"scoreDim1Genre",    label:"Genre & Égalité + VIH/Sida",        max:38, color:"#1A237E", bg:"#E8EAF6" },
@@ -122,7 +122,7 @@ export default function DashboardPage() {
         const url = URL.createObjectURL(blob);
         const a = document.createElement("a");
         a.href = url;
-        a.download = `Haki_Rapport_DEI_${format}_${new Date().getFullYear()}.pdf`;
+        a.download = `Haki_Rapport_GIS_${format}_${new Date().getFullYear()}.pdf`;
         a.click();
         URL.revokeObjectURL(url);
       } else {
@@ -161,7 +161,7 @@ export default function DashboardPage() {
         <div style={{ display:"flex", alignItems:"center", gap:14 }}>
           <span style={{ fontSize:20, fontWeight:700, color:"#FFC107", letterSpacing:3 }}>HAKI</span>
           <div style={{ width:1, height:18, background:"#3949AB" }}/>
-          <span style={{ fontSize:12, color:"#9FA8DA" }}>Plateforme DEI · Côte d'Ivoire</span>
+          <span style={{ fontSize:12, color:"#9FA8DA" }}>Plateforme GIS · Côte d'Ivoire</span>
           <button onClick={() => router.push("/services")}
             style={{ background:"transparent", color:"#FFC107", border:"1px solid #FFC107", borderRadius:6, padding:"5px 12px", fontSize:11, fontWeight:600, cursor:"pointer", marginLeft:8 }}>
             Nos services
@@ -194,7 +194,7 @@ export default function DashboardPage() {
             <div style={{ fontSize:44, marginBottom:16 }}>🚀</div>
             <div style={{ fontSize:20, fontWeight:600, color:"#1A237E", marginBottom:8 }}>Lancer votre premier diagnostic Haki</div>
             <div style={{ fontSize:14, color:"#757575", marginBottom:28, maxWidth:420, margin:"0 auto 28px" }}>
-              Commencez par le SOCLE (conformité légale CI), puis les 4 dimensions DEI.
+              Commencez par le SOCLE (conformité légale CI), puis les 4 dimensions GIS.
             </div>
             <button className="haki-btn" onClick={creerSession}
               style={{ background:"#1A237E", color:"#fff", padding:"13px 32px", fontSize:14 }}>
@@ -463,7 +463,7 @@ export default function DashboardPage() {
               <div style={{ display:"flex", justifyContent:"space-between", alignItems:"center", flexWrap:"wrap" as const, gap:16 }}>
                 <div>
                   <div style={{ fontSize:13, fontWeight:700, color:"#FFC107", marginBottom:6, letterSpacing:".05em" }}>
-                    PRODUCTION DOCUMENTAIRE DEI
+                    PRODUCTION DOCUMENTAIRE GIS
                   </div>
                   <div style={{ fontSize:13, color:"#C5CAE9", marginBottom:12 }}>
                     5 documents personnalisés · Stratégie Genre · Charte D&I · Politique Genre · PAG · Mécanisme S&E
@@ -499,10 +499,10 @@ export default function DashboardPage() {
         🎓 FORMATION HAKI MANAGERS
       </div>
       <div style={{ fontSize:13, color:"rgba(255,255,255,0.85)", marginBottom:12 }}>
-        33 thématiques DEI · Présentiel & en ligne · Formateurs experts CI · Certification disponible
+        33 thématiques GIS · Présentiel & en ligne · Formateurs experts CI · Certification disponible
       </div>
       <div style={{ display:"flex", gap:8, flexWrap:"wrap" as const }}>
-        {["Fondamentaux DEI","Genre & VIH/Sida","Handicap","Anti-tribalisme","Leadership inclusif","Sur mesure"].map(t => (
+        {["Fondamentaux GIS","Genre & VIH/Sida","Handicap","Anti-tribalisme","Leadership inclusif","Sur mesure"].map(t => (
           <span key={t} style={{ fontSize:11, padding:"3px 10px", borderRadius:99, background:"rgba(255,255,255,0.2)", color:"#fff" }}>
             {t}
           </span>
@@ -520,13 +520,13 @@ export default function DashboardPage() {
   <div style={{ display:"flex", justifyContent:"space-between", alignItems:"center", flexWrap:"wrap" as const, gap:16 }}>
     <div>
       <div style={{ fontSize:13, fontWeight:700, color:"#fff", marginBottom:6, letterSpacing:".05em" }}>
-        📣 COMMUNICATION DIGITALE DEI
+        📣 COMMUNICATION DIGITALE GIS
       </div>
       <div style={{ fontSize:13, color:"rgba(255,255,255,0.8)", marginBottom:12 }}>
-        Posts LinkedIn · Facebook · Twitter/X · Emails · WhatsApp — personnalisés avec vos données DEI
+        Posts LinkedIn · Facebook · Twitter/X · Emails · WhatsApp — personnalisés avec vos données GIS
       </div>
       <div style={{ display:"flex", gap:8, flexWrap:"wrap" as const }}>
-        {["Kit Journées DEI","Kit Plan d'Action DEI","Génération IA","Sur mesure Haki"].map(t => (
+        {["Kit Journées GIS","Kit Plan d'Action GIS","Génération IA","Sur mesure Haki"].map(t => (
           <span key={t} style={{ fontSize:11, padding:"3px 10px", borderRadius:99, background:"rgba(255,255,255,0.15)", color:"rgba(255,255,255,0.9)" }}>
             {t}
           </span>
@@ -545,7 +545,7 @@ export default function DashboardPage() {
                 <div>
                   <div className="haki-section-title" style={{ marginBottom:4 }}>Benchmarks sectoriels CI</div>
                   <div style={{ fontSize:12, color:"#9E9E9E" }}>
-                    Positionnement vs entreprises CI · Veille web DEI mensuelle · 339 entreprises suivies
+                    Positionnement vs entreprises CI · Veille web GIS mensuelle · 339 entreprises suivies
                   </div>
                 </div>
                 <button className="haki-btn" onClick={() => router.push("/benchmarks")}
@@ -555,8 +555,8 @@ export default function DashboardPage() {
               </div>
             </div>
 
-            {/* ══ 9. CALENDRIER DEI ══ */}
-            <CalendrierDEI />
+            {/* ══ 9. CALENDRIER GIS ══ */}
+            <CalendrierGIS />
 
           </>
         )}

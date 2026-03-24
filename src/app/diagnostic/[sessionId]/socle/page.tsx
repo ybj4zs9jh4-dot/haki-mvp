@@ -117,7 +117,7 @@ export default function SoclePage() {
           <div style={{ fontSize: 13, color: "#C62828", lineHeight: 1.6 }}>
             Ce diagnostic évalue vos obligations légales en Côte d'Ivoire (CNPS, CMU, Médecine du travail, Prévoyance).
             Il génère un <strong>badge synthétique</strong> et un <strong>plan de remédiation priorisé</strong>.
-            Les résultats ne sont pas inclus dans le score MMI-CI — ils apparaissent en tête de votre rapport DEI.
+            Les résultats ne sont pas inclus dans le score MMI-CI — ils apparaissent en tête de votre rapport GIS.
           </div>
         </div>
 

@@ -161,7 +161,7 @@ export function calculerScoreCollaborateur(
 
 /**
  * Calcule le delta politique/vécu entre le score ORGANISATION et le score COLLABORATEURS
- * Un delta > 10 pts déclenche une alerte washing DEI
+ * Un delta > 10 pts déclenche une alerte washing GIS
  */
 export interface DeltaPolVisuResult {
   dim1: number | null;
@@ -209,7 +209,7 @@ export function calculerDeltaPolVecu(
   for (const [key, delta] of Object.entries(deltas)) {
     if (delta !== null && delta >= SEUIL_WASHING) {
       alerteWashingDei.push(
-        `${dimLabels[key as keyof typeof dimLabels]} : écart ${delta} pts — risque de washing DEI identifié`
+        `${dimLabels[key as keyof typeof dimLabels]} : écart ${delta} pts — risque de washing GIS identifié`
       );
     }
   }

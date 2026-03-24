@@ -214,7 +214,7 @@ export async function POST(
 
 function getNiveauLabel(scoreTotal: number): string {
   if (scoreTotal >= 84) return "Pratiques inclusives avancées (84–112 pts)";
-  if (scoreTotal >= 56) return "Bon niveau de conscience DEI (56–83 pts)";
+  if (scoreTotal >= 56) return "Bon niveau de conscience GIS (56–83 pts)";
   if (scoreTotal >= 28) return "En progression — axes à renforcer (28–55 pts)";
   return "À construire — formation recommandée (0–27 pts)";
 }
@@ -280,7 +280,7 @@ function genererPlanActionAuto(
   // Plan par défaut si tout va bien
   if (plan.length === 0) {
     plan.push({
-      action: "Partager mes bonnes pratiques DEI lors d'un atelier avec d'autres managers de l'organisation",
+      action: "Partager mes bonnes pratiques GIS lors d'un atelier avec d'autres managers de l'organisation",
       delai: "60 jours",
       indicateur: "1 session partagée organisée",
     });

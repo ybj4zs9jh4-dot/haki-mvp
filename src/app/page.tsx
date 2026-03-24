@@ -12,7 +12,7 @@ const PROBLEMES = [
   },
   {
     emoji: "📊",
-    titre: "Aucun outil DEI adapté à la CI",
+    titre: "Aucun outil GIS adapté à la CI",
     desc: "Mixity est calibré sur le droit français. Paradigm sur les USA. Il n'existait aucun référentiel ancré dans le Code du Travail CI 2025, la réalité multiculturelle ivoirienne et les exigences des bailleurs CEDEAO.",
     color: "#E65100",
     bg: "#FFF3E0",
@@ -20,28 +20,28 @@ const PROBLEMES = [
   {
     emoji: "🤝",
     titre: "Pression croissante des bailleurs",
-    desc: "AFD, ONU Femmes, Banque Mondiale, PNUD exigent des indicateurs DEI mesurables. Sans outil certifiable, les entreprises CI perdent des marchés et des financements.",
+    desc: "AFD, ONU Femmes, Banque Mondiale, PNUD exigent des indicateurs GIS mesurables. Sans outil certifiable, les entreprises CI perdent des marchés et des financements.",
     color: "#1A237E",
     bg: "#E8EAF6",
   },
 ];
 
 const SERVICES = [
-  { emoji:"📋", titre:"Diagnostic DEI", desc:"SOCLE légal CI + Score MMI-CI /100", color:"#1A237E" },
+  { emoji:"📋", titre:"Diagnostic GIS", desc:"SOCLE légal CI + Score MMI-CI /100", color:"#1A237E" },
   { emoji:"📊", titre:"Baromètre COLLABORATEURS", desc:"Enquête anonyme conforme ARTCI", color:"#00695C" },
   { emoji:"🧭", titre:"Auto-diagnostic MANAGERS", desc:"Score confidentiel /112 points", color:"#2E7D32" },
   { emoji:"📈", titre:"Benchmarks CI", desc:"Positionnement sectoriel · 339 entreprises", color:"#E65100" },
   { emoji:"📄", titre:"Production Documentaire", desc:"Stratégie, Charte, Politique, PAG", color:"#4A148C" },
-  { emoji:"📣", titre:"Communication Digitale", desc:"Contenus DEI sur 5 réseaux · IA + Sur mesure", color:"#00838F" },
+  { emoji:"📣", titre:"Communication Digitale", desc:"Contenus GIS sur 5 réseaux · IA + Sur mesure", color:"#00838F" },
   { emoji:"🎓", titre:"Formation MANAGERS", desc:"33 thématiques · Présentiel & en ligne", color:"#F57F17" },
 ];
 
 const CHIFFRES = [
   { valeur:"5", label:"Niveaux de maturité MMI-CI", icon:"⭐" },
   { valeur:"67", label:"Questions du diagnostic ORGANISATION", icon:"📋" },
-  { valeur:"33", label:"Thématiques de formation DEI", icon:"🎓" },
+  { valeur:"33", label:"Thématiques de formation GIS", icon:"🎓" },
   { valeur:"339", label:"Entreprises CI suivies en veille", icon:"📈" },
-  { valeur:"4", label:"Dimensions DEI ancrées CT CI 2025", icon:"⚖️" },
+  { valeur:"4", label:"Dimensions GIS ancrées CT CI 2025", icon:"⚖️" },
   { valeur:"7", label:"Flux de revenus · 3 segments clients", icon:"💡" },
 ];
 
@@ -49,7 +49,7 @@ const TEMOIGNAGES = [
   {
     nom: "Directrice des Ressources Humaines",
     org: "Groupe bancaire international CI",
-    texte: "Haki nous a permis de structurer notre démarche DEI en moins de 3 mois. Le rapport PDF a convaincu notre siège à Paris de financer notre programme genre.",
+    texte: "Haki nous a permis de structurer notre démarche GIS en moins de 3 mois. Le rapport PDF a convaincu notre siège à Paris de financer notre programme genre.",
     score: 78,
   },
   {
@@ -68,9 +68,9 @@ const TEMOIGNAGES = [
 
 const RESSOURCES = [
   { emoji:"📘", titre:"Guide CT CI 2025 & non-discrimination", desc:"Les 12 articles clés du Code du Travail CI que tout DRH doit connaître", tag:"Légal" },
-  { emoji:"📗", titre:"Référentiel MMI-CI", desc:"Comprendre les 5 niveaux de maturité DEI et les 4 dimensions d'évaluation", tag:"Méthode" },
+  { emoji:"📗", titre:"Référentiel MMI-CI", desc:"Comprendre les 5 niveaux de maturité GIS et les 4 dimensions d'évaluation", tag:"Méthode" },
   { emoji:"📙", titre:"Checklist SOCLE Haki", desc:"30 points de conformité à vérifier avant votre prochain contrôle CNPS/Inspection", tag:"Outil" },
-  { emoji:"📕", titre:"Bailleurs & DEI en CI", desc:"Ce qu'AFD, ONU Femmes et PNUD attendent de vos indicateurs DEI", tag:"Bailleurs" },
+  { emoji:"📕", titre:"Bailleurs & GIS en CI", desc:"Ce qu'AFD, ONU Femmes et PNUD attendent de vos indicateurs GIS", tag:"Bailleurs" },
 ];
 
 export default function LandingPage() {
@@ -123,7 +123,7 @@ export default function LandingPage() {
       }}>
         <div style={{ display:"flex", alignItems:"center", gap:10 }}>
           <span style={{ fontSize:22, fontWeight:700, color:"#FFC107", letterSpacing:4 }}>HAKI</span>
-          <span style={{ fontSize:10, color:"#9FA8DA", letterSpacing:".1em", textTransform:"uppercase" as const }}>Plateforme DEI · CI</span>
+          <span style={{ fontSize:10, color:"#9FA8DA", letterSpacing:".1em", textTransform:"uppercase" as const }}>Plateforme GIS · CI</span>
         </div>
         <div style={{ display:"flex", alignItems:"center", gap:10 }}>
           <button className="land-btn" onClick={() => router.push("/connexion")}
@@ -152,7 +152,7 @@ export default function LandingPage() {
           {/* Badge */}
           <div style={{ display:"inline-flex", alignItems:"center", gap:8, padding:"6px 16px", background:"rgba(255,193,7,0.15)", border:"1px solid rgba(255,193,7,0.3)", borderRadius:99, marginBottom:28 }}>
             <span style={{ fontSize:10, fontWeight:700, color:"#FFC107", letterSpacing:".12em", textTransform:"uppercase" as const }}>
-              🇨🇮 Première plateforme DEI ancrée dans le CT CI 2025
+              🇨🇮 Première plateforme GIS ancrée dans le CT CI 2025
             </span>
           </div>
 
@@ -164,7 +164,7 @@ export default function LandingPage() {
 
           {/* Sous-titre */}
           <p style={{ fontSize:"clamp(15px, 2vw, 18px)", color:"#C5CAE9", lineHeight:1.7, marginBottom:36, maxWidth:580 }}>
-            Haki mesure, pilote et améliore votre maturité DEI en Côte d'Ivoire.
+            Haki mesure, pilote et améliore votre maturité GIS en Côte d'Ivoire.
             Conformité légale CT CI · Score MMI-CI · Benchmarks sectoriels · 7 services intégrés.
           </p>
 
@@ -234,7 +234,7 @@ export default function LandingPage() {
             <h2 style={{ fontSize:"clamp(22px, 3vw, 32px)", fontWeight:700, color:"#fff", marginBottom:8 }}>
               Haki en chiffres
             </h2>
-            <p style={{ fontSize:14, color:"#9FA8DA" }}>La plateforme DEI la plus complète pour le contexte ivoirien</p>
+            <p style={{ fontSize:14, color:"#9FA8DA" }}>La plateforme GIS la plus complète pour le contexte ivoirien</p>
           </div>
           <div className="land-grid-3">
             {CHIFFRES.map((c,i) => (
@@ -259,7 +259,7 @@ export default function LandingPage() {
               7 services intégrés dans une seule plateforme
             </h2>
             <p style={{ fontSize:15, color:"#757575", maxWidth:500, margin:"0 auto", lineHeight:1.7 }}>
-              Du diagnostic à la communication, en passant par la formation — tout ce dont votre organisation a besoin pour piloter sa maturité DEI.
+              Du diagnostic à la communication, en passant par la formation — tout ce dont votre organisation a besoin pour piloter sa maturité GIS.
             </p>
           </div>
           <div className="land-grid-4">
@@ -323,7 +323,7 @@ export default function LandingPage() {
             <div>
               <div style={{ fontSize:11, fontWeight:700, color:"#9E9E9E", letterSpacing:".15em", textTransform:"uppercase" as const, marginBottom:12 }}>À propos de Haki</div>
               <h2 style={{ fontSize:"clamp(24px, 3vw, 36px)", fontWeight:700, color:"#1A237E", marginBottom:16, lineHeight:1.2 }}>
-                Le premier référentiel DEI construit pour la Côte d'Ivoire
+                Le premier référentiel GIS construit pour la Côte d'Ivoire
               </h2>
               <p style={{ fontSize:14, color:"#616161", lineHeight:1.8, marginBottom:16 }}>
                 <strong style={{ color:"#1A237E" }}>Haki</strong> signifie "le droit", "la part légitime" en Dioula. C'est cette conviction qui fonde notre mission : chaque collaborateur a droit à sa juste place dans l'organisation.
@@ -399,7 +399,7 @@ export default function LandingPage() {
         <div style={{ maxWidth:700, margin:"0 auto", textAlign:"center" as const }}>
           <div style={{ fontSize:40, marginBottom:16 }}>🚀</div>
           <h2 style={{ fontSize:"clamp(26px, 4vw, 42px)", fontWeight:700, color:"#fff", marginBottom:16, lineHeight:1.2 }}>
-            Prêt à mesurer votre maturité DEI ?
+            Prêt à mesurer votre maturité GIS ?
           </h2>
           <p style={{ fontSize:15, color:"#C5CAE9", lineHeight:1.7, marginBottom:32 }}>
             Commencez par le SOCLE — notre diagnostic de conformité légale CI gratuit. Résultats immédiats. Aucune carte bancaire requise.
@@ -429,18 +429,18 @@ export default function LandingPage() {
             <div>
               <div style={{ fontSize:20, fontWeight:700, color:"#FFC107", letterSpacing:4, marginBottom:8 }}>HAKI</div>
               <div style={{ fontSize:12, color:"#4A5568", lineHeight:1.7, maxWidth:260 }}>
-                Première plateforme SaaS DEI ancrée dans le Code du Travail CI 2025. Redonner à chacun sa juste part.
+                Première plateforme SaaS GIS ancrée dans le Code du Travail CI 2025. Redonner à chacun sa juste part.
               </div>
             </div>
             <div>
               <div style={{ fontSize:11, fontWeight:700, color:"#6B7280", letterSpacing:".12em", textTransform:"uppercase" as const, marginBottom:12 }}>Plateforme</div>
-              {["Diagnostic DEI","Baromètre","Benchmarks CI","Production docs","Formation","Communication"].map(l => (
+              {["Diagnostic GIS","Baromètre","Benchmarks CI","Production docs","Formation","Communication"].map(l => (
                 <div key={l} style={{ fontSize:12, color:"#4A5568", marginBottom:6, cursor:"pointer" }} onClick={() => router.push("/connexion")}>{l}</div>
               ))}
             </div>
             <div>
               <div style={{ fontSize:11, fontWeight:700, color:"#6B7280", letterSpacing:".12em", textTransform:"uppercase" as const, marginBottom:12 }}>Ressources</div>
-              {["Guide CT CI 2025","Référentiel MMI-CI","Checklist SOCLE","Bailleurs & DEI"].map(l => (
+              {["Guide CT CI 2025","Référentiel MMI-CI","Checklist SOCLE","Bailleurs & GIS"].map(l => (
                 <div key={l} style={{ fontSize:12, color:"#4A5568", marginBottom:6, cursor:"pointer" }}>{l}</div>
               ))}
             </div>

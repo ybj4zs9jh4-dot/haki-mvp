@@ -92,7 +92,7 @@ export default function DocumentsPage() {
       <div style={{ background:"#1A237E", padding:"14px 28px", display:"flex", alignItems:"center", justifyContent:"space-between" }}>
         <div style={{ display:"flex", alignItems:"center", gap:12 }}>
           <span style={{ fontSize:20, fontWeight:600, color:"#FFC107", letterSpacing:2 }}>HAKI</span>
-          <span style={{ fontSize:12, color:"#9FA8DA" }}>Production documentaire DEI</span>
+          <span style={{ fontSize:12, color:"#9FA8DA" }}>Production documentaire GIS</span>
         </div>
         <button onClick={() => router.push("/dashboard")}
           style={{ background:"transparent", border:"1px solid #3949AB", color:"#90CAF9", borderRadius:6, padding:"6px 14px", fontSize:12, cursor:"pointer" }}>
@@ -104,7 +104,7 @@ export default function DocumentsPage() {
       <div style={{ background:"#fff", borderBottom:"1px solid #E0E0E0", padding:"16px 28px" }}>
         <div style={{ maxWidth:1100, margin:"0 auto" }}>
           <div style={{ fontSize:16, fontWeight:500, color:"#1A237E", marginBottom:4 }}>
-            Documents DEI personnalisés pour {sessionDiag?.organisation?.nom ?? "votre organisation"}
+            Documents GIS personnalisés pour {sessionDiag?.organisation?.nom ?? "votre organisation"}
           </div>
           <div style={{ fontSize:13, color:"#757575" }}>
             Chaque document est produit sur mesure à partir de vos données diagnostiques Haki · Livraison 10 à 21 jours ouvrés · Contextualisation CI garantie
@@ -337,7 +337,7 @@ export default function DocumentsPage() {
               <div style={{ background:"#fff", borderRadius:12, padding:32, textAlign:"center" }}>
                 <div style={{ fontSize:32, marginBottom:12 }}>📄</div>
                 <div style={{ fontSize:15, fontWeight:500, color:"#1A237E", marginBottom:8 }}>Aucune commande pour le moment</div>
-                <div style={{ fontSize:13, color:"#9E9E9E", marginBottom:20 }}>Parcourez notre catalogue et commandez vos premiers documents DEI.</div>
+                <div style={{ fontSize:13, color:"#9E9E9E", marginBottom:20 }}>Parcourez notre catalogue et commandez vos premiers documents GIS.</div>
                 <button onClick={() => setVue("catalogue")}
                   style={{ padding:"10px 24px", background:"#1A237E", color:"#fff", border:"none", borderRadius:8, fontSize:13, fontWeight:500, cursor:"pointer" }}>
                   Voir le catalogue →

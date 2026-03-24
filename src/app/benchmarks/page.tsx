@@ -106,7 +106,7 @@ export default function BenchmarksPage() {
       <div style={{ background:"#fff", borderBottom:"2px solid #E0E0E0", padding:"0 28px", display:"flex", gap:0 }}>
         {[
           { id:"benchmark", label:"📊 Benchmarks sectoriels CI" },
-          { id:"veille",    label:"🔍 Veille web DEI CI" },
+          { id:"veille",    label:"🔍 Veille web GIS CI" },
         ].map(o => (
           <button key={o.id} onClick={() => setOnglet(o.id as any)}
             style={{ padding:"12px 20px", border:"none", background:"transparent", fontSize:13, fontWeight:500, cursor:"pointer",
@@ -226,7 +226,7 @@ export default function BenchmarksPage() {
               <div style={{ display:"flex", justifyContent:"space-between", alignItems:"flex-start", marginBottom:14 }}>
                 <div>
                   <div style={{ fontSize:13, fontWeight:500, color:"#424242", marginBottom:4 }}>
-                    Veille web DEI CI — Recherche automatisée mensuelle
+                    Veille web GIS CI — Recherche automatisée mensuelle
                   </div>
                   <div style={{ fontSize:12, color:"#9E9E9E" }}>
                     Scan des sources publiques CI (sites entreprises, CGECI, AFD, ONU Femmes, presse économique CI)
@@ -252,7 +252,7 @@ export default function BenchmarksPage() {
               {veilleResult && (
                 <div style={{ padding:"12px 16px", borderRadius:8, background:veilleResult.success?"#E8F5E9":"#FFF3E0", fontSize:13, color:veilleResult.success?"#2E7D32":"#E65100" }}>
                   {veilleResult.success
-                    ? `✓ ${veilleResult.signauxTrouves} signaux DEI CI détectés et ajoutés`
+                    ? `✓ ${veilleResult.signauxTrouves} signaux GIS CI détectés et ajoutés`
                     : veilleResult.message ?? "Veille déjà effectuée ce mois-ci"
                   }
                 </div>
@@ -285,7 +285,7 @@ export default function BenchmarksPage() {
               <div style={{ background:"#fff", borderRadius:12, padding:32, textAlign:"center" }}>
                 <div style={{ fontSize:32, marginBottom:12 }}>🔍</div>
                 <div style={{ fontSize:15, fontWeight:500, color:"#1A237E", marginBottom:8 }}>
-                  Aucun signal DEI CI disponible
+                  Aucun signal GIS CI disponible
                 </div>
                 <div style={{ fontSize:13, color:"#9E9E9E", marginBottom:20 }}>
                   Lancez une première veille pour scanner les sources publiques CI.
@@ -294,7 +294,7 @@ export default function BenchmarksPage() {
             ) : (
               <div>
                 <div style={{ fontSize:12, color:"#9E9E9E", marginBottom:12 }}>
-                  {veillesFiltrees.length} signal(s) DEI CI détecté(s)
+                  {veillesFiltrees.length} signal(s) GIS CI détecté(s)
                   {secteurFiltre ? ` · Secteur : ${secteurFiltre}` : ""}
                 </div>
                 {veillesFiltrees.map((v: any, i: number) => (

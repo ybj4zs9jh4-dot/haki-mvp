@@ -1,7 +1,7 @@
 // src/lib/scoring/bareme.ts
 // Barème de scoring MMI-CI v1.0
 // Haki — Côte d'Ivoire
-// Total : 100 pts sur 4 dimensions DEI (SOCLE hors score)
+// Total : 100 pts sur 4 dimensions GIS (SOCLE hors score)
 
 export type TypeItem =
   | "binaire"
@@ -38,7 +38,7 @@ export const BAREME: ItemBareme[] = [
     bareme: { "diffusee": 3.0, "elaboration": 1.0, "non": 0 } },
   { code: "G-02", libelle: "Résultats genre présentés aux instances dirigeantes", dimension: "DIM1", composante: "A", scoreMax: 2.0, type: "binaire", importance: "important",
     bareme: { "trimestriel": 2.0, "annuel": 1.0, "non": 0 } },
-  { code: "G-03", libelle: "Référent·e ou comité DEI désigné·e", dimension: "DIM1", composante: "A", scoreMax: 2.0, type: "binaire", importance: "important",
+  { code: "G-03", libelle: "Référent·e ou comité GIS désigné·e", dimension: "DIM1", composante: "A", scoreMax: 2.0, type: "binaire", importance: "important",
     bareme: { "comite": 2.0, "referent": 1.0, "non": 0 } },
   { code: "G-03b", libelle: "Politique non-discrimination tous critères Art. 4 CT CI", dimension: "DIM1", composante: "A", scoreMax: 1.0, type: "binaire", importance: "standard",
     bareme: { "tous_criteres": 1.0, "partielle": 0.5, "non": 0 } },

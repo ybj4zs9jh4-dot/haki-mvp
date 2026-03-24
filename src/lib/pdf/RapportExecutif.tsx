@@ -1,6 +1,6 @@
 // src/lib/pdf/RapportExecutif.tsx
 // Rapport PDF Format Exécutif — 6 pages
-// Haki · Plateforme DEI Côte d'Ivoire
+// Haki · Plateforme GIS Côte d'Ivoire
 
 import React from "react";
 import {
@@ -41,11 +41,11 @@ function pct(score: number, max: number) {
 
 function interpretationNiveau(niveau: number, orgNom: string, scoreGlobal: number): string {
   switch (niveau) {
-    case 1: return `${orgNom} n'a pas encore de politique DEI formalisée. Un plan de mise en conformité d'urgence est recommandé.`;
-    case 2: return `${orgNom} respecte les obligations DEI minimales. Les bases sont posées pour construire une politique structurée.`;
-    case 3: return `${orgNom} dispose d'une politique DEI écrite et collecte ses premiers indicateurs. La systématisation des pratiques est la prochaine étape.`;
-    case 4: return `${orgNom} a intégré la DEI dans ses processus RH clés. L'organisation est à ${75 - scoreGlobal > 0 ? 75 - scoreGlobal : 0} pts du Label Haki DEI.`;
-    case 5: return `${orgNom} est une référence sectorielle CI en matière de DEI. Elle contribue aux benchmarks Haki et est éligible au Label Haki DEI.`;
+    case 1: return `${orgNom} n'a pas encore de politique GIS formalisée. Un plan de mise en conformité d'urgence est recommandé.`;
+    case 2: return `${orgNom} respecte les obligations GIS minimales. Les bases sont posées pour construire une politique structurée.`;
+    case 3: return `${orgNom} dispose d'une politique GIS écrite et collecte ses premiers indicateurs. La systématisation des pratiques est la prochaine étape.`;
+    case 4: return `${orgNom} a intégré la GIS dans ses processus RH clés. L'organisation est à ${75 - scoreGlobal > 0 ? 75 - scoreGlobal : 0} pts du Label Haki GIS.`;
+    case 5: return `${orgNom} est une référence sectorielle CI en matière de GIS. Elle contribue aux benchmarks Haki et est éligible au Label Haki GIS.`;
     default: return "";
   }
 }
@@ -70,7 +70,7 @@ function PageHeader({ orgNom, pageLabel, ref }: { orgNom: string; pageLabel: str
     <View style={styles.pageHeader}>
       <View>
         <Text style={styles.pageHeaderLogo}>HAKI</Text>
-        <Text style={styles.pageHeaderSub}>Plateforme DEI · Côte d'Ivoire</Text>
+        <Text style={styles.pageHeaderSub}>Plateforme GIS · Côte d'Ivoire</Text>
       </View>
       <View style={{ alignItems: "center" }}>
         <Text style={{ fontSize: 9, color: COLORS.indMd, fontFamily: "Helvetica-Bold" }}>{orgNom}</Text>
@@ -109,10 +109,10 @@ function PageCouverture({ data }: { data: DonnéesRapport }) {
       {/* Fond indigo haut */}
       <View style={{ backgroundColor: COLORS.indigo, paddingHorizontal: 40, paddingTop: 60, paddingBottom: 50 }}>
         <Text style={{ fontSize: 36, fontFamily: "Helvetica-Bold", color: COLORS.safran, letterSpacing: 6, marginBottom: 6 }}>HAKI</Text>
-        <Text style={{ fontSize: 11, color: COLORS.indMd, marginBottom: 40 }}>Plateforme DEI · Côte d'Ivoire</Text>
+        <Text style={{ fontSize: 11, color: COLORS.indMd, marginBottom: 40 }}>Plateforme GIS · Côte d'Ivoire</Text>
         <Text style={{ fontSize: 22, fontFamily: "Helvetica-Bold", color: COLORS.white, marginBottom: 6 }}>{data.organisation.nom}</Text>
         <Text style={{ fontSize: 11, color: COLORS.indMd, marginBottom: 30 }}>
-          Rapport de maturité DEI · {data.organisation.annee} · Réf. {data.organisation.ref}
+          Rapport de maturité GIS · {data.organisation.annee} · Réf. {data.organisation.ref}
         </Text>
         {/* Chips */}
         <View style={{ flexDirection: "row", gap: 8 }}>
@@ -439,18 +439,18 @@ function PageLabel({ data }: { data: DonnéesRapport }) {
 
   return (
     <Page size="A4" style={styles.page}>
-      <PageHeader orgNom={data.organisation.nom} pageLabel="Label Haki DEI" ref={data.organisation.ref} />
+      <PageHeader orgNom={data.organisation.nom} pageLabel="Label Haki GIS" ref={data.organisation.ref} />
       <View style={styles.content}>
-        <Text style={styles.sectionTitle}>ÉLIGIBILITÉ LABEL HAKI DEI</Text>
+        <Text style={styles.sectionTitle}>ÉLIGIBILITÉ LABEL HAKI GIS</Text>
         <View style={[styles.card, { backgroundColor: eligible ? COLORS.grnLt : COLORS.indLt, marginBottom: 14 }]}>
           <View style={{ flexDirection: "row", alignItems: "center", gap: 16 }}>
             {/* Badge circulaire */}
             <View style={{ width: 60, height: 60, borderRadius: 30, backgroundColor: COLORS.indigo, alignItems: "center", justifyContent: "center" }}>
-              <Text style={{ fontSize: 8, fontFamily: "Helvetica-Bold", color: COLORS.safran, textAlign: "center" }}>HAKI{"\n"}DEI{"\n"}CI</Text>
+              <Text style={{ fontSize: 8, fontFamily: "Helvetica-Bold", color: COLORS.safran, textAlign: "center" }}>HAKI{"\n"}GIS{"\n"}CI</Text>
             </View>
             <View style={{ flex: 1 }}>
               <Text style={[styles.h2, { color: eligible ? COLORS.green : COLORS.indigo }]}>
-                {eligible ? "✓ Éligible au Label Haki DEI" : "Pas encore éligible"}
+                {eligible ? "✓ Éligible au Label Haki GIS" : "Pas encore éligible"}
               </Text>
               <Text style={[styles.body, { marginTop: 4 }]}>
                 {eligible
@@ -470,7 +470,7 @@ function PageLabel({ data }: { data: DonnéesRapport }) {
         <View style={styles.card}>
           <Text style={styles.cardTitle}>Méthodologie MMI-CI</Text>
           <Text style={[styles.body, { marginBottom: 6 }]}>
-            Le Score MMI-CI (Maturity Index for Inclusion CI) est calculé sur 100 points répartis en 4 dimensions DEI
+            Le Score MMI-CI (Maturity Index for Inclusion CI) est calculé sur 100 points répartis en 4 dimensions GIS
             ancrées dans le Code du Travail CI 2025, la Constitution CI et les conventions internationales ratifiées.
           </Text>
           <View style={{ flexDirection: "row", gap: 8, flexWrap: "wrap" }}>
@@ -486,7 +486,7 @@ function PageLabel({ data }: { data: DonnéesRapport }) {
         {/* Contact */}
         <View style={[styles.card, { backgroundColor: COLORS.indigo }]}>
           <Text style={{ fontSize: 10, fontFamily: "Helvetica-Bold", color: COLORS.safran, marginBottom: 6, textAlign: "center" }}>
-            HAKI · Plateforme DEI Côte d'Ivoire
+            HAKI · Plateforme GIS Côte d'Ivoire
           </Text>
           <Text style={{ fontSize: 8, color: COLORS.indMd, textAlign: "center" }}>
             contact@haki.ci · www.haki.ci · Abidjan, Côte d'Ivoire
@@ -501,7 +501,7 @@ function PageLabel({ data }: { data: DonnéesRapport }) {
 // ─── DOCUMENT EXÉCUTIF COMPLET ────────────────────────────────
 export function RapportExecutif({ data }: { data: DonnéesRapport }) {
   return (
-    <Document title={`Rapport Haki DEI — ${data.organisation.nom} — ${data.organisation.annee}`} author="Haki CI">
+    <Document title={`Rapport Haki GIS — ${data.organisation.nom} — ${data.organisation.annee}`} author="Haki CI">
       <PageCouverture data={data} />
       <PageScoreSocle data={data} />
       <PageDimensions data={data} />

@@ -76,7 +76,7 @@ sessionStorage.setItem("haki_admin_auth_pwd", password);
         </div>
 
         <div style={{ textAlign:"center" as const, marginTop:20, fontSize:11, color:"#2D2D5E" }}>
-          Haki · Plateforme DEI Côte d'Ivoire
+          Haki · Plateforme GIS Côte d'Ivoire
         </div>
       </div>
     </div>

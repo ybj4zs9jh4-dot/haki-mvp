@@ -9,14 +9,14 @@ export async function envoyerLienBarometre(
 ): Promise<boolean> {
   try {
     await resend.emails.send({
-      from: "Haki DEI <onboarding@resend.dev>",
+      from: "Haki GIS <onboarding@resend.dev>",
       to: email,
       subject: `${orgNom} — Votre lien baromètre d'inclusion Haki`,
       html: `
         <div style="font-family:system-ui,sans-serif;max-width:600px;margin:0 auto;padding:32px 24px;">
           <div style="background:#1A237E;padding:24px;border-radius:12px 12px 0 0;text-align:center;">
             <div style="font-size:28px;font-weight:600;color:#FFC107;letter-spacing:4px;">HAKI</div>
-            <div style="font-size:13px;color:#9FA8DA;margin-top:4px;">Plateforme DEI · Côte d'Ivoire</div>
+            <div style="font-size:13px;color:#9FA8DA;margin-top:4px;">Plateforme GIS · Côte d'Ivoire</div>
           </div>
           <div style="background:#fff;border:1px solid #E0E0E0;border-top:none;border-radius:0 0 12px 12px;padding:32px 24px;">
             <div style="font-size:16px;font-weight:500;color:#212121;margin-bottom:16px;">Bonjour,</div>
@@ -41,7 +41,7 @@ export async function envoyerLienBarometre(
             </div>
           </div>
           <div style="text-align:center;margin-top:16px;font-size:11px;color:#BDBDBD;">
-            Haki · Plateforme DEI Côte d'Ivoire · contact@haki.ci
+            Haki · Plateforme GIS Côte d'Ivoire · contact@haki.ci
           </div>
         </div>
       `,
@@ -60,7 +60,7 @@ export async function envoyerLienManager(
 ): Promise<boolean> {
   try {
     await resend.emails.send({
-      from: "Haki DEI <onboarding@resend.dev>",
+      from: "Haki GIS <onboarding@resend.dev>",
       to: email,
       subject: `${orgNom} — Votre auto-diagnostic Manager Inclusif CI`,
       html: `
@@ -91,7 +91,7 @@ export async function envoyerLienManager(
             </div>
           </div>
           <div style="text-align:center;margin-top:16px;font-size:11px;color:#BDBDBD;">
-            Haki · Plateforme DEI Côte d'Ivoire · contact@haki.ci
+            Haki · Plateforme GIS Côte d'Ivoire · contact@haki.ci
           </div>
         </div>
       `,

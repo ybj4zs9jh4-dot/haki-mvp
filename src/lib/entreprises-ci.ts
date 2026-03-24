@@ -1,5 +1,5 @@
 // src/lib/entreprises-ci.ts
-// 339 grandes entreprises CI — requêtes de veille DEI
+// 339 grandes entreprises CI — requêtes de veille GIS
 
 export function genererRequetesVeille(): string[] {
   return [
@@ -11,7 +11,7 @@ export function genererRequetesVeille(): string[] {
     "LafargeHolcim Bouygues Eiffage Colas BTP Côte d'Ivoire diversité inclusion genre",
     "Air Côte d'Ivoire Port Autonome Abidjan inclusion diversité genre emploi",
     "Banques SIB BICICI SCB SGBCI Ecobank Côte d'Ivoire diversité inclusion genre femmes",
-    // Mots-clés DEI spécifiques CI
+    // Mots-clés GIS spécifiques CI
     "autonomisation femme entreprises Côte d'Ivoire 2024 2025 emploi leadership féminin",
     "genre égalité professionnelle entreprises ivoiriennes rapport annuel RSE",
     "VIH Sida non-discrimination emploi entreprises Côte d'Ivoire Art 4 Code Travail CI",

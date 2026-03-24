@@ -36,7 +36,7 @@ export default function ConnexionPage() {
         {/* Logo */}
         <div style={{ textAlign:"center", marginBottom:32 }}>
           <div style={{ fontSize:36, fontWeight:600, color:"#1A237E", letterSpacing:4 }}>HAKI</div>
-          <div style={{ fontSize:13, color:"#757575", marginTop:4 }}>Plateforme DEI · Côte d'Ivoire</div>
+          <div style={{ fontSize:13, color:"#757575", marginTop:4 }}>Plateforme GIS · Côte d'Ivoire</div>
         </div>
 
         {error && (

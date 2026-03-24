@@ -5,11 +5,11 @@ import { useEffect, useState } from "react";
 
 const BLOCS = [
   {
-    id:"b1", emoji:"⚖️", titre:"Fondamentaux DEI & cadre légal CI", color:"#1A237E", bg:"#E8EAF6",
+    id:"b1", emoji:"⚖️", titre:"Fondamentaux GIS & cadre légal CI", color:"#1A237E", bg:"#E8EAF6",
     themes:[
-      { id:"b1t1", titre:"Introduction à la DEI en entreprise ivoirienne", duree:"3h", niveau:"Sensibilisation", public:"Tous" },
+      { id:"b1t1", titre:"Introduction à la GIS en entreprise ivoirienne", duree:"3h", niveau:"Sensibilisation", public:"Tous" },
       { id:"b1t2", titre:"Code du Travail CI 2025 — obligations non-discrimination (Art. 4, 12, 23, 41)", duree:"7h", niveau:"Pratique", public:"DRH · Managers" },
-      { id:"b1t3", titre:"Le score MMI-CI — comprendre et piloter sa maturité DEI", duree:"3h", niveau:"Pratique", public:"DRH · Dirigeants" },
+      { id:"b1t3", titre:"Le score MMI-CI — comprendre et piloter sa maturité GIS", duree:"3h", niveau:"Pratique", public:"DRH · Dirigeants" },
       { id:"b1t4", titre:"Conformité CNPS/CMU/Médecine du travail — responsabilités du manager", duree:"3h", niveau:"Pratique", public:"Managers · DRH" },
     ]
   },
@@ -73,12 +73,12 @@ const BLOCS = [
     ]
   },
   {
-    id:"b8", emoji:"📣", titre:"Communication & engagement DEI", color:"#00838F", bg:"#E0F7FA",
+    id:"b8", emoji:"📣", titre:"Communication & engagement GIS", color:"#00838F", bg:"#E0F7FA",
     themes:[
-      { id:"b8t1", titre:"Communiquer sa démarche DEI en interne — outils et messages clés", duree:"3h", niveau:"Pratique", public:"DRH · Comm" },
-      { id:"b8t2", titre:"RSE et DEI — intégration dans la stratégie de communication externe", duree:"7h", niveau:"Expert", public:"Dirigeants · Comm" },
-      { id:"b8t3", titre:"Réseaux sociaux employeur et marque employeur DEI", duree:"3h", niveau:"Pratique", public:"Comm · DRH" },
-      { id:"b8t4", titre:"Reporting DEI pour les bailleurs et partenaires institutionnels", duree:"7h", niveau:"Expert", public:"DRH · Dirigeants" },
+      { id:"b8t1", titre:"Communiquer sa démarche GIS en interne — outils et messages clés", duree:"3h", niveau:"Pratique", public:"DRH · Comm" },
+      { id:"b8t2", titre:"RSE et GIS — intégration dans la stratégie de communication externe", duree:"7h", niveau:"Expert", public:"Dirigeants · Comm" },
+      { id:"b8t3", titre:"Réseaux sociaux employeur et marque employeur GIS", duree:"3h", niveau:"Pratique", public:"Comm · DRH" },
+      { id:"b8t4", titre:"Reporting GIS pour les bailleurs et partenaires institutionnels", duree:"7h", niveau:"Expert", public:"DRH · Dirigeants" },
     ]
   },
   {
@@ -86,8 +86,8 @@ const BLOCS = [
     themes:[
       { id:"b9t1", titre:"VBG en milieu professionnel — prévention, détection, protocole Orange the World", duree:"7h", niveau:"Pratique", public:"Managers · DRH" },
       { id:"b9t2", titre:"Protection des données RH et ARTCI — conformité et bonnes pratiques", duree:"3h", niveau:"Pratique", public:"DRH · DSI" },
-      { id:"b9t3", titre:"DEI pour les PME ivoiriennes — démarche simplifiée et ROI immédiat", duree:"3h", niveau:"Sensibilisation", public:"Dirigeants · DRH" },
-      { id:"b9t4", titre:"DEI pour les ONG et bailleurs — critères ODD, reporting AFD/ONU Femmes", duree:"7h", niveau:"Expert", public:"Dirigeants · DRH" },
+      { id:"b9t3", titre:"GIS pour les PME ivoiriennes — démarche simplifiée et ROI immédiat", duree:"3h", niveau:"Sensibilisation", public:"Dirigeants · DRH" },
+      { id:"b9t4", titre:"GIS pour les ONG et bailleurs — critères ODD, reporting AFD/ONU Femmes", duree:"7h", niveau:"Expert", public:"Dirigeants · DRH" },
     ]
   },
 ];
@@ -109,7 +109,7 @@ const PARTICIPANTS = [
   { id:"p60p", label:"Plus de 60",   coef:2.0 },
 ];
 const INTERVENANTS = [
-  { id:"haki",   label:"Formateur Haki",                  desc:"Expert DEI Haki certifié",                      coef:1.0 },
+  { id:"haki",   label:"Formateur Haki",                  desc:"Expert GIS Haki certifié",                      coef:1.0 },
   { id:"expert", label:"Formateur Haki + Expert invité",  desc:"Juriste CI, médecin travail, RHEEG-CI…",         coef:1.5 },
   { id:"seul",   label:"Expert invité coordonné Haki",    desc:"Spécialiste externe, logistique Haki",           coef:1.3 },
 ];
@@ -125,12 +125,12 @@ const LANGUES = [
 const CERTIFICATIONS = [
   { id:"none",   label:"Sans attestation",               coef:1.00 },
   { id:"attest", label:"Attestation de participation",   coef:1.05 },
-  { id:"certif", label:"Certification Haki DEI Manager", coef:1.15 },
+  { id:"certif", label:"Certification Haki GIS Manager", coef:1.15 },
 ];
 const LIVRABLES = [
   { id:"none",    label:"Sans livrable",                            coef:1.00 },
   { id:"rapport", label:"Rapport + évaluation des acquis",          coef:1.10 },
-  { id:"plan",    label:"Rapport + Plan d'action DEI personnalisé", coef:1.20 },
+  { id:"plan",    label:"Rapport + Plan d'action GIS personnalisé", coef:1.20 },
 ];
 
 const TARIF_BASE = 150000;
@@ -228,9 +228,9 @@ export default function FormationPage() {
         {/* INTRO */}
         <div style={{marginBottom:24}}>
           <div style={{fontSize:11,fontWeight:700,color:"#9E9E9E",letterSpacing:".12em",textTransform:"uppercase" as const,marginBottom:4}}>Formation Haki MANAGERS</div>
-          <h1 style={{fontSize:22,fontWeight:700,color:"#1A237E",margin:"0 0 6px"}}>Formations DEI sur mesure pour vos encadrants</h1>
+          <h1 style={{fontSize:22,fontWeight:700,color:"#1A237E",margin:"0 0 6px"}}>Formations GIS sur mesure pour vos encadrants</h1>
           <p style={{fontSize:13,color:"#757575",margin:0,lineHeight:1.6,maxWidth:680}}>
-            33 thématiques ancrées dans le Code du Travail CI 2025 · Formats adaptés à votre contexte · Formateurs experts DEI CI · Certification disponible
+            33 thématiques ancrées dans le Code du Travail CI 2025 · Formats adaptés à votre contexte · Formateurs experts GIS CI · Certification disponible
           </p>
         </div>
 

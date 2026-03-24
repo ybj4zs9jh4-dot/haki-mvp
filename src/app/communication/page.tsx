@@ -16,10 +16,10 @@ interface ContenuGenere {
   whatsapp: string;
 }
 
-const JOURNEES_DEI = [
+const JOURNEES_GIS = [
   { id:"8mars",    label:"8 Mars — Journée des Femmes",          emoji:"♀️" },
   { id:"1mai",     label:"1er Mai — Fête du Travail CI",          emoji:"✊" },
-  { id:"haki",     label:"Haki DEI Month — Octobre",             emoji:"🏆" },
+  { id:"haki",     label:"Haki GIS Month — Octobre",             emoji:"🏆" },
   { id:"vbg",      label:"16 jours d'activisme — VBG",           emoji:"🟠" },
   { id:"sida",     label:"1er Décembre — Journée Mondiale Sida", emoji:"🔴" },
   { id:"psh",      label:"3 Décembre — Journée Int'l PSH",       emoji:"♿" },
@@ -69,33 +69,33 @@ export default function CommunicationPage() {
     setErreur("");
     setContenu(null);
 
-    const journee = JOURNEES_DEI.find(j => j.id === journeeId);
+    const journee = JOURNEES_GIS.find(j => j.id === journeeId);
     const orgNom = user?.organisationNom ?? "votre organisation";
 
     const prompt = kit === "journees"
-      ? `Tu es expert en communication DEI pour les entreprises de Côte d'Ivoire.
+      ? `Tu es expert en communication GIS pour les entreprises de Côte d'Ivoire.
 Génère des contenus de communication pour ${orgNom} à l'occasion de : ${journee?.label}.
-Le contexte : plateforme Haki DEI CI, ancrée dans le Code du Travail CI 2025.
+Le contexte : plateforme Haki GIS CI, ancrée dans le Code du Travail CI 2025.
 
 Génère exactement ce JSON (sans markdown, sans backticks) :
 {
-  "linkedin": "Post LinkedIn professionnel 150-200 mots, ton engagé et institutionnel, hashtags DEI CI pertinents",
+  "linkedin": "Post LinkedIn professionnel 150-200 mots, ton engagé et institutionnel, hashtags GIS CI pertinents",
   "facebook": "Post Facebook 100-150 mots, ton plus accessible et communautaire, 2-3 emojis, hashtags",
   "twitter": "Tweet 240 caractères maximum, percutant, 2 hashtags max",
   "email": "Email interne objet + corps 150 mots, ton RH bienveillant, signé Direction des Ressources Humaines de ${orgNom}",
   "whatsapp": "Message WhatsApp RH 80 mots maximum, ton chaleureux, quelques emojis"
 }`
-      : `Tu es expert en communication DEI pour les entreprises de Côte d'Ivoire.
-Génère des contenus de communication pour ${orgNom} pour présenter son Plan d'Action DEI.
-Le contexte : l'organisation vient de réaliser son diagnostic DEI sur la plateforme Haki CI et s'engage dans une démarche structurée.
+      : `Tu es expert en communication GIS pour les entreprises de Côte d'Ivoire.
+Génère des contenus de communication pour ${orgNom} pour présenter son Plan d'Action GIS.
+Le contexte : l'organisation vient de réaliser son diagnostic GIS sur la plateforme Haki CI et s'engage dans une démarche structurée.
 
 Génère exactement ce JSON (sans markdown, sans backticks) :
 {
-  "linkedin": "Post LinkedIn 150-200 mots annonçant l'engagement DEI de l'organisation, ton institutionnel et fier, hashtags DEI CI",
-  "facebook": "Post Facebook 100-150 mots, ton accessible, présentation de l'engagement DEI, emojis, hashtags",
-  "twitter": "Tweet 240 caractères max sur l'engagement DEI, percutant, 2 hashtags",
-  "email": "Email interne objet + corps 150 mots présentant le Plan d'Action DEI aux collaborateurs, signé DRH de ${orgNom}",
-  "whatsapp": "Message WhatsApp RH 80 mots max informant les collaborateurs de l'engagement DEI"
+  "linkedin": "Post LinkedIn 150-200 mots annonçant l'engagement GIS de l'organisation, ton institutionnel et fier, hashtags GIS CI",
+  "facebook": "Post Facebook 100-150 mots, ton accessible, présentation de l'engagement GIS, emojis, hashtags",
+  "twitter": "Tweet 240 caractères max sur l'engagement GIS, percutant, 2 hashtags",
+  "email": "Email interne objet + corps 150 mots présentant le Plan d'Action GIS aux collaborateurs, signé DRH de ${orgNom}",
+  "whatsapp": "Message WhatsApp RH 80 mots max informant les collaborateurs de l'engagement GIS"
 }`;
 
     try {
@@ -139,7 +139,7 @@ Génère exactement ce JSON (sans markdown, sans backticks) :
     }
   `;
 
-  const journee = JOURNEES_DEI.find(j => j.id === journeeId);
+  const journee = JOURNEES_GIS.find(j => j.id === journeeId);
   const reseauActif = RESEAUX.find(r => r.id === reseau);
 
   return (
@@ -151,7 +151,7 @@ Génère exactement ce JSON (sans markdown, sans backticks) :
         <div style={{ display:"flex", alignItems:"center", gap:14 }}>
           <span style={{ fontSize:20, fontWeight:700, color:"#FFC107", letterSpacing:3 }}>HAKI</span>
           <div style={{ width:1, height:18, background:"#3949AB" }}/>
-          <span style={{ fontSize:12, color:"#9FA8DA" }}>Communication DEI</span>
+          <span style={{ fontSize:12, color:"#9FA8DA" }}>Communication GIS</span>
         </div>
         <div style={{ display:"flex", alignItems:"center", gap:10 }}>
           <button onClick={() => router.push("/dashboard")}
@@ -177,10 +177,10 @@ Génère exactement ce JSON (sans markdown, sans backticks) :
             Accompagnement Communication Digitale
           </div>
           <h1 style={{ fontSize:22, fontWeight:700, color:"#1A237E", margin:"0 0 6px" }}>
-            Vos contenus DEI prêts à publier
+            Vos contenus GIS prêts à publier
           </h1>
           <p style={{ fontSize:13, color:"#757575", margin:0, lineHeight:1.6 }}>
-            Générez en quelques secondes vos posts, emails et messages DEI personnalisés pour {user?.organisationNom ?? "votre organisation"}.
+            Générez en quelques secondes vos posts, emails et messages GIS personnalisés pour {user?.organisationNom ?? "votre organisation"}.
           </p>
         </div>
 
@@ -196,8 +196,8 @@ Génère exactement ce JSON (sans markdown, sans backticks) :
               </div>
               <div style={{ display:"flex", flexDirection:"column" as const, gap:8 }}>
                 {[
-                  { id:"journees",     emoji:"📅", label:"Kit Journées DEI",      desc:"Pour les journées nationales et internationales" },
-                  { id:"plan_action",  emoji:"🎯", label:"Kit Plan d'Action DEI", desc:"Pour communiquer vos engagements et avancées" },
+                  { id:"journees",     emoji:"📅", label:"Kit Journées GIS",      desc:"Pour les journées nationales et internationales" },
+                  { id:"plan_action",  emoji:"🎯", label:"Kit Plan d'Action GIS", desc:"Pour communiquer vos engagements et avancées" },
                 ].map(k => (
                   <button key={k.id} className="haki-btn"
                     onClick={() => { setKit(k.id as Kit); setContenu(null); setErreur(""); }}
@@ -218,10 +218,10 @@ Génère exactement ce JSON (sans markdown, sans backticks) :
             {kit === "journees" && (
               <div style={{ background:"#fff", borderRadius:12, padding:20, boxShadow:"0 1px 3px rgba(0,0,0,0.06)" }}>
                 <div style={{ fontSize:11, fontWeight:700, color:"#9E9E9E", letterSpacing:".1em", textTransform:"uppercase" as const, marginBottom:12 }}>
-                  Journée DEI
+                  Journée GIS
                 </div>
                 <div style={{ display:"flex", flexDirection:"column" as const, gap:6 }}>
-                  {JOURNEES_DEI.map(j => (
+                  {JOURNEES_GIS.map(j => (
                     <button key={j.id} className="haki-btn"
                       onClick={() => { setJourneeId(j.id); setContenu(null); }}
                       style={{
@@ -262,7 +262,7 @@ Génère exactement ce JSON (sans markdown, sans backticks) :
                     border: `1.5px solid ${niveau==="sur_mesure" ? "#E65100" : "transparent"}`,
                   }}>
                   <div style={{ fontSize:13, fontWeight:600, color: niveau==="sur_mesure"?"#E65100":"#212121", marginBottom:2 }}>✍️ Production sur mesure Haki</div>
-                  <div style={{ fontSize:11, color:"#9E9E9E" }}>5 jours ouvrés · Relu par expert DEI · Service payant</div>
+                  <div style={{ fontSize:11, color:"#9E9E9E" }}>5 jours ouvrés · Relu par expert GIS · Service payant</div>
                 </button>
               </div>
             </div>
@@ -288,7 +288,7 @@ Génère exactement ce JSON (sans markdown, sans backticks) :
                   <div style={{ display:"flex", flexDirection:"column" as const, alignItems:"center", justifyContent:"center", height:360, gap:12, color:"#BDBDBD" }}>
                     <div style={{ fontSize:48 }}>✨</div>
                     <div style={{ fontSize:14, fontWeight:500, color:"#9E9E9E" }}>
-                      {kit==="journees" ? `Kit ${journee?.label}` : "Kit Plan d'Action DEI"}
+                      {kit==="journees" ? `Kit ${journee?.label}` : "Kit Plan d'Action GIS"}
                     </div>
                     <div style={{ fontSize:12, color:"#BDBDBD" }}>Cliquez sur "Générer" pour obtenir vos contenus</div>
                   </div>
@@ -317,7 +317,7 @@ Génère exactement ce JSON (sans markdown, sans backticks) :
                     <div style={{ display:"flex", justifyContent:"space-between", alignItems:"center", marginBottom:16 }}>
                       <div>
                         <div style={{ fontSize:13, fontWeight:700, color:"#1A237E" }}>
-                          {kit==="journees" ? journee?.label : "Plan d'Action DEI"} — Contenus générés
+                          {kit==="journees" ? journee?.label : "Plan d'Action GIS"} — Contenus générés
                         </div>
                         <div style={{ fontSize:11, color:"#9E9E9E", marginTop:2 }}>
                           {user?.organisationNom ?? "Votre organisation"} · {RESEAUX.length} formats disponibles
@@ -397,14 +397,14 @@ Génère exactement ce JSON (sans markdown, sans backticks) :
                       ✍️ Production sur mesure Haki
                     </div>
                     <div style={{ fontSize:12, color:"#9E9E9E", marginBottom:20, lineHeight:1.6 }}>
-                      L'équipe Haki produit vos contenus DEI personnalisés, relus et validés par un expert DEI CI. Délai : 5 jours ouvrés.
+                      L'équipe Haki produit vos contenus GIS personnalisés, relus et validés par un expert GIS CI. Délai : 5 jours ouvrés.
                     </div>
 
                     <div style={{ display:"flex", flexDirection:"column" as const, gap:14 }}>
                       <div>
                         <div style={{ fontSize:12, fontWeight:600, color:"#424242", marginBottom:6 }}>Kit demandé</div>
                         <div style={{ padding:"10px 14px", background:"#F5F5F5", borderRadius:8, fontSize:13, color:"#1A237E", fontWeight:500 }}>
-                          {kit==="journees" ? `📅 Kit Journées DEI — ${journee?.label}` : "🎯 Kit Plan d'Action DEI"}
+                          {kit==="journees" ? `📅 Kit Journées GIS — ${journee?.label}` : "🎯 Kit Plan d'Action GIS"}
                         </div>
                       </div>
 
@@ -442,7 +442,7 @@ Génère exactement ce JSON (sans markdown, sans backticks) :
                     <div style={{ fontSize:48 }}>✅</div>
                     <div style={{ fontSize:16, fontWeight:700, color:"#2E7D32" }}>Demande envoyée</div>
                     <div style={{ fontSize:13, color:"#757575", maxWidth:360, lineHeight:1.7 }}>
-                      L'équipe Haki a bien reçu votre demande pour <strong>{kit==="journees" ? journee?.label : "le Plan d'Action DEI"}</strong>.
+                      L'équipe Haki a bien reçu votre demande pour <strong>{kit==="journees" ? journee?.label : "le Plan d'Action GIS"}</strong>.
                       Vous recevrez un devis sous 24h à l'adresse email de votre compte.
                     </div>
                     <div style={{ fontSize:12, color:"#9E9E9E" }}>Délai de production : 5 jours ouvrés après validation du devis</div>

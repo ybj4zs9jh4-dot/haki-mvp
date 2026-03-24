@@ -1,5 +1,5 @@
 // src/lib/catalogue-documents.ts
-// Catalogue complet des 5 documents DEI Haki
+// Catalogue complet des 5 documents GIS Haki
 // Tarification CI · Tables des matières · Proformas
 
 export type TypeDocument =
@@ -36,7 +36,7 @@ export const PACKAGES = [
     emoji: "📦",
     documents: ["charte_di", "politique_genre", "pag"] as TypeDocument[],
     remise: 0.20,
-    description: "Les 3 documents fondamentaux pour démarrer votre démarche DEI",
+    description: "Les 3 documents fondamentaux pour démarrer votre démarche GIS",
     recommande: false,
   },
   {
@@ -50,11 +50,11 @@ export const PACKAGES = [
   },
   {
     id: "pack_transformation",
-    label: "Pack Transformation DEI",
+    label: "Pack Transformation GIS",
     emoji: "🚀",
     documents: ["strategie_genre", "charte_di", "politique_genre", "pag", "mecanisme_se"] as TypeDocument[],
     remise: 0.30,
-    description: "Les 5 documents — transformation DEI complète · Éligible Label Haki DEI",
+    description: "Les 5 documents — transformation GIS complète · Éligible Label Haki GIS",
     recommande: false,
   },
 ];
@@ -149,13 +149,13 @@ export const CATALOGUE: Record<TypeDocument, {
   },
 
   charte_di: {
-    label: "Charte Diversité & Inclusion",
+    label: "Charte Genre et Inclusion Sociale",
     emoji: "📜",
     couleur: "#00695C",
     bg: "#E0F2F1",
     dureeJours: { standard: 10, enrichi: 15, premium: 21 },
     objectifs: [
-      "Formaliser l'engagement public de votre organisation en matière de DEI",
+      "Formaliser l'engagement public de votre organisation en matière de GIS",
       "Créer un document signable par la direction et diffusable externement",
       "Répondre aux exigences des bailleurs (AFD, IFC, ONU Femmes CI)",
       "Renforcer votre marque employeur auprès des candidats",
@@ -168,7 +168,7 @@ export const CATALOGUE: Record<TypeDocument, {
     tableDesMatieres: [
       "1. Préambule et engagement de la direction",
       "2. Définitions — Diversité, Équité, Inclusion au sens Haki CI",
-      "3. Nos 7 engagements DEI signés",
+      "3. Nos 7 engagements GIS signés",
       "4. Champ d'application et bénéficiaires",
       "5. Mécanismes de mise en œuvre",
       "6. Communication et diffusion interne/externe",
@@ -370,27 +370,27 @@ export const CATALOGUE: Record<TypeDocument, {
     bg: "#E8F5E9",
     dureeJours: { standard: 10, enrichi: 15, premium: 21 },
     objectifs: [
-      "Mettre en place un système de mesure continue des progrès DEI",
+      "Mettre en place un système de mesure continue des progrès GIS",
       "Créer les tableaux de bord pour le reporting interne et externe",
-      "Anticiper et gérer les risques DEI de votre organisation",
+      "Anticiper et gérer les risques GIS de votre organisation",
       "Répondre aux exigences GRI/CSRD/ODD de vos bailleurs",
     ],
     livrables: [
       "Document Word + PDF · 25-35 pages",
-      "Tableau de bord Excel KPI DEI (mensuel/trimestriel/annuel)",
-      "Matrice des risques DEI",
-      "Modèle de rapport annuel DEI",
+      "Tableau de bord Excel KPI GIS (mensuel/trimestriel/annuel)",
+      "Matrice des risques GIS",
+      "Modèle de rapport annuel GIS",
     ],
     tableDesMatieres: [
       "1. Objectifs et portée du mécanisme S&E",
-      "2. Cadre de résultats et indicateurs clés (KPI DEI) par dimension MMI-CI",
+      "2. Cadre de résultats et indicateurs clés (KPI GIS) par dimension MMI-CI",
       "3. Tableau de bord de suivi mensuel et trimestriel",
       "4. Collecte et gestion des données (conformité ARTCI · anonymisation)",
       "5. Processus de reporting interne (DRH → DG → CA)",
       "6. Reporting externe (GRI · CSRD · ODD · bailleurs)",
       "7. Revue annuelle du score MMI-CI",
-      "8. Matrice des risques DEI et mesures de mitigation",
-      "9. Plan de communication des résultats DEI",
+      "8. Matrice des risques GIS et mesures de mitigation",
+      "9. Plan de communication des résultats GIS",
       "10. Mécanisme de plainte et de remontée des alertes",
       "11. Révision et amélioration continue du mécanisme",
     ],
@@ -407,7 +407,7 @@ export const CATALOGUE: Record<TypeDocument, {
         inclus: [
           "KPI alignés sur les 4 dimensions MMI-CI",
           "Tableau de bord Excel pré-rempli",
-          "Matrice des risques DEI sectoriels CI",
+          "Matrice des risques GIS sectoriels CI",
           "Livraison 10 jours ouvrés",
         ],
       },
@@ -418,7 +418,7 @@ export const CATALOGUE: Record<TypeDocument, {
           "Tout le niveau Standard",
           "Cohérence avec vos systèmes de reporting existants",
           "Indicateurs GRI/CSRD/ODD intégrés",
-          "Modèle rapport annuel DEI personnalisé",
+          "Modèle rapport annuel GIS personnalisé",
           "Livraison 15 jours ouvrés",
         ],
       },

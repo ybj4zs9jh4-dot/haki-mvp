@@ -42,12 +42,12 @@ async function analyserAvecClaude(requete: string, resultsGoogle: any[]): Promis
         tools: [{ type: "web_search_20250305", name: "web_search" }],
         messages: [{
           role: "user",
-          content: `Recherche DEI Côte d'Ivoire : "${requete}"${contexte}
+          content: `Recherche GIS Côte d'Ivoire : "${requete}"${contexte}
 
-Trouve entreprises CI avec actions DEI publiques (genre, autonomisation femme, VIH/Sida Art.4 CT CI, handicap PSH, anti-tribalisme, AGEFOP, RSE).
+Trouve entreprises CI avec actions GIS publiques (genre, autonomisation femme, VIH/Sida Art.4 CT CI, handicap PSH, anti-tribalisme, AGEFOP, RSE).
 
 JSON uniquement :
-{"resultats":[{"entreprise":"Nom CI","secteur":"telecoms/banque/energie/agroalimentaire/btp/mining/autre","sourceUrl":"URL","sourceTitre":"Titre","signalDei":"Action DEI concrète max 200 car.","dimension":"DIM1 ou DIM2 ou DIM3 ou DIM4 ou null","scoreConfiance":80}]}`,
+{"resultats":[{"entreprise":"Nom CI","secteur":"telecoms/banque/energie/agroalimentaire/btp/mining/autre","sourceUrl":"URL","sourceTitre":"Titre","signalDei":"Action GIS concrète max 200 car.","dimension":"DIM1 ou DIM2 ou DIM3 ou DIM4 ou null","scoreConfiance":80}]}`,
         }],
       }),
     });
@@ -124,7 +124,7 @@ export async function POST(req: NextRequest) {
     return NextResponse.json({
       success: true,
       signauxTrouves: totalInseres,
-      message: `Veille Google + Claude — ${totalInseres} signaux DEI CI détectés`,
+      message: `Veille Google + Claude — ${totalInseres} signaux GIS CI détectés`,
     });
 
   } catch (e: any) {

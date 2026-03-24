@@ -7,9 +7,9 @@ const SERVICES_INCLUS = [
   {
     id: "diagnostic",
     emoji: "📋",
-    nom: "Diagnostic DEI",
+    nom: "Diagnostic GIS",
     sous: "SOCLE + Score MMI-CI",
-    desc: "Évaluez votre conformité légale CI (SOCLE) et mesurez votre maturité DEI sur 100 points selon les 4 dimensions du MMI-CI. Rapport PDF exécutif et analytique inclus.",
+    desc: "Évaluez votre conformité légale CI (SOCLE) et mesurez votre maturité GIS sur 100 points selon les 4 dimensions du MMI-CI. Rapport PDF exécutif et analytique inclus.",
     statut: "actif",
     lien: "/dashboard",
     color: "#1A237E",
@@ -40,9 +40,9 @@ const SERVICES_INCLUS = [
   {
     id: "benchmarks",
     emoji: "📈",
-    nom: "Benchmarks & Veille DEI CI",
+    nom: "Benchmarks & Veille GIS CI",
     sous: "Positionnement sectoriel",
-    desc: "Comparez votre score MMI-CI aux entreprises de votre secteur en Côte d'Ivoire. Veille DEI mensuelle sur 339 entreprises CI suivies.",
+    desc: "Comparez votre score MMI-CI aux entreprises de votre secteur en Côte d'Ivoire. Veille GIS mensuelle sur 339 entreprises CI suivies.",
     statut: "actif",
     lien: "/benchmarks",
     color: "#E65100",
@@ -51,9 +51,9 @@ const SERVICES_INCLUS = [
   {
     id: "calendrier",
     emoji: "📅",
-    nom: "Calendrier DEI & Communication",
+    nom: "Calendrier GIS & Communication",
     sous: "Événements annuels + OSC CI",
-    desc: "Identifiez les journées clés DEI nationales et internationales pertinentes pour la CI, avec activités suggérées, plans de communication et partenaires OSC recommandés.",
+    desc: "Identifiez les journées clés GIS nationales et internationales pertinentes pour la CI, avec activités suggérées, plans de communication et partenaires OSC recommandés.",
     statut: "actif",
     lien: "/dashboard",
     color: "#4A148C",
@@ -65,9 +65,9 @@ const SERVICES_COMPLEMENTAIRES = [
   {
     id: "documents",
     emoji: "📄",
-    nom: "Production Documentaire DEI",
+    nom: "Production Documentaire GIS",
     sous: "Stratégie · Charte · Politique · PAG",
-    desc: "Production sur mesure de vos documents DEI internes : Stratégie Genre, Charte Diversité & Inclusion, Politique Genre, Plan d'Action Genre et Mécanisme de Suivi-Évaluation. Trois niveaux : Standard, Enrichi, Premium.",
+    desc: "Production sur mesure de vos documents GIS internes : Stratégie Genre, Charte Genre et Inclusion Sociale, Politique Genre, Plan d'Action Genre et Mécanisme de Suivi-Évaluation. Trois niveaux : Standard, Enrichi, Premium.",
     statut: "actif",
     lien: "/documents",
     color: "#1A237E",
@@ -78,7 +78,7 @@ const SERVICES_COMPLEMENTAIRES = [
     emoji: "🎓",
     nom: "Formation Haki MANAGERS",
     sous: "Présentiel & e-learning",
-    desc: "Modules de formation DEI certifiants pour vos encadrants : diversité & inclusion en milieu professionnel CI, VIH/Sida Art. 4 CT CI, anti-tribalisme, management intergénérationnel. En présentiel à Abidjan ou en e-learning.",
+    desc: "Modules de formation GIS certifiants pour vos encadrants : genre et inclusion sociale en milieu professionnel CI, VIH/Sida Art. 4 CT CI, anti-tribalisme, management intergénérationnel. En présentiel à Abidjan ou en e-learning.",
     statut: "actif",
     lien: "/formation",
     color: "#F57F17",
@@ -88,8 +88,8 @@ const SERVICES_COMPLEMENTAIRES = [
     id: "comm",
     emoji: "📣",
     nom: "Accompagnement Communication Digitale",
-    sous: "Stratégie · Contenu · Visibilité DEI",
-    desc: "Haki vous accompagne dans votre stratégie de communication DEI externe : rédaction de contenus, gestion des journées clés, communication LinkedIn employeur, rapports RSE et positionnement DEI auprès de vos parties prenantes.",
+    sous: "Stratégie · Contenu · Visibilité GIS",
+    desc: "Haki vous accompagne dans votre stratégie de communication GIS externe : rédaction de contenus, gestion des journées clés, communication LinkedIn employeur, rapports RSE et positionnement GIS auprès de vos parties prenantes.",
     statut: "actif",
     lien: "/communication",
     color: "#00838F",
@@ -100,7 +100,7 @@ const SERVICES_COMPLEMENTAIRES = [
     emoji: "🤝",
     nom: "Forfait ONG & Bailleurs",
     sous: "Licence multi · Forfait projet",
-    desc: "Solution dédiée aux organisations humanitaires, bailleurs de fonds et programmes de développement : licence multi-organisations, diagnostic DEI adapté aux critères ODD, reporting bailleurs (AFD, ONU Femmes, Banque Mondiale), benchmark CEDEAO.",
+    desc: "Solution dédiée aux organisations humanitaires, bailleurs de fonds et programmes de développement : licence multi-organisations, diagnostic GIS adapté aux critères ODD, reporting bailleurs (AFD, ONU Femmes, Banque Mondiale), benchmark CEDEAO.",
     statut: "bientot",
     lien: null,
     color: "#BF360C",
@@ -188,7 +188,7 @@ export default function ServicesPage() {
         <div style={{ display:"flex", alignItems:"center", gap:14 }}>
           <span style={{ fontSize:20, fontWeight:700, color:"#FFC107", letterSpacing:3 }}>HAKI</span>
           <div style={{ width:1, height:18, background:"#3949AB" }}/>
-          <span style={{ fontSize:12, color:"#9FA8DA" }}>Plateforme DEI · Côte d'Ivoire</span>
+          <span style={{ fontSize:12, color:"#9FA8DA" }}>Plateforme GIS · Côte d'Ivoire</span>
         </div>
         <div style={{ display:"flex", alignItems:"center", gap:10 }}>
           <button onClick={() => router.push("/dashboard")}
@@ -217,8 +217,8 @@ export default function ServicesPage() {
             Tout ce que Haki fait pour votre organisation
           </h1>
           <p style={{ fontSize:14, color:"#757575", maxWidth:620, lineHeight:1.7, margin:0 }}>
-            Haki est une plateforme SaaS DEI ancrée dans le Code du Travail CI 2025.
-            Votre abonnement donne accès à l'ensemble des outils de diagnostic, de mesure et de pilotage DEI.
+            Haki est une plateforme SaaS GIS ancrée dans le Code du Travail CI 2025.
+            Votre abonnement donne accès à l'ensemble des outils de diagnostic, de mesure et de pilotage GIS.
             Des services complémentaires sont disponibles pour aller plus loin.
           </p>
         </div>

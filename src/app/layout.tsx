@@ -3,8 +3,8 @@ import { Providers } from "./providers";
 import "./globals.css";
 
 export const metadata: Metadata = {
-  title: "Haki — Plateforme DEI Côte d'Ivoire",
-  description: "Score MMI-CI · Diagnostic DEI · Conformité CT CI 2025",
+  title: "Haki — Plateforme GIS Côte d'Ivoire",
+  description: "Score MMI-CI · Diagnostic GIS · Conformité CT CI 2025",
 };
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {

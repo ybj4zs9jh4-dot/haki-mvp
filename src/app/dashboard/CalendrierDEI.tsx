@@ -13,7 +13,7 @@ const EVENTS = [
   {
     date:"20 fév", mois:2, emoji:"⚖️", color:"#1565C0", bg:"#E3F2FD",
     titre:"Justice Sociale",
-    activite:"Bilan équité salariale · Communication engagement DEI",
+    activite:"Bilan équité salariale · Communication engagement GIS",
     comm:"Tribune DG · LinkedIn · Newsletter RH CI",
     legal:"ODD 10", projet:"Publication rapport équité interne", budget:"Très faible",
   },
@@ -75,9 +75,9 @@ const EVENTS = [
   },
   {
     date:"Haki Month", mois:10, emoji:"🏆", color:"#1A237E", bg:"#E8EAF6",
-    titre:"Haki DEI Month",
+    titre:"Haki GIS Month",
     activite:"Challenge 30 jours + classement sectoriel CI + événement Abidjan",
-    comm:"Social media · CGECI · RIGRH · Remise Label Haki DEI",
+    comm:"Social media · CGECI · RIGRH · Remise Label Haki GIS",
     legal:null, projet:null, budget:null, flagship:true,
   },
   {
@@ -111,8 +111,8 @@ const EVENTS = [
   {
     date:"10 déc", mois:12, emoji:"🌐", color:"#4A148C", bg:"#F3E5F5",
     titre:"Droits de l'Homme",
-    activite:"Bilan annuel DEI Haki — données agrégées de la plateforme",
-    comm:"Rapport annuel Haki DEI CI · Presse",
+    activite:"Bilan annuel GIS Haki — données agrégées de la plateforme",
+    comm:"Rapport annuel Haki GIS CI · Presse",
     legal:null, projet:null, budget:null,
   },
 ];
@@ -169,9 +169,9 @@ const OSC = [
     color:"#546E7A",
   },
   {
-    cat:"Activistes DEI indépendants CI",
+    cat:"Activistes GIS indépendants CI",
     orgs:"Militants droits des femmes · Défenseurs PSH · Journalistes équité CI (Kessiya.com) · Blogueurs genre",
-    mode:"Parrainage, invitation panels Haki DEI Month, co-production contenus sensibilisation",
+    mode:"Parrainage, invitation panels Haki GIS Month, co-production contenus sensibilisation",
     note:null,
     color:"#2E7D32",
   },
@@ -191,7 +191,7 @@ function getMoisAvecEvents() {
     .map(([mois, evts]) => ({ mois: Number(mois), evts }));
 }
 
-export default function CalendrierDEI() {
+export default function CalendrierGIS() {
   const moisList = getMoisAvecEvents();
   const now = new Date();
   const moisCourant = now.getMonth() + 1;
@@ -211,7 +211,7 @@ export default function CalendrierDEI() {
       {/* ── Header + onglets ── */}
       <div style={{ display:"flex", justifyContent:"space-between", alignItems:"center", marginBottom:14, flexWrap:"wrap", gap:8 }}>
         <div style={{ fontSize:11, fontWeight:700, color:"#9E9E9E", letterSpacing:".1em", textTransform:"uppercase" as const }}>
-          Calendrier DEI & Communication
+          Calendrier GIS & Communication
         </div>
         <div style={{ display:"flex", gap:5 }}>
           <button onClick={() => setTab("calendrier")} style={{ padding:"5px 12px", background:tab==="calendrier"?"#1A237E":"#F5F5F5", color:tab==="calendrier"?"#fff":"#424242", border:"none", borderRadius:5, fontSize:11, fontWeight:500, cursor:"pointer" }}>
@@ -342,7 +342,7 @@ export default function CalendrierDEI() {
       {tab === "osc" && (
         <>
           <div style={{ fontSize:11, color:"#757575", marginBottom:10, lineHeight:1.6 }}>
-            Partenaires société civile ivoirienne recommandés dans la démarche RSE/DEI.
+            Partenaires société civile ivoirienne recommandés dans la démarche RSE/GIS.
           </div>
           <div style={{ display:"flex", flexDirection:"column" as const, gap:4 }}>
             {OSC.map((o, i) => (
