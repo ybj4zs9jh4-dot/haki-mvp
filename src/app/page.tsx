@@ -5,79 +5,77 @@ import { useState, useEffect } from "react";
 const PROBLEMES = [
   {
     emoji: "⚠️",
-    titre: "Non-conformité légale invisible",
-    desc: "CNPS non à jour, médecine du travail absente, clauses discriminatoires dans les contrats — les pénalités peuvent atteindre 10M FCFA. La plupart des DRH ne savent pas où ils en sont.",
+    titre: "Une conformité légale difficile à maîtriser",
+    desc: "Obligations sociales non respectées, clauses discriminatoires dans les contrats, absence de suivi médical des employés — les risques juridiques et financiers sont réels. La plupart des responsables RH ne savent pas précisément où ils en sont.",
     color: "#B71C1C",
     bg: "#FFEBEE",
   },
   {
     emoji: "📊",
-    titre: "Aucun outil GIS adapté à la CI",
-    desc: "Mixity est calibré sur le droit français. Paradigm sur les USA. Il n'existait aucun référentiel ancré dans le Code du Travail CI 2025, la réalité multiculturelle ivoirienne et les exigences des bailleurs CEDEAO.",
+    titre: "Aucun outil adapté à votre contexte local",
+    desc: "Les outils existants sont conçus pour les entreprises européennes ou américaines. Ils ne tiennent pas compte de vos réalités culturelles, sociales et réglementaires. Résultat : des diagnostics inadaptés et des recommandations inapplicables.",
     color: "#E65100",
     bg: "#FFF3E0",
   },
   {
     emoji: "🤝",
-    titre: "Pression croissante des bailleurs",
-    desc: "AFD, ONU Femmes, Banque Mondiale, PNUD exigent des indicateurs GIS mesurables. Sans outil certifiable, les entreprises CI perdent des marchés et des financements.",
+    titre: "Une pression croissante des partenaires",
+    desc: "Bailleurs de fonds, investisseurs, partenaires internationaux exigent des indicateurs mesurables sur l'inclusion et l'égalité. Sans outil certifiable, les organisations perdent des marchés et des financements.",
     color: "#1A237E",
     bg: "#E8EAF6",
   },
 ];
 
 const SERVICES = [
-  { emoji:"📋", titre:"Diagnostic GIS", desc:"SOCLE légal CI + Score MMI-CI /100", color:"#1A237E" },
-  { emoji:"📊", titre:"Baromètre COLLABORATEURS", desc:"Enquête anonyme conforme ARTCI", color:"#00695C" },
-  { emoji:"🧭", titre:"Auto-diagnostic MANAGERS", desc:"Score confidentiel /112 points", color:"#2E7D32" },
-  { emoji:"📈", titre:"Benchmarks CI", desc:"Positionnement sectoriel · 339 entreprises", color:"#E65100" },
-  { emoji:"📄", titre:"Production Documentaire", desc:"Stratégie, Charte, Politique, PAG", color:"#4A148C" },
-  { emoji:"📣", titre:"Communication Digitale", desc:"Contenus GIS sur 5 réseaux · IA + Sur mesure", color:"#00838F" },
-  { emoji:"🎓", titre:"Formation MANAGERS", desc:"33 thématiques · Présentiel & en ligne", color:"#F57F17" },
+  { emoji:"📋", titre:"Diagnostic Inclusion", desc:"Évaluez votre conformité et mesurez votre maturité sur 100 points", color:"#1A237E" },
+  { emoji:"📊", titre:"Baromètre Collaborateurs", desc:"Enquête anonyme pour mesurer le sentiment d'inclusion de vos équipes", color:"#00695C" },
+  { emoji:"🧭", titre:"Diagnostic Managers", desc:"Évaluation confidentielle des pratiques managériales inclusives", color:"#2E7D32" },
+  { emoji:"📈", titre:"Benchmarks sectoriels", desc:"Comparez-vous aux organisations de votre secteur", color:"#E65100" },
+  { emoji:"📄", titre:"Production Documentaire", desc:"Stratégie, Charte, Politique Genre, Plan d'Action sur mesure", color:"#4A148C" },
+  { emoji:"📣", titre:"Communication Digitale", desc:"Contenus inclusion prêts à publier sur 5 réseaux — IA + Sur mesure", color:"#00838F" },
+  { emoji:"🎓", titre:"Formation des Managers", desc:"33 thématiques · Présentiel, en ligne ou hybride", color:"#F57F17" },
 ];
 
 const CHIFFRES = [
-  { valeur:"5", label:"Niveaux de maturité MMI-CI", icon:"⭐" },
-  { valeur:"67", label:"Questions du diagnostic ORGANISATION", icon:"📋" },
-  { valeur:"33", label:"Thématiques de formation GIS", icon:"🎓" },
-  { valeur:"339", label:"Entreprises CI suivies en veille", icon:"📈" },
-  { valeur:"4", label:"Dimensions GIS ancrées CT CI 2025", icon:"⚖️" },
-  { valeur:"7", label:"Flux de revenus · 3 segments clients", icon:"💡" },
+  { valeur:"5",  label:"Niveaux de maturité inclusive", icon:"⭐" },
+  { valeur:"67", label:"Questions du diagnostic organisation", icon:"📋" },
+  { valeur:"33", label:"Thématiques de formation disponibles", icon:"🎓" },
+  { valeur:"4",  label:"Dimensions d'évaluation de l'inclusion", icon:"🔍" },
+  { valeur:"7",  label:"Services intégrés dans une plateforme", icon:"💡" },
+  { valeur:"3",  label:"Types d'organisations accompagnées", icon:"🏢" },
 ];
 
 const TEMOIGNAGES = [
   {
     nom: "Directrice des Ressources Humaines",
-    org: "Groupe bancaire international CI",
-    texte: "Haki nous a permis de structurer notre démarche GIS en moins de 3 mois. Le rapport PDF a convaincu notre siège à Paris de financer notre programme genre.",
+    org: "Groupe bancaire international",
+    texte: "Haki nous a permis de structurer notre démarche inclusion en moins de 3 mois. Le rapport a convaincu notre siège de financer notre programme égalité femmes-hommes.",
     score: 78,
   },
   {
-    nom: "DRH",
-    org: "PME industrielle, Abidjan",
-    texte: "On ne savait pas qu'on était non-conformes sur la médecine du travail. Haki SOCLE nous a évité une mise en demeure de l'Inspection du Travail.",
+    nom: "Directeur des Ressources Humaines",
+    org: "PME industrielle",
+    texte: "On ne savait pas qu'on avait des manquements sur le suivi médical de nos employés. Haki nous a évité une mise en demeure de l'inspection du travail.",
     score: 54,
   },
   {
-    nom: "Responsable RSE",
-    org: "Filiale multinationale FMCG CI",
-    texte: "Le benchmark sectoriel CI est une vraie valeur ajoutée. On peut enfin se comparer à nos pairs ivoiriens, pas à des entreprises françaises.",
+    nom: "Responsable Responsabilité Sociale",
+    org: "Filiale d'une multinationale",
+    texte: "Le benchmark sectoriel est une vraie valeur ajoutée. On peut enfin se comparer à nos pairs locaux, pas à des entreprises dans un contexte complètement différent.",
     score: 82,
   },
 ];
 
 const RESSOURCES = [
-  { emoji:"📘", titre:"Guide CT CI 2025 & non-discrimination", desc:"Les 12 articles clés du Code du Travail CI que tout DRH doit connaître", tag:"Légal" },
-  { emoji:"📗", titre:"Référentiel MMI-CI", desc:"Comprendre les 5 niveaux de maturité GIS et les 4 dimensions d'évaluation", tag:"Méthode" },
-  { emoji:"📙", titre:"Checklist SOCLE Haki", desc:"30 points de conformité à vérifier avant votre prochain contrôle CNPS/Inspection", tag:"Outil" },
-  { emoji:"📕", titre:"Bailleurs & GIS en CI", desc:"Ce qu'AFD, ONU Femmes et PNUD attendent de vos indicateurs GIS", tag:"Bailleurs" },
+  { emoji:"📘", titre:"Guide obligations sociales & non-discrimination", desc:"Les points clés que tout responsable RH doit maîtriser pour éviter les risques juridiques", tag:"Légal" },
+  { emoji:"📗", titre:"Référentiel de maturité inclusive", desc:"Comprendre les 5 niveaux d'évaluation et les 4 dimensions mesurées par Haki", tag:"Méthode" },
+  { emoji:"📙", titre:"Checklist conformité sociale", desc:"30 points à vérifier avant votre prochain contrôle ou audit social", tag:"Outil" },
+  { emoji:"📕", titre:"Inclusion & partenaires institutionnels", desc:"Ce qu'attendent les bailleurs de fonds et investisseurs de vos indicateurs d'inclusion", tag:"Partenaires" },
 ];
 
 export default function LandingPage() {
   const router = useRouter();
   const [scrolled, setScrolled] = useState(false);
-  const [emailContact, setEmailContact] = useState("");
-  const [contactEnvoye, setContactEnvoye] = useState(false);
 
   useEffect(() => {
     const handler = () => setScrolled(window.scrollY > 40);
@@ -109,9 +107,7 @@ export default function LandingPage() {
     <div style={{ fontFamily:"system-ui,-apple-system,sans-serif", color:"#212121" }}>
       <style>{css}</style>
 
-      {/* ══════════════════════════════════════
-          NAVBAR
-      ══════════════════════════════════════ */}
+      {/* ── NAVBAR ── */}
       <nav style={{
         position:"fixed", top:0, left:0, right:0, zIndex:100,
         background: scrolled ? "rgba(13,13,43,0.97)" : "transparent",
@@ -123,7 +119,7 @@ export default function LandingPage() {
       }}>
         <div style={{ display:"flex", alignItems:"center", gap:10 }}>
           <span style={{ fontSize:22, fontWeight:700, color:"#FFC107", letterSpacing:4 }}>HAKI</span>
-          <span style={{ fontSize:10, color:"#9FA8DA", letterSpacing:".1em", textTransform:"uppercase" as const }}>Plateforme GIS · CI</span>
+          <span style={{ fontSize:10, color:"#9FA8DA", letterSpacing:".1em", textTransform:"uppercase" as const }}>Genre & Inclusion Sociale</span>
         </div>
         <div style={{ display:"flex", alignItems:"center", gap:10 }}>
           <button className="land-btn" onClick={() => router.push("/connexion")}
@@ -137,38 +133,31 @@ export default function LandingPage() {
         </div>
       </nav>
 
-      {/* ══════════════════════════════════════
-          HERO
-      ══════════════════════════════════════ */}
+      {/* ── HERO ── */}
       <section style={{
         background:"linear-gradient(135deg, #0D0D2B 0%, #1A237E 60%, #0D47A1 100%)",
         minHeight:"100vh", display:"flex", alignItems:"center",
         padding:"100px 40px 80px", position:"relative", overflow:"hidden",
       }}>
-        {/* Motif de fond */}
         <div style={{ position:"absolute", inset:0, opacity:.04, backgroundImage:"repeating-linear-gradient(45deg, #fff 0, #fff 1px, transparent 0, transparent 50%)", backgroundSize:"30px 30px" }}/>
-
         <div style={{ maxWidth:1100, margin:"0 auto", width:"100%", position:"relative" }}>
-          {/* Badge */}
+
           <div style={{ display:"inline-flex", alignItems:"center", gap:8, padding:"6px 16px", background:"rgba(255,193,7,0.15)", border:"1px solid rgba(255,193,7,0.3)", borderRadius:99, marginBottom:28 }}>
             <span style={{ fontSize:10, fontWeight:700, color:"#FFC107", letterSpacing:".12em", textTransform:"uppercase" as const }}>
-              🇨🇮 Première plateforme GIS ancrée dans le CT CI 2025
+              ✨ Plateforme Genre et Inclusion Sociale — 7 services intégrés
             </span>
           </div>
 
-          {/* Titre */}
           <h1 style={{ fontSize:"clamp(36px, 5vw, 64px)", fontWeight:700, color:"#fff", lineHeight:1.1, marginBottom:20, maxWidth:800 }}>
             Redonner à chacun<br/>
             <span style={{ color:"#FFC107" }}>sa juste part.</span>
           </h1>
 
-          {/* Sous-titre */}
           <p style={{ fontSize:"clamp(15px, 2vw, 18px)", color:"#C5CAE9", lineHeight:1.7, marginBottom:36, maxWidth:580 }}>
-            Haki mesure, pilote et améliore votre maturité GIS en Côte d'Ivoire.
-            Conformité légale CT CI · Score MMI-CI · Benchmarks sectoriels · 7 services intégrés.
+            Haki mesure, pilote et améliore la maturité inclusive de votre organisation.
+            Conformité sociale · Score d'inclusion · Benchmarks sectoriels · Formation des managers.
           </p>
 
-          {/* CTAs */}
           <div style={{ display:"flex", gap:12, flexWrap:"wrap" as const, marginBottom:52 }}>
             <button className="land-btn" onClick={() => router.push("/inscription")}
               style={{ padding:"14px 32px", background:"#FFC107", color:"#1A237E", fontSize:15 }}>
@@ -180,13 +169,12 @@ export default function LandingPage() {
             </button>
           </div>
 
-          {/* Chiffres clés hero */}
           <div style={{ display:"flex", gap:32, flexWrap:"wrap" as const }}>
             {[
-              { val:"MMI-CI", label:"Modèle propriétaire CI" },
-              { val:"CT 2025", label:"Code du Travail CI ancré" },
-              { val:"7 flux", label:"Services intégrés" },
-              { val:"S1 · S2 · S3", label:"Segments couverts" },
+              { val:"Score /100", label:"Niveau de maturité inclusive" },
+              { val:"7 services", label:"Intégrés dans une plateforme" },
+              { val:"33 formations", label:"Thématiques disponibles" },
+              { val:"3 segments", label:"Entreprises, PME, ONG" },
             ].map(s => (
               <div key={s.val}>
                 <div style={{ fontSize:18, fontWeight:700, color:"#FFC107" }}>{s.val}</div>
@@ -197,18 +185,16 @@ export default function LandingPage() {
         </div>
       </section>
 
-      {/* ══════════════════════════════════════
-          3 PROBLÈMES
-      ══════════════════════════════════════ */}
+      {/* ── 3 PROBLÈMES ── */}
       <section style={{ background:"#F8F9FA", padding:"80px 40px" }}>
         <div style={{ maxWidth:1100, margin:"0 auto" }}>
           <div style={{ textAlign:"center" as const, marginBottom:48 }}>
-            <div style={{ fontSize:11, fontWeight:700, color:"#9E9E9E", letterSpacing:".15em", textTransform:"uppercase" as const, marginBottom:10 }}>Le problème</div>
+            <div style={{ fontSize:11, fontWeight:700, color:"#9E9E9E", letterSpacing:".15em", textTransform:"uppercase" as const, marginBottom:10 }}>Pourquoi Haki ?</div>
             <h2 style={{ fontSize:"clamp(24px, 3vw, 36px)", fontWeight:700, color:"#1A237E", marginBottom:12 }}>
-              Pourquoi les entreprises CI ont besoin de Haki
+              3 défis que chaque organisation doit relever
             </h2>
-            <p style={{ fontSize:15, color:"#757575", maxWidth:540, margin:"0 auto", lineHeight:1.7 }}>
-              Trois réalités que chaque DRH et dirigeant ivoirien connaît — mais auxquelles aucun outil n'avait encore répondu.
+            <p style={{ fontSize:15, color:"#757575", maxWidth:560, margin:"0 auto", lineHeight:1.7 }}>
+              Des réalités que chaque responsable RH et dirigeant connaît — mais auxquelles aucun outil intégré n'avait encore répondu.
             </p>
           </div>
           <div className="land-grid-3">
@@ -225,16 +211,14 @@ export default function LandingPage() {
         </div>
       </section>
 
-      {/* ══════════════════════════════════════
-          CHIFFRES CLÉS
-      ══════════════════════════════════════ */}
+      {/* ── CHIFFRES ── */}
       <section style={{ background:"#1A237E", padding:"64px 40px" }}>
         <div style={{ maxWidth:1100, margin:"0 auto" }}>
           <div style={{ textAlign:"center" as const, marginBottom:40 }}>
             <h2 style={{ fontSize:"clamp(22px, 3vw, 32px)", fontWeight:700, color:"#fff", marginBottom:8 }}>
               Haki en chiffres
             </h2>
-            <p style={{ fontSize:14, color:"#9FA8DA" }}>La plateforme GIS la plus complète pour le contexte ivoirien</p>
+            <p style={{ fontSize:14, color:"#9FA8DA" }}>La plateforme inclusion la plus complète pour votre contexte</p>
           </div>
           <div className="land-grid-3">
             {CHIFFRES.map((c,i) => (
@@ -248,9 +232,7 @@ export default function LandingPage() {
         </div>
       </section>
 
-      {/* ══════════════════════════════════════
-          7 SERVICES
-      ══════════════════════════════════════ */}
+      {/* ── 7 SERVICES ── */}
       <section style={{ background:"#fff", padding:"80px 40px" }}>
         <div style={{ maxWidth:1100, margin:"0 auto" }}>
           <div style={{ textAlign:"center" as const, marginBottom:48 }}>
@@ -259,7 +241,7 @@ export default function LandingPage() {
               7 services intégrés dans une seule plateforme
             </h2>
             <p style={{ fontSize:15, color:"#757575", maxWidth:500, margin:"0 auto", lineHeight:1.7 }}>
-              Du diagnostic à la communication, en passant par la formation — tout ce dont votre organisation a besoin pour piloter sa maturité GIS.
+              Du diagnostic à la communication, en passant par la formation — tout ce dont votre organisation a besoin pour piloter son inclusion.
             </p>
           </div>
           <div className="land-grid-4">
@@ -280,15 +262,13 @@ export default function LandingPage() {
         </div>
       </section>
 
-      {/* ══════════════════════════════════════
-          TÉMOIGNAGES
-      ══════════════════════════════════════ */}
+      {/* ── TÉMOIGNAGES ── */}
       <section style={{ background:"#F8F9FA", padding:"80px 40px" }}>
         <div style={{ maxWidth:1100, margin:"0 auto" }}>
           <div style={{ textAlign:"center" as const, marginBottom:48 }}>
             <div style={{ fontSize:11, fontWeight:700, color:"#9E9E9E", letterSpacing:".15em", textTransform:"uppercase" as const, marginBottom:10 }}>Témoignages</div>
             <h2 style={{ fontSize:"clamp(24px, 3vw, 36px)", fontWeight:700, color:"#1A237E" }}>
-              Ce que disent nos clients CI
+              Ce que disent nos clients
             </h2>
           </div>
           <div className="land-grid-3">
@@ -298,7 +278,7 @@ export default function LandingPage() {
                   <div style={{ fontSize:28, color:"#FFC107" }}>"</div>
                   <div style={{ textAlign:"center" as const, background:"#E8EAF6", borderRadius:10, padding:"8px 14px" }}>
                     <div style={{ fontSize:20, fontWeight:700, color:"#1A237E" }}>{t.score}</div>
-                    <div style={{ fontSize:9, color:"#9E9E9E" }}>MMI-CI</div>
+                    <div style={{ fontSize:9, color:"#9E9E9E" }}>Score /100</div>
                   </div>
                 </div>
                 <p style={{ fontSize:13, color:"#424242", lineHeight:1.7, marginBottom:16, fontStyle:"italic" }}>
@@ -314,33 +294,31 @@ export default function LandingPage() {
         </div>
       </section>
 
-      {/* ══════════════════════════════════════
-          À PROPOS
-      ══════════════════════════════════════ */}
+      {/* ── À PROPOS ── */}
       <section style={{ background:"#fff", padding:"80px 40px" }}>
         <div style={{ maxWidth:1100, margin:"0 auto" }}>
           <div className="land-grid-2" style={{ alignItems:"center", gap:60 }}>
             <div>
               <div style={{ fontSize:11, fontWeight:700, color:"#9E9E9E", letterSpacing:".15em", textTransform:"uppercase" as const, marginBottom:12 }}>À propos de Haki</div>
               <h2 style={{ fontSize:"clamp(24px, 3vw, 36px)", fontWeight:700, color:"#1A237E", marginBottom:16, lineHeight:1.2 }}>
-                Le premier référentiel GIS construit pour la Côte d'Ivoire
+                Un référentiel d'inclusion construit pour votre réalité
               </h2>
               <p style={{ fontSize:14, color:"#616161", lineHeight:1.8, marginBottom:16 }}>
-                <strong style={{ color:"#1A237E" }}>Haki</strong> signifie "le droit", "la part légitime" en Dioula. C'est cette conviction qui fonde notre mission : chaque collaborateur a droit à sa juste place dans l'organisation.
+                <strong style={{ color:"#1A237E" }}>Haki</strong> signifie "le droit" et "la part légitime". C'est cette conviction qui fonde notre mission : chaque collaborateur a droit à sa juste place dans l'organisation.
               </p>
               <p style={{ fontSize:14, color:"#616161", lineHeight:1.8, marginBottom:16 }}>
-                Nous avons construit le <strong>Modèle de Maturité Inclusif CI (MMI-CI)</strong> — un référentiel propriétaire ancré dans le Code du Travail CI 2025, la réalité multiculturelle ivoirienne et les exigences des bailleurs internationaux. Ce n'est pas une adaptation d'un modèle occidental : c'est un instrument conçu pour et par le contexte ivoirien.
+                Nous avons construit un <strong>modèle de maturité inclusive propriétaire</strong> — un référentiel rigoureux qui mesure votre niveau d'inclusion sur 100 points, à travers 4 dimensions clés : égalité de genre, inclusion des personnes en situation de handicap, diversité culturelle et cohésion intergénérationnelle.
               </p>
               <p style={{ fontSize:14, color:"#616161", lineHeight:1.8 }}>
-                Haki s'adresse aux <strong>grandes entreprises et multinationales</strong> (S1), aux <strong>PME formelles CI</strong> (S2) et aux <strong>ONG et bailleurs</strong> (S3) qui veulent transformer l'obligation légale de non-discrimination en levier de performance organisationnelle.
+                Haki s'adresse aux <strong>grandes entreprises et multinationales</strong>, aux <strong>PME et entreprises de taille intermédiaire</strong> et aux <strong>organisations non gouvernementales et bailleurs de fonds</strong> qui veulent transformer leurs obligations sociales en leviers de performance.
               </p>
             </div>
             <div style={{ display:"flex", flexDirection:"column" as const, gap:14 }}>
               {[
-                { emoji:"🇨🇮", titre:"Ancrage CI", desc:"Code du Travail CI 2025 · CNPS · CMU · Médecine du travail · ARTCI" },
-                { emoji:"🔬", titre:"Rigueur scientifique", desc:"MMI-CI basé sur les standards CMM, Likert, benchmarks ODD 5/8/10/16" },
-                { emoji:"🤝", titre:"Partenaires CI", desc:"CGECI · RIGRH · RHEEG-CI · ONU Femmes CI · Réseau RH CI" },
-                { emoji:"🔒", titre:"Conformité données", desc:"Loi n° 2013-450 CI · ARTCI · Anonymat PVVIH · Hébergement sécurisé" },
+                { emoji:"📐", titre:"Rigueur méthodologique", desc:"Modèle basé sur les standards internationaux de mesure de la maturité organisationnelle" },
+                { emoji:"🌍", titre:"Adapté à votre contexte", desc:"Référentiel construit pour les réalités culturelles, sociales et réglementaires de votre environnement" },
+                { emoji:"🤝", titre:"Partenaires de terrain", desc:"Réseau d'experts RH, juristes du travail, spécialistes inclusion et formateurs certifiés" },
+                { emoji:"🔒", titre:"Confidentialité garantie", desc:"Données des collaborateurs anonymisées · Aucune information individuelle partagée · Hébergement sécurisé" },
               ].map((v,i) => (
                 <div key={i} style={{ display:"flex", gap:14, padding:"14px 16px", background:"#F8F9FA", borderRadius:10 }}>
                   <span style={{ fontSize:22, flexShrink:0 }}>{v.emoji}</span>
@@ -355,15 +333,13 @@ export default function LandingPage() {
         </div>
       </section>
 
-      {/* ══════════════════════════════════════
-          RESSOURCES
-      ══════════════════════════════════════ */}
+      {/* ── RESSOURCES ── */}
       <section style={{ background:"#F8F9FA", padding:"80px 40px" }}>
         <div style={{ maxWidth:1100, margin:"0 auto" }}>
           <div style={{ textAlign:"center" as const, marginBottom:48 }}>
             <div style={{ fontSize:11, fontWeight:700, color:"#9E9E9E", letterSpacing:".15em", textTransform:"uppercase" as const, marginBottom:10 }}>Ressources</div>
             <h2 style={{ fontSize:"clamp(24px, 3vw, 36px)", fontWeight:700, color:"#1A237E", marginBottom:12 }}>
-              Guides & outils gratuits pour les DRH CI
+              Guides & outils gratuits pour les responsables RH
             </h2>
             <p style={{ fontSize:15, color:"#757575", maxWidth:500, margin:"0 auto" }}>
               Disponibles dès votre inscription sur la plateforme Haki.
@@ -392,17 +368,15 @@ export default function LandingPage() {
         </div>
       </section>
 
-      {/* ══════════════════════════════════════
-          CTA FINAL
-      ══════════════════════════════════════ */}
+      {/* ── CTA FINAL ── */}
       <section style={{ background:"linear-gradient(135deg, #0D0D2B 0%, #1A237E 100%)", padding:"80px 40px" }}>
         <div style={{ maxWidth:700, margin:"0 auto", textAlign:"center" as const }}>
           <div style={{ fontSize:40, marginBottom:16 }}>🚀</div>
           <h2 style={{ fontSize:"clamp(26px, 4vw, 42px)", fontWeight:700, color:"#fff", marginBottom:16, lineHeight:1.2 }}>
-            Prêt à mesurer votre maturité GIS ?
+            Prêt à mesurer votre niveau d'inclusion ?
           </h2>
           <p style={{ fontSize:15, color:"#C5CAE9", lineHeight:1.7, marginBottom:32 }}>
-            Commencez par le SOCLE — notre diagnostic de conformité légale CI gratuit. Résultats immédiats. Aucune carte bancaire requise.
+            Commencez par notre diagnostic de conformité sociale. Résultats immédiats. Aucune carte bancaire requise.
           </p>
           <div style={{ display:"flex", gap:12, justifyContent:"center", flexWrap:"wrap" as const, marginBottom:24 }}>
             <button className="land-btn" onClick={() => router.push("/inscription")}
@@ -414,40 +388,35 @@ export default function LandingPage() {
               Nous contacter
             </a>
           </div>
-          <div style={{ fontSize:12, color:"#4A5568" }}>
-            contact@haki.ci · Abidjan, Côte d'Ivoire
-          </div>
+          <div style={{ fontSize:12, color:"#4A5568" }}>contact@haki.ci</div>
         </div>
       </section>
 
-      {/* ══════════════════════════════════════
-          FOOTER
-      ══════════════════════════════════════ */}
+      {/* ── FOOTER ── */}
       <footer style={{ background:"#080820", padding:"40px 40px 24px" }}>
         <div style={{ maxWidth:1100, margin:"0 auto" }}>
           <div style={{ display:"grid", gridTemplateColumns:"2fr 1fr 1fr 1fr", gap:32, marginBottom:32 }}>
             <div>
               <div style={{ fontSize:20, fontWeight:700, color:"#FFC107", letterSpacing:4, marginBottom:8 }}>HAKI</div>
               <div style={{ fontSize:12, color:"#4A5568", lineHeight:1.7, maxWidth:260 }}>
-                Première plateforme SaaS GIS ancrée dans le Code du Travail CI 2025. Redonner à chacun sa juste part.
+                Plateforme Genre et Inclusion Sociale. Mesurez, pilotez et améliorez la maturité inclusive de votre organisation.
               </div>
             </div>
             <div>
               <div style={{ fontSize:11, fontWeight:700, color:"#6B7280", letterSpacing:".12em", textTransform:"uppercase" as const, marginBottom:12 }}>Plateforme</div>
-              {["Diagnostic GIS","Baromètre","Benchmarks CI","Production docs","Formation","Communication"].map(l => (
+              {["Diagnostic inclusion","Baromètre équipes","Benchmarks","Documents","Formation","Communication"].map(l => (
                 <div key={l} style={{ fontSize:12, color:"#4A5568", marginBottom:6, cursor:"pointer" }} onClick={() => router.push("/connexion")}>{l}</div>
               ))}
             </div>
             <div>
               <div style={{ fontSize:11, fontWeight:700, color:"#6B7280", letterSpacing:".12em", textTransform:"uppercase" as const, marginBottom:12 }}>Ressources</div>
-              {["Guide CT CI 2025","Référentiel MMI-CI","Checklist SOCLE","Bailleurs & GIS"].map(l => (
+              {["Guide obligations sociales","Référentiel d'inclusion","Checklist conformité","Inclusion & partenaires"].map(l => (
                 <div key={l} style={{ fontSize:12, color:"#4A5568", marginBottom:6, cursor:"pointer" }}>{l}</div>
               ))}
             </div>
             <div>
               <div style={{ fontSize:11, fontWeight:700, color:"#6B7280", letterSpacing:".12em", textTransform:"uppercase" as const, marginBottom:12 }}>Contact</div>
               <div style={{ fontSize:12, color:"#4A5568", marginBottom:6 }}>contact@haki.ci</div>
-              <div style={{ fontSize:12, color:"#4A5568", marginBottom:6 }}>Abidjan, Côte d'Ivoire</div>
               <div style={{ fontSize:12, color:"#4A5568", marginBottom:16 }}>www.haki.ci</div>
               <button className="land-btn" onClick={() => router.push("/inscription")}
                 style={{ padding:"9px 18px", background:"#FFC107", color:"#1A237E", fontSize:12 }}>
@@ -456,8 +425,8 @@ export default function LandingPage() {
             </div>
           </div>
           <div style={{ borderTop:"1px solid #1A1A3E", paddingTop:20, display:"flex", justifyContent:"space-between", alignItems:"center", flexWrap:"wrap" as const, gap:10 }}>
-            <div style={{ fontSize:11, color:"#2D3748" }}>© 2026 Haki · Tous droits réservés · Abidjan, CI</div>
-            <div style={{ fontSize:11, color:"#2D3748" }}>Données protégées · Loi n° 2013-450 CI · ARTCI</div>
+            <div style={{ fontSize:11, color:"#2D3748" }}>© 2026 Haki · Tous droits réservés</div>
+            <div style={{ fontSize:11, color:"#2D3748" }}>Données confidentielles · Hébergement sécurisé</div>
           </div>
         </div>
       </footer>
