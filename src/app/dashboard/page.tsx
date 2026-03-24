@@ -176,8 +176,12 @@ export default function DashboardPage() {
         </div>
         <div style={{ display:"flex", alignItems:"center", gap:12 }}>
           <div style={{ textAlign:"right" as const }}>
-            <div style={{ fontSize:12, color:"#fff", fontWeight:500 }}>{user?.organisationNom}</div>
-            <div style={{ fontSize:10, color:"#7986CB" }}>{user?.role?.toUpperCase()}</div>
+            <div
+  onClick={() => router.push("/profil")}
+  style={{ textAlign:"right" as const, cursor:"pointer" }}>
+  <div style={{ fontSize:12, color:"#fff", fontWeight:500, textDecoration:"underline dotted" }}>{user?.organisationNom}</div>
+  <div style={{ fontSize:10, color:"#7986CB" }}>{user?.role?.toUpperCase()} · Mon profil</div>
+</div>
           </div>
           <button className="haki-btn"
             onClick={() => signOut({ callbackUrl:"/connexion" })}
