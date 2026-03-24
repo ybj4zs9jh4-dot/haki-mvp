@@ -46,6 +46,39 @@ export async function GET(req: NextRequest) {
     const commandesEnAttente = commandes.filter((c:any) => c.statut === "en_attente").length;
     const revenuEstime = commandes.reduce((acc:number, c:any) => acc + (c.montantFcfa ?? 0), 0);
 
+// Productions
+    const productions: any[] = [];
+
+    // Rapports PDF générés
+    const sessionsAvecRapport = await prisma.diagnosticSession.findMany({
+      where: { scoreMmiCi: { not: null } },
+      include: { organisation: { select: { nom: true } } },
+      orderBy: { creeLe: "desc" },
+      take: 50,
+    });
+    sessionsAvecRapport.forEach((s: any) => {
+      productions.push({
+        type: "rapport_pdf",
+        organisationNom: s.organisation?.nom ?? "—",
+        creeLe: s.creeLe,
+        statut: "genere",
+        urlDocument: null,
+      });
+    });
+
+    // Documents GIS commandés
+    commandes.forEach((c: any) => {
+      if (["en_production","livre"].includes(c.statut)) {
+        productions.push({
+          type: "document_gis",
+          organisationNom: c.organisation?.nom ?? "—",
+          typeDocument: c.typeDocument,
+          creeLe: c.commandeeLe,
+          statut: c.statut === "livre" ? "genere" : "en_cours",
+          urlDocument: c.urlDocument ?? null,
+        });
+      }
+    });
     return NextResponse.json({
       stats:{
         totalOrgs,
