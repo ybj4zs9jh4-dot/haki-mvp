@@ -80,7 +80,7 @@ const SERVICES_COMPLEMENTAIRES = [
     sous: "Présentiel & e-learning",
     desc: "Modules de formation DEI certifiants pour vos encadrants : diversité & inclusion en milieu professionnel CI, VIH/Sida Art. 4 CT CI, anti-tribalisme, management intergénérationnel. En présentiel à Abidjan ou en e-learning.",
     statut: "actif",
-    lien: "/formation"
+    lien: "/formation",
     color: "#F57F17",
     bg: "#FFFDE7",
   },
