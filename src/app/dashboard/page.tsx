@@ -485,6 +485,30 @@ export default function DashboardPage() {
               </div>
             </div>
 
+{/* ══ 8ter. FORMATION MANAGERS ══ */}
+<div style={{ background:"linear-gradient(135deg, #F57F17 0%, #F9A825 100%)", borderRadius:14, padding:24, marginBottom:16, boxShadow:"0 4px 20px rgba(245,127,23,0.2)" }}>
+  <div style={{ display:"flex", justifyContent:"space-between", alignItems:"center", flexWrap:"wrap" as const, gap:16 }}>
+    <div>
+      <div style={{ fontSize:13, fontWeight:700, color:"#fff", marginBottom:6, letterSpacing:".05em" }}>
+        🎓 FORMATION HAKI MANAGERS
+      </div>
+      <div style={{ fontSize:13, color:"rgba(255,255,255,0.85)", marginBottom:12 }}>
+        33 thématiques DEI · Présentiel & en ligne · Formateurs experts CI · Certification disponible
+      </div>
+      <div style={{ display:"flex", gap:8, flexWrap:"wrap" as const }}>
+        {["Fondamentaux DEI","Genre & VIH/Sida","Handicap","Anti-tribalisme","Leadership inclusif","Sur mesure"].map(t => (
+          <span key={t} style={{ fontSize:11, padding:"3px 10px", borderRadius:99, background:"rgba(255,255,255,0.2)", color:"#fff" }}>
+            {t}
+          </span>
+        ))}
+      </div>
+    </div>
+    <button className="haki-btn" onClick={() => router.push("/formation")}
+      style={{ padding:"13px 28px", background:"#fff", color:"#E65100", fontSize:14, fontWeight:700, flexShrink:0 }}>
+      Voir le catalogue →
+    </button>
+  </div>
+</div>
 {/* ══ 8bis. COMMUNICATION DIGITALE ══ */}
 <div style={{ background:"linear-gradient(135deg, #00695C 0%, #00838F 100%)", borderRadius:14, padding:24, marginBottom:16, boxShadow:"0 4px 20px rgba(0,105,92,0.2)" }}>
   <div style={{ display:"flex", justifyContent:"space-between", alignItems:"center", flexWrap:"wrap" as const, gap:16 }}>
